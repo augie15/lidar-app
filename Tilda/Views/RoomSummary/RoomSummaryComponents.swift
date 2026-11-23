@@ -69,6 +69,21 @@ struct SummaryHero: View {
             }
             .accessibilityElement(children: .combine)
 
+            if facts.totalOpenFloorArea != nil || facts.totalGrossArea != nil {
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(alignment: .top, spacing: 0) {
+                        if let open = facts.totalOpenFloorArea { stat(f.area(open), "Open floor") }
+                        if let gross = facts.totalGrossArea { stat(f.area(gross), "Est. gross") }
+                    }
+                    if facts.totalOpenFloorArea != nil {
+                        Text("Open floor: Floor not covered by furniture.").footnote(p)
+                    }
+                    if facts.totalGrossArea != nil {
+                        Text("Est. gross: Adds wall thickness, like listing square footage (assumes \(f.wallThickness(facts.wallThickness)) walls).").footnote(p)
+                    }
+                }
+            }
+
             Rectangle().fill(p.separator).frame(height: 1)
 
             HStack(alignment: .top, spacing: 0) {
@@ -97,6 +112,12 @@ struct SummaryHero: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)
+    }
+}
+
+private extension Text {
+    func footnote(_ p: SummaryPalette) -> some View {
+        font(.caption2).foregroundStyle(p.secondary).fixedSize(horizontal: false, vertical: true)
     }
 }
 
@@ -210,6 +231,13 @@ struct SummaryRoomCard: View {
                     fact("Perimeter", f.length(room.perimeter))
                     fact("Ceiling", f.length(room.ceilingHeight))
                     fact("Wall area", f.area(room.wallArea))
+                }
+                if room.openFloorArea != nil || room.grossArea != nil {
+                    GridRow {
+                        if let open = room.openFloorArea { fact("Open floor", f.area(open)) } else { Color.clear.gridCellUnsizedAxes([.horizontal, .vertical]) }
+                        if let gross = room.grossArea { fact("Gross (est.)", f.area(gross)) } else { Color.clear.gridCellUnsizedAxes([.horizontal, .vertical]) }
+                        Color.clear.gridCellUnsizedAxes([.horizontal, .vertical])
+                    }
                 }
                 GridRow {
                     fact("Doors", "\(room.doorCount)")

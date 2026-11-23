@@ -145,6 +145,10 @@ extension ScanMeasurements {
         func add(_ l: String, _ v: String) { out.append(.init(label: l, value: v)) }
 
         if let a = totalFloorArea { add("Floor area", MeasureFormat.area(a)) }
+        if let f = roomFacts {
+            if let a = f.totalOpenFloorArea { add("Open floor area", MeasureFormat.area(Double(a))) }
+            if let g = f.totalGrossArea { add("Est. gross area", MeasureFormat.area(Double(g))) }
+        }
         if let h = ceilingHeight { add("Ceiling height", MeasureFormat.length(h)) }
         if let rooms = roomFacts?.rooms, !rooms.isEmpty {
             add("Rooms", String(rooms.count))

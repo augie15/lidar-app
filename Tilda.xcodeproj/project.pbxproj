@@ -22,6 +22,7 @@
 		33E61EB8CEA69CC805903687 /* WalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB64DEEFB05F6FE6F90A6A0 /* WalkthroughView.swift */; };
 		384DE18780DD854E31868057 /* Surfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8CB3FC9E24CEDD575CE73A /* Surfaces.swift */; };
 		3B544475A291FDC0E191C004 /* AskTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A4ED736DC92F8ECDE417C3 /* AskTools.swift */; };
+		3F59883D652EEC9624041543 /* RoomAreaGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB2D2BACEE7E1CECD159073 /* RoomAreaGeometry.swift */; };
 		40AA10DA1AF32C9D95BAAEF7 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F0E88ED1186CDCED00AFC /* NavigationRouter.swift */; };
 		423F39FFFA4926532B647576 /* MeshCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34976E9723DA6D0D9E19AE0A /* MeshCaptureController.swift */; };
 		460893D531B37644A6F3B421 /* LidarMeshCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F875C0E0FCE78EB04EEC1DC /* LidarMeshCropper.swift */; };
@@ -116,6 +117,7 @@
 		7079B4876FAEB07CD70335AB /* ScanIntelligence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanIntelligence.swift; sourceTree = "<group>"; };
 		71913AD745B2EA5ECFBD79C5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		739AA29D1D97EDA1F0AB018F /* MeshScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshScanView.swift; sourceTree = "<group>"; };
+		7EB2D2BACEE7E1CECD159073 /* RoomAreaGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomAreaGeometry.swift; sourceTree = "<group>"; };
 		800CD2A01A3E4D5B43B630E9 /* PhotoTourView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTourView.swift; sourceTree = "<group>"; };
 		80B5DD82345CB9F07A6B857F /* AskScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskScanView.swift; sourceTree = "<group>"; };
 		81835F59DB587A5646C131B5 /* RoomSummaryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryModel.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 			children = (
 				E04DACAB0CE204FCB270C5A4 /* FloorPlanBuilder.swift */,
 				E4F3A30100DBA4C53851781F /* FramePoller.swift */,
+				7EB2D2BACEE7E1CECD159073 /* RoomAreaGeometry.swift */,
 				108F29B102B3D2A925CD4C41 /* RoomCaptureController.swift */,
 				11E9EB55428D115BE2605EA8 /* RoomExporter.swift */,
 				6BED8C695B956FE82F7AC70F /* RoomFactsBuilder.swift */,
@@ -483,6 +486,7 @@
 				6C81F819271E392510F6B9B7 /* PointCloudCapture.swift in Sources */,
 				7820A944E96E06456D9C4A12 /* PointCloudCore.swift in Sources */,
 				0C57EE8A8341BE979D827C6A /* PointGeometry.swift in Sources */,
+				3F59883D652EEC9624041543 /* RoomAreaGeometry.swift in Sources */,
 				B23C018832AD64F8E4416E73 /* RoomCaptureController.swift in Sources */,
 				6A61DA8C771F62C4D37BADB0 /* RoomExporter.swift in Sources */,
 				E249427B725BD48F05741D58 /* RoomFacts.swift in Sources */,

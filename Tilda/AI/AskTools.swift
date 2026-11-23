@@ -10,7 +10,7 @@ private func m(_ v: Double) -> String { MeasureFormat.length(v) }
 struct RoomFactsTool: Tool {
     let measurements: ScanMeasurements
     let name = "roomFacts"
-    let description = "Returns the measured facts for each room: floor area, perimeter, ceiling height, wall area, doors, windows, openings and objects."
+    let description = "Returns the measured facts for each room: floor area, perimeter, ceiling height, wall area, doors, windows, openings and objects. Also gives open floor area and estimated gross area when known. Open floor area is the floor not covered by floor-standing furniture (wall-mounted items excluded). Estimated gross area adds wall thickness to the floor area, like listing-style square footage that measures to the outside of the walls."
 
     @Generable
     struct Arguments {
@@ -25,8 +25,21 @@ struct RoomFactsTool: Tool {
         let filter = arguments.room?.lowercased().trimmingCharacters(in: .whitespaces) ?? ""
         let picked = filter.isEmpty ? rooms : rooms.filter { $0.label.lowercased().contains(filter) }
         guard !picked.isEmpty else { return "No room matches \"\(filter)\". Rooms: " + rooms.map(\.label).joined(separator: ", ") }
-        return picked.map { r in
-            "\(r.label): floor \(MeasureFormat.area(Double(r.floorArea))), perimeter \(m(Double(r.perimeter))), "
+        var header = ""
+        if filter.isEmpty, let facts = measurements.roomFacts {
+            var totals: [String] = []
+            if let a = facts.totalOpenFloorArea { totals.append("total open floor area \(MeasureFormat.area(Double(a)))") }
+            if let g = facts.totalGrossArea {
+                let t = facts.wallThickness.map { " assuming \(String(format: "%.0f", Double($0) * 100)) cm walls" } ?? ""
+                totals.append("total estimated gross area \(MeasureFormat.area(Double(g)))\(t)")
+            }
+            if !totals.isEmpty { header = "Whole scan: " + totals.joined(separator: ", ") + ".\n" }
+        }
+        return header + picked.map { r in
+            var extra = ""
+            if let o = r.openFloorArea { extra += ", open floor (not covered by furniture) \(MeasureFormat.area(Double(o)))" }
+            if let g = r.grossArea { extra += ", estimated gross (with wall thickness) \(MeasureFormat.area(Double(g)))" }
+            return "\(r.label): floor \(MeasureFormat.area(Double(r.floorArea)))\(extra), perimeter \(m(Double(r.perimeter))), "
                 + "ceiling \(m(Double(r.ceilingHeight))), wall area \(MeasureFormat.area(Double(r.wallArea))), "
                 + "\(r.doorCount) doors, \(r.windowCount) windows, \(r.openingCount) openings, "
                 + "\(r.objects.count) objects"

@@ -9,6 +9,7 @@ enum AppSettings {
         static let colorMesh = "colorMesh"
         static let flashOnStart = "flashOnStart"
         static let units = "units"
+        static let wallThickness = "wallThickness"
         // Object
         static let objectMode = "objectMode"
         static let objectOverCapture = "objectOverCapture"
@@ -36,6 +37,9 @@ enum AppSettings {
 
     /// Display units for measurements. Defaults to imperial (square footage).
     static var units: Units { Units(rawValue: defaults.string(forKey: Key.units) ?? "") ?? .imperial }
+
+    /// Assumed wall thickness for "estimated gross area", in metres. Choices: 0.10 (4 in), 0.15 (6 in), 0.20 (8 in).
+    static var wallThickness: Float { Float(defaults.object(forKey: Key.wallThickness) as? Double ?? 0.15) }
 
     // MARK: Object modes and options
 

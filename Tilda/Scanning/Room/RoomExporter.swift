@@ -28,6 +28,7 @@ enum RoomExporter {
 
             var structure: CapturedStructure?
             var factRooms = rooms
+            var structureWalls: [CapturedRoom.Surface]?
             if rooms.count > 1 {
                 switch strategy {
                 case .merged:
@@ -39,6 +40,7 @@ enum RoomExporter {
                     }
                     structure = built
                     if !built.rooms.isEmpty { factRooms = built.rooms }
+                    structureWalls = built.walls
                 case .largestRoomOnly:
                     let largest = rooms.max { RoomFactsBuilder.floorArea(of: $0) < RoomFactsBuilder.floorArea(of: $1) } ?? rooms[0]
                     try exportRoom(largest, to: model, order: order)
@@ -53,7 +55,7 @@ enum RoomExporter {
             if (try? plan.write(to: planURL)) != nil { attachments.append(planURL) }
 
             let factsURL = dir.appendingPathComponent(RoomFacts.fileName)
-            if (try? RoomFactsBuilder.build(from: factRooms).write(to: factsURL)) != nil { attachments.append(factsURL) }
+            if (try? RoomFactsBuilder.build(from: factRooms, structureWalls: structureWalls).write(to: factsURL)) != nil { attachments.append(factsURL) }
 
             if let frames = recorder?.finish() { attachments.append(frames) }
             return Output(model: model, attachments: attachments)

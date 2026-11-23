@@ -9,6 +9,7 @@ struct SettingsView: View {
     @AppStorage(AppSettings.Key.roomDetail) private var roomDetail = AppSettings.RoomDetail.simple.rawValue
     @AppStorage(AppSettings.Key.flashOnStart) private var flashOnStart = false
     @AppStorage(AppSettings.Key.units) private var units = AppSettings.Units.imperial.rawValue
+    @AppStorage(AppSettings.Key.wallThickness) private var wallThickness = 0.15
     @AppStorage("aiAutoAnalyze") private var aiAutoAnalyze = true
 
     @State private var storageText = "Calculating…"
@@ -55,7 +56,16 @@ struct SettingsView: View {
                             .foregroundStyle(Theme.textSecondary)
                     }
                     .padding(.vertical, 4)
-                } header: { header("Room") }
+                    Picker("Wall thickness", selection: $wallThickness) {
+                        if units == AppSettings.Units.metric.rawValue {
+                            Text("10 cm").tag(0.10); Text("15 cm").tag(0.15); Text("20 cm").tag(0.20)
+                        } else {
+                            Text("4″").tag(0.10); Text("6″").tag(0.15); Text("8″").tag(0.20)
+                        }
+                    }
+                } header: { header("Room") } footer: {
+                    Text("Used for estimated gross area. Interior walls are usually 4–5″, exterior walls 6–8″.")
+                }
                 .listRowBackground(Theme.card)
 
                 ObjectSettingsSection()

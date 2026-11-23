@@ -44,6 +44,13 @@ struct RoomSummaryFormatter {
         return "\(Self.number(Double(m), digits: 1)) m"
     }
 
+    /// "6″" or "15 cm" for a wall thickness in metres (nil falls back to the current setting).
+    func wallThickness(_ t: Float?) -> String {
+        let metres = Double(t ?? AppSettings.wallThickness)
+        if imperial { return "\(Int((metres * 39.3701).rounded()))″" }
+        return "\(Int((metres * 100).rounded())) cm"
+    }
+
     // MARK: Estimates
     func paintLitres(wallArea: Float) -> Double {
         Double(wallArea / Self.paintCoverageM2PerLitre * Self.paintCoats)
@@ -99,12 +106,20 @@ enum RoomSummaryText {
         let f = RoomSummaryFormatter(units: units)
         var out = ["\(name) – room summary", ""]
         out.append("Total floor area: \(f.area(facts.totalFloorArea)) (\(f.altArea(facts.totalFloorArea)))")
+        if let open = facts.totalOpenFloorArea {
+            out.append("Open floor area (not covered by furniture): \(f.area(open)) (\(f.altArea(open)))")
+        }
+        if let gross = facts.totalGrossArea {
+            out.append("Estimated gross area (assumes \(f.wallThickness(facts.wallThickness)) walls): \(f.area(gross)) (\(f.altArea(gross)))")
+        }
         out.append("Rooms: \(facts.rooms.count)")
         out.append("Average ceiling height: \(f.length(facts.averageCeiling))")
         out.append("Doors: \(facts.totalDoors), windows: \(facts.totalWindows)")
         for r in facts.rooms {
             out += ["", "\(r.displayLabel) – \(f.area(r.floorArea))"]
             if let d = f.dimensions(for: r) { out.append("  Approx. \(d)") }
+            if let open = r.openFloorArea { out.append("  Open floor: \(f.area(open))") }
+            if let gross = r.grossArea { out.append("  Gross (est.): \(f.area(gross))") }
             out.append("  Perimeter: \(f.length(r.perimeter))")
             out.append("  Ceiling height: \(f.length(r.ceilingHeight))")
             out.append("  Wall area: \(f.area(r.wallArea))")
