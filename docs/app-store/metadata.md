@@ -8,15 +8,15 @@ Paste these into App Store Connect. Character counts are exact (counted by scrip
 
 | Option | Name | Characters |
 |---|---|---|
-| 1 (recommended) | `Tilda: LiDAR 3D Scanner` | 23 |
-| 2 | `Tilda: Room & Object Scanner` | 28 |
+| 1 | `Tilda: LiDAR 3D Scanner` | 23 |
+| 2 (**in use**: the App Store Connect record was created with this name) | `Tilda: Room & Object Scanner` | 28 |
 | 3 | `Tilda LiDAR Room Scanner` | 24 |
 
 ## Subtitle (30 characters max)
 
-`Floor plans and models, free` (28 characters)
+`LiDAR floor plans & 3D models` (29 characters)
 
-The subtitle avoids repeating words from the name or keywords, because Apple indexes all three together. If you pick name option 2, consider changing "models" to something else since "Object" is then in the name.
+Written for the name in use, "Tilda: Room & Object Scanner". It avoids repeating words from the name or keywords, because Apple indexes all three together, and adds "LiDAR" and "3D", which the name no longer has. "Free" moved to the keywords.
 
 ## Promotional text (170 characters max)
 
@@ -80,11 +80,11 @@ Questions or ideas? Visit the support page or send feedback from Settings.
 ## Keywords (100 characters max)
 
 ```
-room,measure,square footage,usdz,obj,stl,ply,point cloud,mesh,photogrammetry,roomplan,home,object
+measure,square footage,sqft,usdz,obj,stl,ply,point cloud,mesh,photogrammetry,roomplan,home,free
 ```
-(97 characters.)
+(95 characters.)
 
-Rules followed: comma-separated, no spaces after commas, none of the words from the name option 1 (tilda, lidar, 3d, scanner) or the subtitle (floor, plans, models, free). If you choose a different name option, drop any keyword that now appears in the name.
+Rules followed: comma-separated, no spaces after commas, none of the words from the name in use (tilda, room, object, scanner) or the subtitle (lidar, floor, plans, 3d, models).
 
 ## Categories
 
