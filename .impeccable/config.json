@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/privacy.html"
+        ],
+        "createdAt": "2026-11-23T16:17:12.994Z",
+        "reason": "agent measured all text/bg pairs in docs/style.css: lowest is muted #B4B2A9 on #163A30 at 5.87:1, all pass WCAG AA"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/support.html"
+        ],
+        "createdAt": "2026-11-23T16:17:13.023Z",
+        "reason": "agent measured all text/bg pairs in docs/style.css: lowest is muted #B4B2A9 on #163A30 at 5.87:1, all pass WCAG AA"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/index.html"
+        ],
+        "createdAt": "2026-11-23T16:17:13.047Z",
+        "reason": "agent measured all text/bg pairs in docs/style.css: lowest is muted #B4B2A9 on #163A30 at 5.87:1, all pass WCAG AA"
+      }
+    ]
+  }
+}

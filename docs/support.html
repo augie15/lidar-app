@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Answers to common questions about Tilda and how to report a problem.">
+<title>Tilda Support</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <a class="brand" href="index.html">Tilda</a>
+  <nav aria-label="Main">
+    <a href="index.html">Home</a>
+    <a href="support.html" aria-current="page">Support</a>
+    <a href="privacy.html">Privacy</a>
+  </nav>
+</header>
+<main id="main">
+  <h1>Support</h1>
+  <p class="lead">Quick answers first. If you are still stuck, report a problem on GitHub.</p>
+
+  <h2>Frequently asked questions</h2>
+
+  <details>
+    <summary>Which devices does Tilda work on?</summary>
+    <p>Scanning needs an iPhone with a LiDAR scanner: the Pro models from iPhone 12 Pro onward, running iOS 26 or later. Without LiDAR, Tilda opens but explains that scanning is not available on your device. Apple Intelligence features (names, summaries, Ask) additionally need a supported iPhone with Apple Intelligence turned on. Scanning works without them.</p>
+  </details>
+
+  <details>
+    <summary>Where are my scans and files?</summary>
+    <p>Open the Files app, then <strong>On My iPhone</strong>, then <strong>Tilda</strong>. Each scan has its own folder under <code>Scans</code>. You can copy or share files from there. Deleting a scan in Tilda removes its folder, and deleting the app removes all scans.</p>
+  </details>
+
+  <details>
+    <summary>Which export formats are available?</summary>
+    <table>
+      <thead><tr><th scope="col">Format</th><th scope="col">Good for</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">USDZ</th><td>Apple's native format. Keeps colors and textures. Opens in Quick Look, Reality Composer and AR.</td></tr>
+        <tr><th scope="row">OBJ</th><td>Widely supported by 3D tools such as Blender. May include a separate material file and textures.</td></tr>
+        <tr><th scope="row">STL</th><td>3D printing. Shape only, no color.</td></tr>
+        <tr><th scope="row">PLY</th><td>Point clouds and meshes with vertex color.</td></tr>
+        <tr><th scope="row">Photos + poses</th><td>A zip of keyframe photos and camera positions for photogrammetry or Gaussian splat tools on a computer. Available when photos were saved with the scan.</td></tr>
+        <tr><th scope="row">Photos for Mac</th><td>A zip of the photos from a photoreal object scan. See the next question.</td></tr>
+      </tbody>
+    </table>
+    <p>Room scans can also produce a room summary you can share as a PDF.</p>
+  </details>
+
+  <details>
+    <summary>What is "Photos for Mac"?</summary>
+    <p>On photoreal object scans Tilda keeps the photos it captured. "Photos for Mac" exports them as a zip so you can rebuild the model at full detail on a Mac with Apple's Object Capture. Tilda builds a good model on your iPhone, but a Mac has more memory and can reach finer detail. If you do not see this option, the photos were not saved. Turn on "Save photos with scans" in Settings before your next scan.</p>
+  </details>
+
+  <details>
+    <summary>How do I scan more than one room?</summary>
+    <p>On the Room screen, switch from one room to a whole floor. Scan the first room, tap "Next room", walk through the doorway into the next one and tap "Continue". Tap "Finish floor" when you are done. Tilda merges the rooms into one floor model with a single summary and floor plan.</p>
+    <ul>
+      <li>Walk slowly and keep walls, floor and corners in view.</li>
+      <li>Scan the doorway between rooms from both sides so rooms line up.</li>
+      <li>Open doors before you start.</li>
+      <li>If a room fails, walk back and scan it again, or continue to the next.</li>
+      <li>Large or cluttered spaces work best in several shorter scans.</li>
+    </ul>
+  </details>
+
+  <details>
+    <summary>Can I use the flash?</summary>
+    <p>Yes. Use the flash button on the scan screen to turn the light on or off. To have it start on, open Settings and turn on "Flash on when a scan starts". Light helps in dark rooms, but strong reflections can confuse scans of shiny objects.</p>
+  </details>
+
+  <details>
+    <summary>Does Tilda collect my data or need an account?</summary>
+    <p>No. There are no accounts, ads or analytics, and Tilda makes no network calls. See the <a href="privacy.html">privacy policy</a>.</p>
+  </details>
+
+  <h2>Report a problem or suggest something</h2>
+  <p>Please open an issue on GitHub: <a href="https://github.com/augie15/lidar-app/issues">github.com/augie15/lidar-app/issues</a>. Include your iPhone model, iOS version, the Tilda version, what you were scanning and what went wrong.</p>
+  <p><strong>Issues on GitHub are public.</strong> Do not post private information, floor plans of your home, or photos you do not want shared. Inside the app, Send feedback in Settings opens a prefilled GitHub issue in a browser, or can draft an email to us.</p>
+  <p>Prefer email, or have something private to share? Write to <a href="mailto:brett@augiesrentals.ca">brett@augiesrentals.ca</a>.</p>
+</main>
+<footer class="site">
+  <p>Tilda is a free app by Brett Auger. <a href="privacy.html">Privacy policy</a> · <a href="support.html">Support</a> · <a href="https://github.com/augie15/lidar-app">Source on GitHub</a></p>
+</footer>
+</body></html>

@@ -1,0 +1,61 @@
+name: Bug report
+description: Something in Tilda isn't working as expected.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Tilda. This issue is public, so please don't include personal details or scan contents.
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open Tilda
+        2. Start a scan
+        3. ...
+    validations:
+      required: false
+  - type: dropdown
+    id: scan_mode
+    attributes:
+      label: Scan mode
+      options:
+        - Room
+        - Whole floor
+        - Object Photoreal
+        - Object LiDAR quick
+        - Mesh
+        - Point cloud
+        - Surfaces
+        - Not scan related
+    validations:
+      required: false
+  - type: input
+    id: app_version
+    attributes:
+      label: App version
+      placeholder: "1.0 (1)"
+    validations:
+      required: true
+  - type: input
+    id: ios_version
+    attributes:
+      label: iOS version
+      placeholder: "iOS 26.0"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      placeholder: "iPhone18,2"
+    validations:
+      required: true

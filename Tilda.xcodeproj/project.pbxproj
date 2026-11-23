@@ -1,0 +1,712 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		048A8C3298F51548D05CA586 /* InsightsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30A8B32F37DCBF983B7CF63 /* InsightsCard.swift */; };
+		06D94E59FEF64689BFFCF1A7 /* RoomSummaryPDFBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C567687F6FAE58D85A5818 /* RoomSummaryPDFBlocks.swift */; };
+		0748498D6ABD4FBB96AA1FAF /* AskScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5DD82345CB9F07A6B857F /* AskScanView.swift */; };
+		08CBD2853CD43677AFD4CA52 /* ScanRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75A5E37E9415480C69B4775 /* ScanRow.swift */; };
+		0B7E3B86880445C8AC1CA4F1 /* FrameRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE951ADAA80EF218F6DA3BD8 /* FrameRecorder.swift */; };
+		0C57EE8A8341BE979D827C6A /* PointGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA1F6FD076AA9B190577AC5 /* PointGeometry.swift */; };
+		1221B46109D42691A5CDE04B /* FloorPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA5F716C6D92B15E4991C2E /* FloorPlan.swift */; };
+		1625459AB2333CD0ADF0A381 /* PhotoTourView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800CD2A01A3E4D5B43B630E9 /* PhotoTourView.swift */; };
+		19ABE0B6BDBC7598B02CE5CE /* ScanInsights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */; };
+		1BC4DDA8DD763B5B33281CC6 /* RoomScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA8881DF15E098F3B5EF2C0 /* RoomScanView.swift */; };
+		2FC4595178904B44876382AA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE872844E29A3C4FFEBE10B2 /* SettingsView.swift */; };
+		33CD9B1A6264F53238B08B19 /* CameraProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FB03975DEE545D2EC58807 /* CameraProjection.swift */; };
+		33E61EB8CEA69CC805903687 /* WalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB64DEEFB05F6FE6F90A6A0 /* WalkthroughView.swift */; };
+		384DE18780DD854E31868057 /* Surfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8CB3FC9E24CEDD575CE73A /* Surfaces.swift */; };
+		3B544475A291FDC0E191C004 /* AskTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A4ED736DC92F8ECDE417C3 /* AskTools.swift */; };
+		40AA10DA1AF32C9D95BAAEF7 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F0E88ED1186CDCED00AFC /* NavigationRouter.swift */; };
+		423F39FFFA4926532B647576 /* MeshCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34976E9723DA6D0D9E19AE0A /* MeshCaptureController.swift */; };
+		460893D531B37644A6F3B421 /* LidarMeshCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F875C0E0FCE78EB04EEC1DC /* LidarMeshCropper.swift */; };
+		4768E69A3F0BAD3113F67D14 /* MeshExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659C03586436A21AB4056DDE /* MeshExporter.swift */; };
+		4CE5ACB9EC89F7DC5BB9B540 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71913AD745B2EA5ECFBD79C5 /* HomeView.swift */; };
+		4D79FB45210BE6CE512DB4EE /* RoomFactsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BED8C695B956FE82F7AC70F /* RoomFactsBuilder.swift */; };
+		4E0547B245E4416B5201E4F6 /* RoomSummaryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81835F59DB587A5646C131B5 /* RoomSummaryModel.swift */; };
+		4FDF1D79E222D2E5CD202823 /* FramePoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F3A30100DBA4C53851781F /* FramePoller.swift */; };
+		52856169B71BD3AF40245CDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D11D40B40029EFC5BEDC148 /* Assets.xcassets */; };
+		59E8865DF5A0B9D26C44BF8D /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701191646ABD1F617A3F8DC9 /* FeedbackView.swift */; };
+		5B1D85609CC4DFBEB423ECAE /* ScanDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17642C3635E149D219F0BEF9 /* ScanDetailView.swift */; };
+		5C728755BFB234CC9ABE543D /* FeedbackConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04348A70B69515435183D301 /* FeedbackConfig.swift */; };
+		5FD9565E553E14ED0FA4236C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15118E0F9D59C9F4D6CD8F99 /* Theme.swift */; };
+		6169E05A297292D847CAAB2A /* TildaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E21AB453DA65E87A0A4458 /* TildaApp.swift */; };
+		61A659BCDD3B5DC827D69419 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8544760B33A2F1FDFEDD11A9 /* FlowLayout.swift */; };
+		6A61DA8C771F62C4D37BADB0 /* RoomExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E9EB55428D115BE2605EA8 /* RoomExporter.swift */; };
+		6B01165206FACAA28206941E /* RoomSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B4FDCC11BF29B5F5CE653A /* RoomSummaryView.swift */; };
+		6B70255A4024174CBAF6EC0B /* ModeTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BEAAACE5DE8E1EDBA4B390 /* ModeTile.swift */; };
+		6C81F819271E392510F6B9B7 /* PointCloudCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142B0BE242F3FB60371500E8 /* PointCloudCapture.swift */; };
+		74767336589704B46FAFEF19 /* AnalysisCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152CA85CD9DC3E325A1172B6 /* AnalysisCoordinator.swift */; };
+		7820A944E96E06456D9C4A12 /* PointCloudCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7DC3A4BB0AD0EAB25295CB /* PointCloudCore.swift */; };
+		7B55C94166A5E482F441FC50 /* ObjectSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F2B6718E3F03C3C0F7289 /* ObjectSettingsSection.swift */; };
+		7E218F2DB60D96F15F3D4ED4 /* ScanMeasurements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D06CFC97DA48A1CE99C9B4 /* ScanMeasurements.swift */; };
+		80A236B4155DF302E3A28A4F /* TourModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DF28D6E4FA1656A30B4E1EF /* TourModel.swift */; };
+		81335551D2D40D1131CE7833 /* LidarObjectScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E159D310346ECDF1378981 /* LidarObjectScanView.swift */; };
+		8518A5DE6DCD16C4CB22AEEF /* TorchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4745A5C1FC9219A5BF0A6894 /* TorchButton.swift */; };
+		8871AC5DF826EC5DE28AE4EF /* MeshSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C42B062E78EB1C08AC219B /* MeshSettingsSection.swift */; };
+		9653BBD2779E169A5FE35198 /* MeshColorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B666C3D79855790931332876 /* MeshColorizer.swift */; };
+		9E0F75C6D0E877E46562FF2D /* Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0DDC8BDC99A259D2637BAA1 /* Scan.swift */; };
+		9F607409836A3BCBC2AA5F0A /* ObjectScanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990872D6DB115A1E09113A5 /* ObjectScanModel.swift */; };
+		A9C566CF5995CC89AACC9F89 /* PhotorealObjectScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F32C313695BBBB9C4F9B7 /* PhotorealObjectScanView.swift */; };
+		AAEE4B15F984C61BEDC757F7 /* ScanEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0A2C78108C8A84E0711C65 /* ScanEntity.swift */; };
+		B23C018832AD64F8E4416E73 /* RoomCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108F29B102B3D2A925CD4C41 /* RoomCaptureController.swift */; };
+		B325DDE8C6890247453F2F79 /* FloorPlanCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659F4F496563E95E5FC632E /* FloorPlanCanvas.swift */; };
+		B53FE7F4124E8AE888FB5ED0 /* TildaIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E059FA2D2FA689557A0B2A /* TildaIntents.swift */; };
+		B5EAEE602BCB068E6FD46B9C /* ModelPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D35717F43743BE3A2C0DE /* ModelPreview.swift */; };
+		BD61D9C391B81183D3778135 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B36B620054B30A56FBF02F9 /* ShareSheet.swift */; };
+		BFCF47D9A561EC4D20153975 /* ObjectScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73BD743E1FC00F840819AB /* ObjectScanView.swift */; };
+		C0D60E6946D22DA27C43FC7B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8CA86C1EFB7F019F1ABBB390 /* PrivacyInfo.xcprivacy */; };
+		C2CD596563CB36760576BDE9 /* SpotlightIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2AFD5D5E03174508BE3118 /* SpotlightIndexer.swift */; };
+		C336B0BDFCAC431B96145D30 /* ObjectScanChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A62DFCCBEFB99F9886BA43 /* ObjectScanChrome.swift */; };
+		C46B96F46F95B38DE2CD7A12 /* RoomSummaryExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86313C91B0E75AC395432C0A /* RoomSummaryExporter.swift */; };
+		C6469719853F05F0D4EF8449 /* TildaMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8953D429A42AADA1B4D167D /* TildaMark.swift */; };
+		C73E6F94F20632CAB91F3AAF /* ScanIntelligence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7079B4876FAEB07CD70335AB /* ScanIntelligence.swift */; };
+		CB2183BA53A01C27B81DD02D /* RoomSummaryComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB9A9F9B74EC571363C8288 /* RoomSummaryComponents.swift */; };
+		D05573450ADE8BF9EA144012 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205AE324568F677E7DDA278F /* AppSettings.swift */; };
+		D53639AB92002EDA2F6C4803 /* RoomFloorChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A9D05187AAC84C23B31AD7 /* RoomFloorChrome.swift */; };
+		D702B3210AE8EB9DCF284A78 /* DeviceSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F75BA97805F89D84B211C7B /* DeviceSupport.swift */; };
+		D7AF384A18FAA67A89495FDE /* ScanChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5AF7B8F7F49A4585905C8F /* ScanChrome.swift */; };
+		D8C38088ACBAA768B8E5A890 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F798CA0E323A1411DA4652C /* ExportService.swift */; };
+		D9BA17899874F2799F3A1734 /* ScanStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2803A721F32F200C292FDB5 /* ScanStore.swift */; };
+		DAB10E6B7A2A5653DFE734B9 /* FloorPlanBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04DACAB0CE204FCB270C5A4 /* FloorPlanBuilder.swift */; };
+		E249427B725BD48F05741D58 /* RoomFacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FC6DE6F465D8BCBEC03439 /* RoomFacts.swift */; };
+		FFEB5E815D938EEAA9C8522E /* MeshScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739AA29D1D97EDA1F0AB018F /* MeshScanView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		04348A70B69515435183D301 /* FeedbackConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackConfig.swift; sourceTree = "<group>"; };
+		086F32C313695BBBB9C4F9B7 /* PhotorealObjectScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotorealObjectScanView.swift; sourceTree = "<group>"; };
+		0B36B620054B30A56FBF02F9 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		0BA1F6FD076AA9B190577AC5 /* PointGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointGeometry.swift; sourceTree = "<group>"; };
+		0F798CA0E323A1411DA4652C /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
+		108F29B102B3D2A925CD4C41 /* RoomCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCaptureController.swift; sourceTree = "<group>"; };
+		11E9EB55428D115BE2605EA8 /* RoomExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomExporter.swift; sourceTree = "<group>"; };
+		142B0BE242F3FB60371500E8 /* PointCloudCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointCloudCapture.swift; sourceTree = "<group>"; };
+		15118E0F9D59C9F4D6CD8F99 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		152CA85CD9DC3E325A1172B6 /* AnalysisCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisCoordinator.swift; sourceTree = "<group>"; };
+		17642C3635E149D219F0BEF9 /* ScanDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanDetailView.swift; sourceTree = "<group>"; };
+		1AA5F716C6D92B15E4991C2E /* FloorPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlan.swift; sourceTree = "<group>"; };
+		205AE324568F677E7DDA278F /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		26BEAAACE5DE8E1EDBA4B390 /* ModeTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeTile.swift; sourceTree = "<group>"; };
+		29C567687F6FAE58D85A5818 /* RoomSummaryPDFBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryPDFBlocks.swift; sourceTree = "<group>"; };
+		2F875C0E0FCE78EB04EEC1DC /* LidarMeshCropper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LidarMeshCropper.swift; sourceTree = "<group>"; };
+		34976E9723DA6D0D9E19AE0A /* MeshCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCaptureController.swift; sourceTree = "<group>"; };
+		3BA8881DF15E098F3B5EF2C0 /* RoomScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScanView.swift; sourceTree = "<group>"; };
+		42A4ED736DC92F8ECDE417C3 /* AskTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskTools.swift; sourceTree = "<group>"; };
+		4745A5C1FC9219A5BF0A6894 /* TorchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorchButton.swift; sourceTree = "<group>"; };
+		49E159D310346ECDF1378981 /* LidarObjectScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LidarObjectScanView.swift; sourceTree = "<group>"; };
+		4F75BA97805F89D84B211C7B /* DeviceSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSupport.swift; sourceTree = "<group>"; };
+		505D35717F43743BE3A2C0DE /* ModelPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPreview.swift; sourceTree = "<group>"; };
+		54A9D05187AAC84C23B31AD7 /* RoomFloorChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFloorChrome.swift; sourceTree = "<group>"; };
+		57E21AB453DA65E87A0A4458 /* TildaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TildaApp.swift; sourceTree = "<group>"; };
+		5A5AF7B8F7F49A4585905C8F /* ScanChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanChrome.swift; sourceTree = "<group>"; };
+		5D0A2C78108C8A84E0711C65 /* ScanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanEntity.swift; sourceTree = "<group>"; };
+		6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanInsights.swift; sourceTree = "<group>"; };
+		64C42B062E78EB1C08AC219B /* MeshSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSettingsSection.swift; sourceTree = "<group>"; };
+		659C03586436A21AB4056DDE /* MeshExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshExporter.swift; sourceTree = "<group>"; };
+		6BED8C695B956FE82F7AC70F /* RoomFactsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFactsBuilder.swift; sourceTree = "<group>"; };
+		6C73BD743E1FC00F840819AB /* ObjectScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectScanView.swift; sourceTree = "<group>"; };
+		6D8CB3FC9E24CEDD575CE73A /* Surfaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Surfaces.swift; sourceTree = "<group>"; };
+		701191646ABD1F617A3F8DC9 /* FeedbackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedbackView.swift; sourceTree = "<group>"; };
+		7079B4876FAEB07CD70335AB /* ScanIntelligence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanIntelligence.swift; sourceTree = "<group>"; };
+		71913AD745B2EA5ECFBD79C5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		739AA29D1D97EDA1F0AB018F /* MeshScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshScanView.swift; sourceTree = "<group>"; };
+		800CD2A01A3E4D5B43B630E9 /* PhotoTourView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTourView.swift; sourceTree = "<group>"; };
+		80B5DD82345CB9F07A6B857F /* AskScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskScanView.swift; sourceTree = "<group>"; };
+		81835F59DB587A5646C131B5 /* RoomSummaryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryModel.swift; sourceTree = "<group>"; };
+		82A62DFCCBEFB99F9886BA43 /* ObjectScanChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectScanChrome.swift; sourceTree = "<group>"; };
+		838F2B6718E3F03C3C0F7289 /* ObjectSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectSettingsSection.swift; sourceTree = "<group>"; };
+		8544760B33A2F1FDFEDD11A9 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
+		86313C91B0E75AC395432C0A /* RoomSummaryExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryExporter.swift; sourceTree = "<group>"; };
+		8CA86C1EFB7F019F1ABBB390 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		8D11D40B40029EFC5BEDC148 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8DF28D6E4FA1656A30B4E1EF /* TourModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourModel.swift; sourceTree = "<group>"; };
+		91FC6DE6F465D8BCBEC03439 /* RoomFacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFacts.swift; sourceTree = "<group>"; };
+		98D06CFC97DA48A1CE99C9B4 /* ScanMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanMeasurements.swift; sourceTree = "<group>"; };
+		9990872D6DB115A1E09113A5 /* ObjectScanModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectScanModel.swift; sourceTree = "<group>"; };
+		9EB64DEEFB05F6FE6F90A6A0 /* WalkthroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughView.swift; sourceTree = "<group>"; };
+		9FB9A9F9B74EC571363C8288 /* RoomSummaryComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryComponents.swift; sourceTree = "<group>"; };
+		A18F0E88ED1186CDCED00AFC /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
+		A5E059FA2D2FA689557A0B2A /* TildaIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TildaIntents.swift; sourceTree = "<group>"; };
+		A6D112A53AFAFBB9A06EA6C6 /* Tilda.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tilda.xcconfig; sourceTree = "<group>"; };
+		AE951ADAA80EF218F6DA3BD8 /* FrameRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameRecorder.swift; sourceTree = "<group>"; };
+		B0DDC8BDC99A259D2637BAA1 /* Scan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scan.swift; sourceTree = "<group>"; };
+		B2803A721F32F200C292FDB5 /* ScanStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanStore.swift; sourceTree = "<group>"; };
+		B666C3D79855790931332876 /* MeshColorizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshColorizer.swift; sourceTree = "<group>"; };
+		BB2AFD5D5E03174508BE3118 /* SpotlightIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightIndexer.swift; sourceTree = "<group>"; };
+		BB7DC3A4BB0AD0EAB25295CB /* PointCloudCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointCloudCore.swift; sourceTree = "<group>"; };
+		C30A8B32F37DCBF983B7CF63 /* InsightsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsCard.swift; sourceTree = "<group>"; };
+		CBD4AA36BA58305920A5D3BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		D8953D429A42AADA1B4D167D /* TildaMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TildaMark.swift; sourceTree = "<group>"; };
+		E04DACAB0CE204FCB270C5A4 /* FloorPlanBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanBuilder.swift; sourceTree = "<group>"; };
+		E4F3A30100DBA4C53851781F /* FramePoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FramePoller.swift; sourceTree = "<group>"; };
+		E659F4F496563E95E5FC632E /* FloorPlanCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanCanvas.swift; sourceTree = "<group>"; };
+		E75A5E37E9415480C69B4775 /* ScanRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRow.swift; sourceTree = "<group>"; };
+		E8FB03975DEE545D2EC58807 /* CameraProjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraProjection.swift; sourceTree = "<group>"; };
+		F4B4FDCC11BF29B5F5CE653A /* RoomSummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryView.swift; sourceTree = "<group>"; };
+		FE25CE59F5321D7F1351426C /* Tilda.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Tilda.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE872844E29A3C4FFEBE10B2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0254BCA3FCF6F39324D49BBD /* Scanning */ = {
+			isa = PBXGroup;
+			children = (
+				AE951ADAA80EF218F6DA3BD8 /* FrameRecorder.swift */,
+				739AA29D1D97EDA1F0AB018F /* MeshScanView.swift */,
+				6C73BD743E1FC00F840819AB /* ObjectScanView.swift */,
+				3BA8881DF15E098F3B5EF2C0 /* RoomScanView.swift */,
+				4745A5C1FC9219A5BF0A6894 /* TorchButton.swift */,
+				E84A7044EF67AFF5BA6137DF /* Mesh */,
+				0AE618A5E1F51FCAEC5C22E5 /* Object */,
+				CCF138135CEC451DD0113A6D /* Room */,
+			);
+			path = Scanning;
+			sourceTree = "<group>";
+		};
+		0AE618A5E1F51FCAEC5C22E5 /* Object */ = {
+			isa = PBXGroup;
+			children = (
+				2F875C0E0FCE78EB04EEC1DC /* LidarMeshCropper.swift */,
+				49E159D310346ECDF1378981 /* LidarObjectScanView.swift */,
+				82A62DFCCBEFB99F9886BA43 /* ObjectScanChrome.swift */,
+				9990872D6DB115A1E09113A5 /* ObjectScanModel.swift */,
+				838F2B6718E3F03C3C0F7289 /* ObjectSettingsSection.swift */,
+				086F32C313695BBBB9C4F9B7 /* PhotorealObjectScanView.swift */,
+			);
+			path = Object;
+			sourceTree = "<group>";
+		};
+		1AD2B8ADF621D4F8AEA2BB61 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				205AE324568F677E7DDA278F /* AppSettings.swift */,
+				1AA5F716C6D92B15E4991C2E /* FloorPlan.swift */,
+				91FC6DE6F465D8BCBEC03439 /* RoomFacts.swift */,
+				B0DDC8BDC99A259D2637BAA1 /* Scan.swift */,
+				B2803A721F32F200C292FDB5 /* ScanStore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		24AB6253714F56DEF59ABABB /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				A6D112A53AFAFBB9A06EA6C6 /* Tilda.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		42D4266294A22973D8E302E5 /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				04348A70B69515435183D301 /* FeedbackConfig.swift */,
+				701191646ABD1F617A3F8DC9 /* FeedbackView.swift */,
+			);
+			path = Feedback;
+			sourceTree = "<group>";
+		};
+		4DC117F2F4FC7E72E99AAA1B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FE25CE59F5321D7F1351426C /* Tilda.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4DCBE57EB4CC7BA33877686A /* RoomSummary */ = {
+			isa = PBXGroup;
+			children = (
+				9FB9A9F9B74EC571363C8288 /* RoomSummaryComponents.swift */,
+				86313C91B0E75AC395432C0A /* RoomSummaryExporter.swift */,
+				81835F59DB587A5646C131B5 /* RoomSummaryModel.swift */,
+				29C567687F6FAE58D85A5818 /* RoomSummaryPDFBlocks.swift */,
+				F4B4FDCC11BF29B5F5CE653A /* RoomSummaryView.swift */,
+			);
+			path = RoomSummary;
+			sourceTree = "<group>";
+		};
+		5A1298744F140506AF38FA2A /* Export */ = {
+			isa = PBXGroup;
+			children = (
+				0F798CA0E323A1411DA4652C /* ExportService.swift */,
+			);
+			path = Export;
+			sourceTree = "<group>";
+		};
+		6096124A54C869FC7EA7BCFE = {
+			isa = PBXGroup;
+			children = (
+				24AB6253714F56DEF59ABABB /* Config */,
+				E2D5CD0ED75BF6A8316898E0 /* Tilda */,
+				4DC117F2F4FC7E72E99AAA1B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		696DE1E907F3C218609D2EFB /* AI */ = {
+			isa = PBXGroup;
+			children = (
+				152CA85CD9DC3E325A1172B6 /* AnalysisCoordinator.swift */,
+				80B5DD82345CB9F07A6B857F /* AskScanView.swift */,
+				42A4ED736DC92F8ECDE417C3 /* AskTools.swift */,
+				6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */,
+				7079B4876FAEB07CD70335AB /* ScanIntelligence.swift */,
+				98D06CFC97DA48A1CE99C9B4 /* ScanMeasurements.swift */,
+				BB2AFD5D5E03174508BE3118 /* SpotlightIndexer.swift */,
+			);
+			path = AI;
+			sourceTree = "<group>";
+		};
+		69C07A59D8CE9B7943F01227 /* Walkthrough */ = {
+			isa = PBXGroup;
+			children = (
+				9EB64DEEFB05F6FE6F90A6A0 /* WalkthroughView.swift */,
+			);
+			path = Walkthrough;
+			sourceTree = "<group>";
+		};
+		A5C02E54FEE62E80D53A3214 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				57E21AB453DA65E87A0A4458 /* TildaApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		AD0A095BE24849F076E9296B /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				A18F0E88ED1186CDCED00AFC /* NavigationRouter.swift */,
+				5D0A2C78108C8A84E0711C65 /* ScanEntity.swift */,
+				A5E059FA2D2FA689557A0B2A /* TildaIntents.swift */,
+			);
+			path = Intents;
+			sourceTree = "<group>";
+		};
+		CCF138135CEC451DD0113A6D /* Room */ = {
+			isa = PBXGroup;
+			children = (
+				E04DACAB0CE204FCB270C5A4 /* FloorPlanBuilder.swift */,
+				E4F3A30100DBA4C53851781F /* FramePoller.swift */,
+				108F29B102B3D2A925CD4C41 /* RoomCaptureController.swift */,
+				11E9EB55428D115BE2605EA8 /* RoomExporter.swift */,
+				6BED8C695B956FE82F7AC70F /* RoomFactsBuilder.swift */,
+				54A9D05187AAC84C23B31AD7 /* RoomFloorChrome.swift */,
+				5A5AF7B8F7F49A4585905C8F /* ScanChrome.swift */,
+			);
+			path = Room;
+			sourceTree = "<group>";
+		};
+		E2D5CD0ED75BF6A8316898E0 /* Tilda */ = {
+			isa = PBXGroup;
+			children = (
+				8D11D40B40029EFC5BEDC148 /* Assets.xcassets */,
+				CBD4AA36BA58305920A5D3BA /* Info.plist */,
+				8CA86C1EFB7F019F1ABBB390 /* PrivacyInfo.xcprivacy */,
+				696DE1E907F3C218609D2EFB /* AI */,
+				A5C02E54FEE62E80D53A3214 /* App */,
+				5A1298744F140506AF38FA2A /* Export */,
+				AD0A095BE24849F076E9296B /* Intents */,
+				1AD2B8ADF621D4F8AEA2BB61 /* Models */,
+				0254BCA3FCF6F39324D49BBD /* Scanning */,
+				EFF7C49729714B67778AA492 /* Theme */,
+				EE7DBB81731FCDE7FA86D398 /* Views */,
+			);
+			path = Tilda;
+			sourceTree = "<group>";
+		};
+		E84A7044EF67AFF5BA6137DF /* Mesh */ = {
+			isa = PBXGroup;
+			children = (
+				E8FB03975DEE545D2EC58807 /* CameraProjection.swift */,
+				34976E9723DA6D0D9E19AE0A /* MeshCaptureController.swift */,
+				B666C3D79855790931332876 /* MeshColorizer.swift */,
+				659C03586436A21AB4056DDE /* MeshExporter.swift */,
+				64C42B062E78EB1C08AC219B /* MeshSettingsSection.swift */,
+				142B0BE242F3FB60371500E8 /* PointCloudCapture.swift */,
+				BB7DC3A4BB0AD0EAB25295CB /* PointCloudCore.swift */,
+				0BA1F6FD076AA9B190577AC5 /* PointGeometry.swift */,
+				6D8CB3FC9E24CEDD575CE73A /* Surfaces.swift */,
+			);
+			path = Mesh;
+			sourceTree = "<group>";
+		};
+		EE7DBB81731FCDE7FA86D398 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				4F75BA97805F89D84B211C7B /* DeviceSupport.swift */,
+				8544760B33A2F1FDFEDD11A9 /* FlowLayout.swift */,
+				71913AD745B2EA5ECFBD79C5 /* HomeView.swift */,
+				C30A8B32F37DCBF983B7CF63 /* InsightsCard.swift */,
+				505D35717F43743BE3A2C0DE /* ModelPreview.swift */,
+				26BEAAACE5DE8E1EDBA4B390 /* ModeTile.swift */,
+				17642C3635E149D219F0BEF9 /* ScanDetailView.swift */,
+				E75A5E37E9415480C69B4775 /* ScanRow.swift */,
+				FE872844E29A3C4FFEBE10B2 /* SettingsView.swift */,
+				0B36B620054B30A56FBF02F9 /* ShareSheet.swift */,
+				42D4266294A22973D8E302E5 /* Feedback */,
+				4DCBE57EB4CC7BA33877686A /* RoomSummary */,
+				F8E95ED545B3C982DCA576B8 /* Tour */,
+				69C07A59D8CE9B7943F01227 /* Walkthrough */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		EFF7C49729714B67778AA492 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				15118E0F9D59C9F4D6CD8F99 /* Theme.swift */,
+				D8953D429A42AADA1B4D167D /* TildaMark.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
+		F8E95ED545B3C982DCA576B8 /* Tour */ = {
+			isa = PBXGroup;
+			children = (
+				E659F4F496563E95E5FC632E /* FloorPlanCanvas.swift */,
+				800CD2A01A3E4D5B43B630E9 /* PhotoTourView.swift */,
+				8DF28D6E4FA1656A30B4E1EF /* TourModel.swift */,
+			);
+			path = Tour;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		EBC8118B047204CCDABBD2DA /* Tilda */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 026A3C967C509D4824463F0C /* Build configuration list for PBXNativeTarget "Tilda" */;
+			buildPhases = (
+				45F2631A6325D3CEB347BFC4 /* Sources */,
+				AAF51B83880398726B557FAB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tilda;
+			packageProductDependencies = (
+			);
+			productName = Tilda;
+			productReference = FE25CE59F5321D7F1351426C /* Tilda.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F976BC404BA256A48E252604 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					EBC8118B047204CCDABBD2DA = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 1D91A48A0229A47D40FFAA1C /* Build configuration list for PBXProject "Tilda" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 6096124A54C869FC7EA7BCFE;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4DC117F2F4FC7E72E99AAA1B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EBC8118B047204CCDABBD2DA /* Tilda */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AAF51B83880398726B557FAB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52856169B71BD3AF40245CDC /* Assets.xcassets in Resources */,
+				C0D60E6946D22DA27C43FC7B /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		45F2631A6325D3CEB347BFC4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74767336589704B46FAFEF19 /* AnalysisCoordinator.swift in Sources */,
+				D05573450ADE8BF9EA144012 /* AppSettings.swift in Sources */,
+				0748498D6ABD4FBB96AA1FAF /* AskScanView.swift in Sources */,
+				3B544475A291FDC0E191C004 /* AskTools.swift in Sources */,
+				33CD9B1A6264F53238B08B19 /* CameraProjection.swift in Sources */,
+				D702B3210AE8EB9DCF284A78 /* DeviceSupport.swift in Sources */,
+				D8C38088ACBAA768B8E5A890 /* ExportService.swift in Sources */,
+				5C728755BFB234CC9ABE543D /* FeedbackConfig.swift in Sources */,
+				59E8865DF5A0B9D26C44BF8D /* FeedbackView.swift in Sources */,
+				1221B46109D42691A5CDE04B /* FloorPlan.swift in Sources */,
+				DAB10E6B7A2A5653DFE734B9 /* FloorPlanBuilder.swift in Sources */,
+				B325DDE8C6890247453F2F79 /* FloorPlanCanvas.swift in Sources */,
+				61A659BCDD3B5DC827D69419 /* FlowLayout.swift in Sources */,
+				4FDF1D79E222D2E5CD202823 /* FramePoller.swift in Sources */,
+				0B7E3B86880445C8AC1CA4F1 /* FrameRecorder.swift in Sources */,
+				4CE5ACB9EC89F7DC5BB9B540 /* HomeView.swift in Sources */,
+				048A8C3298F51548D05CA586 /* InsightsCard.swift in Sources */,
+				460893D531B37644A6F3B421 /* LidarMeshCropper.swift in Sources */,
+				81335551D2D40D1131CE7833 /* LidarObjectScanView.swift in Sources */,
+				423F39FFFA4926532B647576 /* MeshCaptureController.swift in Sources */,
+				9653BBD2779E169A5FE35198 /* MeshColorizer.swift in Sources */,
+				4768E69A3F0BAD3113F67D14 /* MeshExporter.swift in Sources */,
+				FFEB5E815D938EEAA9C8522E /* MeshScanView.swift in Sources */,
+				8871AC5DF826EC5DE28AE4EF /* MeshSettingsSection.swift in Sources */,
+				6B70255A4024174CBAF6EC0B /* ModeTile.swift in Sources */,
+				B5EAEE602BCB068E6FD46B9C /* ModelPreview.swift in Sources */,
+				40AA10DA1AF32C9D95BAAEF7 /* NavigationRouter.swift in Sources */,
+				C336B0BDFCAC431B96145D30 /* ObjectScanChrome.swift in Sources */,
+				9F607409836A3BCBC2AA5F0A /* ObjectScanModel.swift in Sources */,
+				BFCF47D9A561EC4D20153975 /* ObjectScanView.swift in Sources */,
+				7B55C94166A5E482F441FC50 /* ObjectSettingsSection.swift in Sources */,
+				1625459AB2333CD0ADF0A381 /* PhotoTourView.swift in Sources */,
+				A9C566CF5995CC89AACC9F89 /* PhotorealObjectScanView.swift in Sources */,
+				6C81F819271E392510F6B9B7 /* PointCloudCapture.swift in Sources */,
+				7820A944E96E06456D9C4A12 /* PointCloudCore.swift in Sources */,
+				0C57EE8A8341BE979D827C6A /* PointGeometry.swift in Sources */,
+				B23C018832AD64F8E4416E73 /* RoomCaptureController.swift in Sources */,
+				6A61DA8C771F62C4D37BADB0 /* RoomExporter.swift in Sources */,
+				E249427B725BD48F05741D58 /* RoomFacts.swift in Sources */,
+				4D79FB45210BE6CE512DB4EE /* RoomFactsBuilder.swift in Sources */,
+				D53639AB92002EDA2F6C4803 /* RoomFloorChrome.swift in Sources */,
+				1BC4DDA8DD763B5B33281CC6 /* RoomScanView.swift in Sources */,
+				CB2183BA53A01C27B81DD02D /* RoomSummaryComponents.swift in Sources */,
+				C46B96F46F95B38DE2CD7A12 /* RoomSummaryExporter.swift in Sources */,
+				4E0547B245E4416B5201E4F6 /* RoomSummaryModel.swift in Sources */,
+				06D94E59FEF64689BFFCF1A7 /* RoomSummaryPDFBlocks.swift in Sources */,
+				6B01165206FACAA28206941E /* RoomSummaryView.swift in Sources */,
+				9E0F75C6D0E877E46562FF2D /* Scan.swift in Sources */,
+				D7AF384A18FAA67A89495FDE /* ScanChrome.swift in Sources */,
+				5B1D85609CC4DFBEB423ECAE /* ScanDetailView.swift in Sources */,
+				AAEE4B15F984C61BEDC757F7 /* ScanEntity.swift in Sources */,
+				19ABE0B6BDBC7598B02CE5CE /* ScanInsights.swift in Sources */,
+				C73E6F94F20632CAB91F3AAF /* ScanIntelligence.swift in Sources */,
+				7E218F2DB60D96F15F3D4ED4 /* ScanMeasurements.swift in Sources */,
+				08CBD2853CD43677AFD4CA52 /* ScanRow.swift in Sources */,
+				D9BA17899874F2799F3A1734 /* ScanStore.swift in Sources */,
+				2FC4595178904B44876382AA /* SettingsView.swift in Sources */,
+				BD61D9C391B81183D3778135 /* ShareSheet.swift in Sources */,
+				C2CD596563CB36760576BDE9 /* SpotlightIndexer.swift in Sources */,
+				384DE18780DD854E31868057 /* Surfaces.swift in Sources */,
+				5FD9565E553E14ED0FA4236C /* Theme.swift in Sources */,
+				6169E05A297292D847CAAB2A /* TildaApp.swift in Sources */,
+				B53FE7F4124E8AE888FB5ED0 /* TildaIntents.swift in Sources */,
+				C6469719853F05F0D4EF8449 /* TildaMark.swift in Sources */,
+				8518A5DE6DCD16C4CB22AEEF /* TorchButton.swift in Sources */,
+				80A236B4155DF302E3A28A4F /* TourModel.swift in Sources */,
+				33E61EB8CEA69CC805903687 /* WalkthroughView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		52FFB1786CE33F4C909E2C42 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A6D112A53AFAFBB9A06EA6C6 /* Tilda.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		73F89EC8307DDF7C37146A20 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A6D112A53AFAFBB9A06EA6C6 /* Tilda.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		8F950152C58820284DB5986D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Tilda/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.augie15.tilda;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FFEDFA079FFDE0E527E66D8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Tilda/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.augie15.tilda;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		026A3C967C509D4824463F0C /* Build configuration list for PBXNativeTarget "Tilda" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FFEDFA079FFDE0E527E66D8D /* Debug */,
+				8F950152C58820284DB5986D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		1D91A48A0229A47D40FFAA1C /* Build configuration list for PBXProject "Tilda" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52FFB1786CE33F4C909E2C42 /* Debug */,
+				73F89EC8307DDF7C37146A20 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F976BC404BA256A48E252604 /* Project object */;
+}

@@ -1,0 +1,3 @@
+// Shared build settings. Signing team lives in an untracked local file:
+//   printf 'DEVELOPMENT_TEAM = YOURTEAMID\n' > Config/Signing.local.xcconfig
+#include? "Signing.local.xcconfig"
