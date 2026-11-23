@@ -1,5 +1,8 @@
 # Submission checklist
 
+Last updated: 2026-11-23. Status: repo, GitHub and device smoke tests are done; App Store Connect, screenshots and
+upload are next (all owner-only).
+
 Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Connect, GitHub or on a device), **[~] decide**.
 
 ## 1. Repo and build
@@ -10,17 +13,35 @@ Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Con
 - [x] Privacy policy, support and landing pages in `docs/`.
 - [x] Store text drafted in `docs/app-store/` (metadata, privacy, age rating, review notes, screenshots).
 - [x] `scripts/archive.sh` archives and exports for App Store Connect.
-- [ ] Commit and push to `main` (the coordinator does this).
+- [x] Committed and pushed to `main`.
+- [x] Repo meta: `LICENSE` (all rights reserved), README, CHANGELOG, CONTRIBUTING, SECURITY, PR template.
+- [x] Unsupported-device messages all say "iPhone with a LiDAR scanner" (target is iPhone-only).
 - [x] Remove or sanitize the team ID in `PLAN.md` (done: it no longer appears in tracked files). The repo is public. The team ID is not secret in itself (it is public inside any signed app), but the project rule is to keep it out of tracked files.
 
 ## 2. GitHub
 
-- [ ] Enable GitHub Pages: repo Settings, Pages, Deploy from a branch, `main`, folder `/docs`.
-- [ ] Open https://augie15.github.io/lidar-app/privacy.html, `support.html` and the home page and check they load. App Review opens the privacy and support URLs.
+- [x] GitHub Pages enabled: deploys from `main`, folder `/docs`.
+- [x] Live and returning 200: https://augie15.github.io/lidar-app/ , [privacy.html](https://augie15.github.io/lidar-app/privacy.html) and [support.html](https://augie15.github.io/lidar-app/support.html). App Review opens the privacy and support URLs.
+- [x] Repo description, homepage (the Pages URL) and topics set.
 - [x] Support email added: brett@augiesrentals.ca (on the support and privacy pages, and in the review notes).
-- [ ] Confirm the GitHub issue templates `bug_report.yml` and `feature_request.yml` exist on `main` (the in-app feedback links use them).
+- [x] Issue templates `bug_report.yml`, `feature_request.yml` and `config.yml` are on `main` (the in-app feedback links use them), and the `bug` and `enhancement` labels exist.
 
-## 3. App Store Connect
+## 3. Device testing (iPhone 17 Pro Max)
+
+- [x] Room, Object and Mesh scans work (owner confirmed).
+- [x] Flash button in each scan mode.
+- [x] Photo tour shows multiple views (fixed: turn-in-place scans no longer collapse to one photo).
+- [ ] Whole floor: Next room, then Continue across 2 or 3 rooms, then Finish floor. Check the merged model and the summary totals.
+- [ ] Room summary on a fresh scan: floor area, open floor and est. gross against a room of known size. Check PDF share.
+- [ ] Walk through on a room scan (look, stick, wall collision).
+- [ ] Object: Photoreal with the coverage preview, and LiDAR quick (box placement, crop, color).
+- [ ] Mesh: Point cloud alignment and frame rate, Surfaces colors and legend, colored Mesh.
+- [ ] Apple Intelligence: auto-name, Insights, Ask (paint, sofa fit), Home search, Spotlight, and "Start a room scan in Tilda" with Siri.
+- [ ] Exports: USDZ, OBJ, STL, PLY, Photos + poses zip, Photos for Mac zip (open one in Files or on a Mac).
+- [ ] Send feedback: GitHub opens prefilled, and the email option works.
+- [ ] Settings: each toggle takes effect; storage size is shown.
+
+## 4. App Store Connect
 
 - [ ] Apple Developer Program membership is active and the Agreements, Tax and Banking page shows the Free Apps agreement as Active. No bank details are needed for a free app.
 - [ ] Create the app record (My Apps, New App): platform iOS, bundle ID `com.augie15.tilda`, SKU (for example `tilda-ios`), primary language English. Use a name option from `metadata.md` (the name is global, so try options in order).
@@ -33,16 +54,17 @@ Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Con
 - [ ] Content rights: answer No (the app does not show third-party content).
 - [ ] Take the device screenshots as in `screenshots.md` and upload the 6.9" set.
 
-## 4. Build and upload
+## 5. Build and upload
 
 - [ ] Run `scripts/archive.sh --bump --upload` (uploads to App Store Connect) or `scripts/archive.sh --bump` and upload the exported .ipa with Transporter. Distribution signing must be available (Xcode, Settings, Accounts).
 - [ ] Wait for processing (about 10 to 30 minutes). Fix any email from App Store Connect about the build.
 - [ ] Optional but recommended: install through TestFlight and scan one room, one object and one mesh on the phone before submitting.
 - [ ] Select the build on the version page, answer the export compliance prompt if shown (uses only Apple encryption, exempt), and add "What's New".
 
-## 5. Submit
+## 6. Submit
 
 - [ ] Add for Review, then Submit to App Review. Release option: manual or automatic as you prefer.
+- [ ] After submitting: tag the release (`git tag v1.0.0 && git push --tags`) and move the CHANGELOG entry from Unreleased to the release date.
 
 ## Things to know before you submit
 
@@ -63,4 +85,6 @@ Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Con
 | `Tilda/Scanning/Object/LidarObjectScanView.swift` | `supportsSceneReconstruction(.mesh)` | Unsupported state |
 | `Tilda/Scanning/Object/PhotorealObjectScanView.swift` and `ObjectScanModel.swift` | `ObjectCaptureSession.isSupported`, `PhotogrammetrySession.isSupported` | Guarded, shows a failure message |
 
-Result: every scan path is gated, so there is no crash path found by grep. Remaining caveat: the Room scan error text says "iPhone or iPad", which is slightly different from the Home alert. Also test on a non-LiDAR device or confirm the app opens without scans before submitting, since the Simulator reports unsupported for all modes and can be used for this check. (fixed: all messages now say iPhone)
+Result: every scan path is gated, so there is no crash path found by grep. Also test on a non-LiDAR device or confirm the app opens without scans before submitting, since the Simulator reports unsupported for all modes and can be used for this check.
+
+The earlier wording mismatch ("iPhone or iPad" in Room and Mesh) is fixed: every message now says iPhone.
