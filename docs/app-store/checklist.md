@@ -1,7 +1,7 @@
 # Submission checklist
 
-Last updated: 2026-11-23. Status: repo, GitHub and device smoke tests are done; App Store Connect, screenshots and
-upload are next (all owner-only).
+Last updated: 2026-11-23. Status: **version 1.0 (build 2) submitted to App Review on 2026-11-23**, Waiting for Review.
+Available in 174 countries (China mainland excluded, see section 6), Free, releases automatically after approval.
 
 Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Connect, GitHub or on a device), **[~] decide**.
 
@@ -31,6 +31,7 @@ Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Con
 - [x] Room, Object and Mesh scans work (owner confirmed).
 - [x] Flash button in each scan mode.
 - [x] Photo tour shows multiple views (fixed: turn-in-place scans no longer collapse to one photo).
+- [x] Fixtures (HVAC vents, bathroom fans, baseboard heaters) found on a real room scan through TestFlight build 2 (owner confirmed).
 - [ ] Whole floor: Next room, then Continue across 2 or 3 rooms, then Finish floor. Check the merged model and the summary totals.
 - [ ] Room summary on a fresh scan: floor area, open floor and est. gross against a room of known size. Check PDF share.
 - [ ] Walk through on a room scan (look, stick, wall collision).
@@ -43,29 +44,31 @@ Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Con
 
 ## 4. App Store Connect
 
-- [ ] Apple Developer Program membership is active and the Agreements, Tax and Banking page shows the Free Apps agreement as Active. No bank details are needed for a free app.
-- [ ] Create the app record (My Apps, New App): platform iOS, bundle ID `com.augie15.tilda`, SKU (for example `tilda-ios`), primary language English. Use a name option from `metadata.md` (the name is global, so try options in order).
-- [ ] Set Pricing to **Free** (price tier 0) and choose availability.
-- [ ] Paste the subtitle, promotional text, description and keywords from `metadata.md`. Enter the support, marketing and privacy URLs and the copyright line.
-- [ ] Choose the primary and secondary categories.
-- [ ] Complete App Privacy as in `app-privacy.md` (Data Not Collected) and publish it.
-- [ ] Answer the age rating questionnaire as in `age-rating.md` (4+).
-- [ ] Add the review contact and notes from `review-notes.md`. Sign-in required: off.
-- [ ] Content rights: answer No (the app does not show third-party content).
+- [x] Apple Developer Program membership is active and the Agreements, Tax and Banking page shows the Free Apps agreement as Active. No bank details are needed for a free app.
+- [x] App record created: "Tilda: Room & Object Scanner", bundle ID `com.augie15.tilda`, SKU `tilda-ios`, primary language English (Canada), Apple ID 6838497058. App ID registered by Xcode automatic signing.
+- [x] Pricing **Free**; availability 174 countries (all except China mainland). Mac and Apple Vision Pro availability turned off (clears ITMS-90984).
+- [x] Paste the subtitle, promotional text, description and keywords from `metadata.md`. Enter the support, marketing and privacy URLs and the copyright line.
+- [x] Choose the primary and secondary categories.
+- [x] Complete App Privacy as in `app-privacy.md` (Data Not Collected) and publish it.
+- [x] Answer the age rating questionnaire as in `age-rating.md` (4+).
+- [x] Add the review contact and notes from `review-notes.md`. Sign-in required: off.
+- [x] Content rights: answer No (the app does not show third-party content).
 - [x] Simulator screenshots 1, 3, 5 and 8 taken (`docs/app-store/screenshots/`, 1320 x 2868, no alpha).
-- [ ] Take device screenshots 2, 4, 6 and 7 (and optionally Ask) on the phone, then upload the 6.9" set.
+- [x] Simulator screenshots uploaded to both iPhone slots: 6.3" (required, resized to 1206 x 2622) and 6.9" (1320 x 2868).
+- [ ] Next version: take device screenshots 2, 4, 6 and 7 (and optionally Ask) on the phone and add them.
 
 ## 5. Build and upload
 
-- [ ] Run `scripts/archive.sh --bump --upload` (uploads to App Store Connect) or `scripts/archive.sh --bump` and upload the exported .ipa with Transporter. Distribution signing must be available (Xcode, Settings, Accounts).
-- [ ] Wait for processing (about 10 to 30 minutes). Fix any email from App Store Connect about the build.
-- [ ] Optional but recommended: install through TestFlight and scan one room, one object and one mesh on the phone before submitting.
-- [ ] Select the build on the version page, answer the export compliance prompt if shown (uses only Apple encryption, exempt), and add "What's New".
+- [x] Run `scripts/archive.sh --bump --upload` (uploads to App Store Connect) or `scripts/archive.sh --bump` and upload the exported .ipa with Transporter. Distribution signing must be available (Xcode, Settings, Accounts).
+- [x] Wait for processing (about 10 to 30 minutes). Fix any email from App Store Connect about the build.
+- [x] Optional but recommended: install through TestFlight and scan one room, one object and one mesh on the phone before submitting.
+- [x] Select the build on the version page, answer the export compliance prompt if shown (uses only Apple encryption, exempt), and add "What's New".
 
 ## 6. Submit
 
-- [ ] Add for Review, then Submit to App Review. Release option: manual or automatic as you prefer.
-- [ ] After submitting: tag the release (`git tag v1.0.0 && git push --tags`) and move the CHANGELOG entry from Unreleased to the release date.
+- [x] Submitted to App Review on 2026-11-23 (release: automatic after approval). Before it could be added, China mainland had to be removed from availability: apps with AI features need a Security Assessment and an AI-generated content filing there.
+- [x] Tagged `v1.0.0` and dated the CHANGELOG entry.
+- [ ] Wait for the review email (up to 48 hours). If rejected, fix and resubmit with `scripts/archive.sh --bump --upload`.
 
 ## Things to know before you submit
 

@@ -2,9 +2,9 @@
 
 All notable changes to Tilda are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## [1.0.0] - Unreleased
+## [1.0.0] - 2026-11-23
 
-First App Store version.
+First App Store version (build 2), submitted to App Review on 2026-11-23.
 
 ### Added
 - Room scans with RoomPlan, for one room or a whole floor merged into a single model.
@@ -15,6 +15,7 @@ First App Store version.
 - Export to USDZ, OBJ, STL and PLY, and photos with camera poses (Nerfstudio-style `transforms.json`).
 - Scan library with rename, delete, 3D preview and AR view. Scans are visible in the Files app.
 - Apple Intelligence on supported iPhones: automatic names, summaries and tags, and Ask. Runs on device.
+- Fixtures in room scans: HVAC vents, bathroom fans and baseboard heaters found in scan photos (on-device, iOS 27) and placed on the floor plan, with manual add and delete in the photo tour.
 - Siri and Shortcuts actions and Spotlight indexing.
 - Flashlight control and an option to turn it on at scan start.
 - Settings for units, room model detail, photo density and wall thickness.
