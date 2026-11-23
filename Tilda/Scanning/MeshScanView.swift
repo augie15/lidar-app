@@ -27,7 +27,7 @@ struct MeshScanView: View {
         .alert("Scan failed", isPresented: $showUnsupported) {
             Button("OK") { dismiss() }
         } message: {
-            Text("Mesh scanning needs an iPhone or iPad with a LiDAR scanner.")
+            Text("Mesh scanning needs an iPhone with a LiDAR scanner.")
         }
     }
 

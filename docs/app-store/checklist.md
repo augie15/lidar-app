@@ -11,7 +11,7 @@ Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Con
 - [x] Store text drafted in `docs/app-store/` (metadata, privacy, age rating, review notes, screenshots).
 - [x] `scripts/archive.sh` archives and exports for App Store Connect.
 - [ ] Commit and push to `main` (the coordinator does this).
-- [ ] Remove or sanitize the team ID in `PLAN.md` (it appears in the Distribution note). The repo is public. The team ID is not secret in itself (it is public inside any signed app), but the project rule is to keep it out of tracked files.
+- [x] Remove or sanitize the team ID in `PLAN.md` (done: it no longer appears in tracked files). The repo is public. The team ID is not secret in itself (it is public inside any signed app), but the project rule is to keep it out of tracked files.
 
 ## 2. GitHub
 
@@ -63,4 +63,4 @@ Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Con
 | `Tilda/Scanning/Object/LidarObjectScanView.swift` | `supportsSceneReconstruction(.mesh)` | Unsupported state |
 | `Tilda/Scanning/Object/PhotorealObjectScanView.swift` and `ObjectScanModel.swift` | `ObjectCaptureSession.isSupported`, `PhotogrammetrySession.isSupported` | Guarded, shows a failure message |
 
-Result: every scan path is gated, so there is no crash path found by grep. Remaining caveat: the Room scan error text says "iPhone or iPad", which is slightly different from the Home alert. Also test on a non-LiDAR device or confirm the app opens without scans before submitting, since the Simulator reports unsupported for all modes and can be used for this check.
+Result: every scan path is gated, so there is no crash path found by grep. Remaining caveat: the Room scan error text says "iPhone or iPad", which is slightly different from the Home alert. Also test on a non-LiDAR device or confirm the app opens without scans before submitting, since the Simulator reports unsupported for all modes and can be used for this check. (fixed: all messages now say iPhone)

@@ -48,7 +48,7 @@ struct RoomScanView: View {
                 errorMessage = "That room couldn't be processed. Walk back and scan it again, or continue to the next one."
             }
             if !RoomCaptureSession.isSupported {
-                errorMessage = "Room scanning needs an iPhone or iPad with a LiDAR scanner."
+                errorMessage = "Room scanning needs an iPhone with a LiDAR scanner."
             }
         }
         .onDisappear {
