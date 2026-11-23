@@ -38,15 +38,8 @@ struct FloorPlanCanvas: View {
                 .contentShape(Rectangle())
                 .gesture(
                     SpatialTapGesture().onEnded { value in
-                        let nearest = spots.min {
-                            hypot(t.point($0.position).x - value.location.x, t.point($0.position).y - value.location.y)
-                                < hypot(t.point($1.position).x - value.location.x, t.point($1.position).y - value.location.y)
-                        }
-                        if let nearest {
-                            let p = t.point(nearest.position)
-                            if hypot(p.x - value.location.x, p.y - value.location.y) <= 32 {
-                                withAnimation(.snappy(duration: 0.25)) { selected = nearest.id }
-                            }
+                        if let id = Self.spotID(at: value.location, spots: spots, selected: selected, point: t.point) {
+                            withAnimation(.snappy(duration: 0.25)) { selected = id }
                         }
                     }
                 )
@@ -128,5 +121,43 @@ struct FloorPlanCanvas: View {
         } else {
             ctx.fill(dot, with: .color(Theme.accentText.opacity(0.75)))
         }
+    }
+}
+
+extension FloorPlanCanvas {
+    /// Picks the spot for a tap. Several views can share one place (turning on the spot), so pins stack:
+    /// a tap on the stack's centre cycles to the next view there, and a tap off-centre picks the view whose
+    /// wedge points toward the tap.
+    static func spotID(at location: CGPoint, spots: [PhotoSpot], selected: Int,
+                       point: (SIMD2<Float>) -> CGPoint) -> Int? {
+        func dist(_ a: CGPoint, _ b: CGPoint) -> CGFloat { hypot(a.x - b.x, a.y - b.y) }
+        let hits = spots.filter { dist(point($0.position), location) <= 32 }
+        guard let nearest = hits.min(by: { dist(point($0.position), location) < dist(point($1.position), location) })
+        else { return nil }
+        // Views stacked on the nearest pin (within a few points on screen).
+        let anchor = point(nearest.position)
+        let stack = hits.filter { dist(point($0.position), anchor) <= 10 }.sorted { $0.id < $1.id }
+        guard stack.count > 1 else { return nearest.id }
+
+        let tap = CGVector(dx: location.x - anchor.x, dy: location.y - anchor.y)
+        if hypot(tap.dx, tap.dy) < 8 {
+            // Centre tap: step to the next view in this stack.
+            let index = stack.firstIndex { $0.id == selected }.map { ($0 + 1) % stack.count } ?? 0
+            return stack[index].id
+        }
+        // Off-centre tap: the view whose on-screen facing best matches the tap direction.
+        func screenFacing(_ spot: PhotoSpot) -> CGVector? {
+            guard let f = spot.facing else { return nil }
+            let a = point(spot.position), b = point(spot.position + f * 0.25)
+            let v = CGVector(dx: b.x - a.x, dy: b.y - a.y)
+            let len = hypot(v.dx, v.dy)
+            return len > 0 ? CGVector(dx: v.dx / len, dy: v.dy / len) : nil
+        }
+        let tapLen = hypot(tap.dx, tap.dy)
+        return stack.max { a, b in
+            let fa = screenFacing(a).map { ($0.dx * tap.dx + $0.dy * tap.dy) / tapLen } ?? -2
+            let fb = screenFacing(b).map { ($0.dx * tap.dx + $0.dy * tap.dy) / tapLen } ?? -2
+            return fa < fb
+        }?.id ?? nearest.id
     }
 }

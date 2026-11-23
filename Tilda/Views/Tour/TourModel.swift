@@ -11,24 +11,37 @@ struct PhotoSpot: Identifiable, Sendable {
 }
 
 enum TourModel {
-    /// Minimum spacing between spots, in metres.
+    /// Spots closer than this are "the same place", in metres.
     static let spotSpacing: Float = 0.8
+    /// Within the same place, a new view is kept when it faces at least this far from every view kept there.
+    static let minViewAngleDegrees: Float = 35
 
-    /// Greedy pass in capture order: keep a frame when it is at least `spotSpacing` from every spot kept so far.
+    /// Greedy pass in capture order. A frame is skipped only when an already-kept spot is both nearby
+    /// (< `spotSpacing`) and facing a similar direction (< `minViewAngleDegrees`). So walking through the room adds
+    /// spots by distance, and turning on the spot (how RoomPlan coaches you to scan) adds one view per ~35°.
+    /// Frames pointing straight up or down have no facing and only count as new when far from every spot.
     /// The first frame is always kept.
     static func spots(from manifest: FrameRecorder.Manifest, framesDir: URL) -> [PhotoSpot] {
+        let minCos = cos(minViewAngleDegrees * .pi / 180)
         var kept: [PhotoSpot] = []
         for frame in manifest.frames {
             let t = frame.transform
             let pos = SIMD2<Float>(t.columns.3.x, t.columns.3.z)
-            if kept.contains(where: { simd_distance($0.position, pos) < spotSpacing }) { continue }
             // Camera looks down its -Z axis.
             let fwd = SIMD2<Float>(-t.columns.2.x, -t.columns.2.z)
             let len = simd_length(fwd)
+            let facing: SIMD2<Float>? = len > 0.15 ? fwd / len : nil
+
+            let redundant = kept.contains { spot in
+                guard simd_distance(spot.position, pos) < spotSpacing else { return false }
+                guard let a = spot.facing, let b = facing else { return true }
+                return simd_dot(a, b) > minCos
+            }
+            if redundant { continue }
             kept.append(PhotoSpot(id: kept.count,
                                   imageURL: framesDir.appendingPathComponent(frame.file_path),
                                   position: pos,
-                                  facing: len > 0.15 ? fwd / len : nil))
+                                  facing: facing))
         }
         return kept
     }
