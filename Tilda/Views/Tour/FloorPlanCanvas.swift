@@ -30,6 +30,8 @@ struct FloorPlanCanvas: View {
     let plan: FloorPlan
     let spots: [PhotoSpot]
     @Binding var selected: Int
+    var fixtures: [Fixture] = []
+    var selectedFixture: Binding<UUID?> = .constant(nil)
 
     var body: some View {
         GeometryReader { geo in
@@ -38,14 +40,16 @@ struct FloorPlanCanvas: View {
                 .contentShape(Rectangle())
                 .gesture(
                     SpatialTapGesture().onEnded { value in
-                        if let id = Self.spotID(at: value.location, spots: spots, selected: selected, point: t.point) {
+                        if let fixture = FixtureMarker.hit(at: value.location, fixtures: fixtures, point: t.point) {
+                            selectedFixture.wrappedValue = fixture.id
+                        } else if let id = Self.spotID(at: value.location, spots: spots, selected: selected, point: t.point) {
                             withAnimation(.snappy(duration: 0.25)) { selected = id }
                         }
                     }
                 )
         }
         .accessibilityElement()
-        .accessibilityLabel("Floor plan with \(spots.count) photo spots")
+        .accessibilityLabel("Floor plan with \(spots.count) photo spots" + (fixtures.isEmpty ? "" : " and \(fixtures.count) fixtures"))
         .accessibilityValue("Spot \(selected + 1) of \(spots.count)")
         .accessibilityAdjustableAction { direction in
             switch direction {
@@ -96,6 +100,9 @@ struct FloorPlanCanvas: View {
         // Pins: unselected first so the selected pin sits on top.
         for spot in spots where spot.id != selected { drawPin(&ctx, t, spot, active: false) }
         if let spot = spots.first(where: { $0.id == selected }) { drawPin(&ctx, t, spot, active: true) }
+
+        FixtureMarker.draw(&ctx, fixtures: fixtures, point: t.point, pointsPerMetre: t.scale, radius: 10,
+                           backdrop: Theme.tile, selected: selectedFixture.wrappedValue)
     }
 
     private func drawPin(_ ctx: inout GraphicsContext, _ t: PlanTransform, _ spot: PhotoSpot, active: Bool) {

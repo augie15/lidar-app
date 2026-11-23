@@ -4,6 +4,7 @@ struct HomeView: View {
     @Environment(ScanStore.self) private var store
     @Environment(NavigationRouter.self) private var router
     @Environment(AnalysisCoordinator.self) private var analysis
+    @Environment(FixtureCoordinator.self) private var fixtures
     @AppStorage("aiAutoAnalyze") private var autoAnalyze = true
     @State private var query = ""
     @State private var activeKind: ScanKind?
@@ -28,8 +29,8 @@ struct HomeView: View {
         }
         .tint(Theme.accent)
         // Re-runs on any change to the scan list (new, renamed, deleted): background analysis and Spotlight upkeep.
-        .task(id: store.scans) { analysis.sync(store: store, autoAnalyze: autoAnalyze) }
-        .onChange(of: autoAnalyze) { analysis.sync(store: store, autoAnalyze: autoAnalyze) }
+        .task(id: store.scans) { sync() }
+        .onChange(of: autoAnalyze) { sync() }
         .onChange(of: router.pendingKind, initial: true) { handleRoute() }
         .onChange(of: router.pendingScanID, initial: true) { handleRoute() }
         .onChange(of: router.pendingLatest, initial: true) { handleRoute() }
@@ -49,6 +50,11 @@ struct HomeView: View {
         } message: { kind in
             Text(DeviceSupport.unsupportedMessage(for: kind))
         }
+    }
+
+    private func sync() {
+        analysis.sync(store: store, autoAnalyze: autoAnalyze)
+        fixtures.sync(store: store, autoDetect: autoAnalyze)
     }
 
     private var header: some View {

@@ -158,6 +158,9 @@ struct AskScanView: View {
             }
             if !insights.tags.isEmpty { context.append("Tags: " + insights.tags.joined(separator: ", ")) }
         }
+        if let line = FixtureLibrary.load(folder: folder)?.summaryLine(lengthText: { MeasureFormat.length(Double($0)) }) {
+            context.append("Fixtures found in the scan photos (vents, bathroom fans, baseboard heaters; may be incomplete): \(line)")
+        }
         let instructions = """
         You answer questions about one 3D scan made with an iPhone LiDAR scanner. \
         For any number (areas, lengths, heights, counts, paint amounts) call a tool and copy the result exactly; \

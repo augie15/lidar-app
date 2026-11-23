@@ -4,12 +4,17 @@ import SwiftUI
 struct PhotoTourView: View {
     let scan: Scan
     @Environment(ScanStore.self) private var store
+    @Environment(FixtureCoordinator.self) private var fixtureCoordinator
     @Environment(\.dismiss) private var dismiss
 
     @State private var spots: [PhotoSpot] = []
     @State private var plan: FloorPlan?
     @State private var selected = 0
     @State private var loaded = false
+    @State private var ceilingHeight: Float?
+    @State private var shownFixture: UUID?
+
+    private var fixtures: [Fixture] { fixtureCoordinator.fixtures(for: scan.id) }
 
     var body: some View {
         VStack(spacing: 12) {
@@ -26,10 +31,17 @@ struct PhotoTourView: View {
                 Spacer()
             } else {
                 if let plan {
-                    FloorPlanCanvas(plan: plan, spots: spots, selected: $selected)
+                    FloorPlanCanvas(plan: plan, spots: spots, selected: $selected, fixtures: fixtures,
+                                    selectedFixture: $shownFixture)
                         .frame(height: 250)
                         .background(Theme.tile, in: RoundedRectangle(cornerRadius: Theme.radiusCard, style: .continuous))
+                        .accessibilityActions {
+                            ForEach(fixtures) { f in
+                                Button("Show \(f.kind.title.lowercased()), \(f.surface.rawValue)") { shownFixture = f.id }
+                            }
+                        }
                         .padding(.horizontal, 16)
+                    if !fixtures.isEmpty { FixtureTourLegend(fixtures: fixtures).padding(.horizontal, 20) }
                 }
                 pager
             }
@@ -37,6 +49,13 @@ struct PhotoTourView: View {
         .background(Theme.background.ignoresSafeArea())
         .preferredColorScheme(.dark)
         .task { await load() }
+        .sheet(isPresented: Binding(get: { shownFixture != nil }, set: { if !$0 { shownFixture = nil } })) {
+            if let fixture = fixtures.first(where: { $0.id == shownFixture }) {
+                FixtureDetailSheet(fixture: fixture, framesURL: store.framesURL(for: scan)) {
+                    fixtureCoordinator.delete(fixture.id, scan: scan, store: store)
+                }
+            }
+        }
     }
 
     private var topBar: some View {
@@ -64,7 +83,10 @@ struct PhotoTourView: View {
     private var pager: some View {
         TabView(selection: $selected) {
             ForEach(spots) { spot in
-                TourPhotoPage(spot: spot, isNear: abs(spot.id - selected) <= 1)
+                TourPhotoPage(spot: spot, isNear: abs(spot.id - selected) <= 1,
+                              fixtures: fixtures.filter { $0.photoFrame == spot.frameFile && $0.photoBox != nil },
+                              onSelect: { shownFixture = $0.id },
+                              onAdd: { kind, surface in add(kind, surface, at: spot) })
                     .tag(spot.id)
             }
         }
@@ -82,16 +104,27 @@ struct PhotoTourView: View {
         .padding(.bottom, 8)
     }
 
+    private func add(_ kind: Fixture.Kind, _ surface: Fixture.Surface, at spot: PhotoSpot) {
+        let fixture = fixtureCoordinator.addManual(kind: kind, surface: surface, spot: spot, plan: plan,
+                                                   ceilingHeight: ceilingHeight, scan: scan, store: store)
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+        shownFixture = fixture.id
+    }
+
     private func load() async {
         let framesURL = store.framesURL(for: scan)
         let planURL = store.floorPlanURL(for: scan)
-        let result: ([PhotoSpot], FloorPlan?) = await Task.detached {
-            guard let framesURL, let manifest = FrameRecorder.load(from: framesURL) else { return ([], nil) }
+        let factsURL = store.roomFactsURL(for: scan)
+        let result: ([PhotoSpot], FloorPlan?, Float?) = await Task.detached {
+            guard let framesURL, let manifest = FrameRecorder.load(from: framesURL) else { return ([], nil, nil) }
+            let height = factsURL.flatMap { RoomFacts.load(from: $0) }?.averageCeiling
             return (TourModel.spots(from: manifest, framesDir: framesURL),
-                    planURL.flatMap { FloorPlan.load(from: $0) })
+                    planURL.flatMap { FloorPlan.load(from: $0) }, height.flatMap { $0 > 1.5 ? $0 : nil })
         }.value
         spots = result.0
         plan = result.1
+        ceilingHeight = result.2
+        fixtureCoordinator.load(scan, store: store)
         loaded = true
     }
 }
@@ -99,6 +132,9 @@ struct PhotoTourView: View {
 private struct TourPhotoPage: View {
     let spot: PhotoSpot
     let isNear: Bool
+    let fixtures: [Fixture]
+    let onSelect: (Fixture) -> Void
+    let onAdd: (Fixture.Kind, Fixture.Surface) -> Void
     @State private var image: UIImage?
 
     var body: some View {
@@ -107,6 +143,7 @@ private struct TourPhotoPage: View {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
+                    .overlay { FixtureBoxesOverlay(fixtures: fixtures, onSelect: onSelect) }
                     .clipShape(RoundedRectangle(cornerRadius: Theme.radiusCard, style: .continuous))
                     .accessibilityLabel("Photo \(spot.id + 1)")
             } else {
@@ -114,6 +151,7 @@ private struct TourPhotoPage: View {
                 if isNear { ProgressView().tint(Theme.accent) }
             }
         }
+        .overlay(alignment: .topTrailing) { AddFixtureMenu(onAdd: onAdd).padding(10) }
         .padding(.horizontal, 16)
         .task(id: isNear) {
             if isNear {

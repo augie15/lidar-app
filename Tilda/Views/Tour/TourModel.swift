@@ -8,6 +8,7 @@ struct PhotoSpot: Identifiable, Sendable {
     let imageURL: URL
     let position: SIMD2<Float>     // world x, z (same space as FloorPlan)
     let facing: SIMD2<Float>?      // unit vector of the camera's -Z on x/z, nil when looking straight up/down
+    var frameFile: String = ""     // the frame's `file_path` in transforms.json (for example "images/frame_00012.jpg")
 }
 
 enum TourModel {
@@ -41,7 +42,8 @@ enum TourModel {
             kept.append(PhotoSpot(id: kept.count,
                                   imageURL: framesDir.appendingPathComponent(frame.file_path),
                                   position: pos,
-                                  facing: facing))
+                                  facing: facing,
+                                  frameFile: frame.file_path))
         }
         return kept
     }

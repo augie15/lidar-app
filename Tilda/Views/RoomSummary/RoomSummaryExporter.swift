@@ -12,12 +12,15 @@ enum RoomSummaryExporter {
 
     /// One block never splits across pages: blocks are measured, then packed top to bottom.
     static func makePDF(name: String, date: Date, facts: RoomFacts, plan: FloorPlan?,
-                        units: AppSettings.Units) -> URL? {
+                        fixtures: FixtureLibrary? = nil, units: AppSettings.Units) -> URL? {
         let width = pageSize.width - margin * 2
         let usable = pageSize.height - margin * 2
 
         var blocks: [AnyView] = [AnyView(RoomSummaryPDFHeader(name: name, date: date, facts: facts, units: units))]
-        if let plan, !plan.walls.isEmpty { blocks.append(AnyView(SummaryPlan(plan: plan))) }
+        if let plan, !plan.walls.isEmpty {
+            blocks.append(AnyView(SummaryPlan(plan: plan, fixtures: fixtures?.fixtures ?? [])))
+        }
+        if let fixtures, !fixtures.fixtures.isEmpty { blocks.append(AnyView(SummaryFixturesBlock(library: fixtures, units: units))) }
         for room in facts.rooms { blocks.append(AnyView(SummaryRoomCard(room: room, units: units))) }
         blocks.append(AnyView(RoomSummaryPDFFootnote()))
 

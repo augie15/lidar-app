@@ -102,7 +102,8 @@ extension RoomFacts.Room {
 }
 
 enum RoomSummaryText {
-    static func make(name: String, facts: RoomFacts, units: AppSettings.Units) -> String {
+    static func make(name: String, facts: RoomFacts, fixtures: FixtureLibrary? = nil,
+                     units: AppSettings.Units) -> String {
         let f = RoomSummaryFormatter(units: units)
         var out = ["\(name) – room summary", ""]
         out.append("Total floor area: \(f.area(facts.totalFloorArea)) (\(f.altArea(facts.totalFloorArea)))")
@@ -115,6 +116,7 @@ enum RoomSummaryText {
         out.append("Rooms: \(facts.rooms.count)")
         out.append("Average ceiling height: \(f.length(facts.averageCeiling))")
         out.append("Doors: \(facts.totalDoors), windows: \(facts.totalWindows)")
+        if let line = fixtures?.summaryLine(lengthText: { f.length($0) }) { out.append("Fixtures: \(line)") }
         for r in facts.rooms {
             out += ["", "\(r.displayLabel) – \(f.area(r.floorArea))"]
             if let d = f.dimensions(for: r) { out.append("  Approx. \(d)") }

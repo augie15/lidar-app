@@ -6,6 +6,7 @@ struct ScanDetailView: View {
     @Environment(ScanStore.self) private var store
     @Environment(\.dismiss) private var dismiss
     @Environment(AnalysisCoordinator.self) private var analysis
+    @Environment(FixtureCoordinator.self) private var fixtureCoordinator
 
     @State private var exportingFormat: ExportFormat?
     @State private var shareItems: ShareItems?
@@ -32,7 +33,7 @@ struct ScanDetailView: View {
         .background(Theme.background)
         .quickLookPreview($arPreviewURL)
         .fullScreenCover(isPresented: $showTour) {
-            if let scan { PhotoTourView(scan: scan) }
+            if let scan { PhotoTourView(scan: scan).environment(store).environment(fixtureCoordinator) }
         }
         .fullScreenCover(isPresented: $showWalkthrough) {
             if let scan {
@@ -55,6 +56,7 @@ struct ScanDetailView: View {
                         }
                 }
                 .environment(store)
+                .environment(fixtureCoordinator)
                 .tint(Theme.accent)
                 .presentationDetents([.medium, .large])
             }

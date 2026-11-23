@@ -13,13 +13,17 @@
 		08CBD2853CD43677AFD4CA52 /* ScanRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E75A5E37E9415480C69B4775 /* ScanRow.swift */; };
 		0B7E3B86880445C8AC1CA4F1 /* FrameRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE951ADAA80EF218F6DA3BD8 /* FrameRecorder.swift */; };
 		0C57EE8A8341BE979D827C6A /* PointGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA1F6FD076AA9B190577AC5 /* PointGeometry.swift */; };
+		0D767CF202BADAE42E7FDDB5 /* FixtureDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBECE92753FD478D4D05E59C /* FixtureDetector.swift */; };
 		1221B46109D42691A5CDE04B /* FloorPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA5F716C6D92B15E4991C2E /* FloorPlan.swift */; };
+		12EE41A667BDC8DCFF0C4C33 /* FixturePlacement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FA379D5D34B4603AE0ECC8 /* FixturePlacement.swift */; };
 		1625459AB2333CD0ADF0A381 /* PhotoTourView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800CD2A01A3E4D5B43B630E9 /* PhotoTourView.swift */; };
 		19ABE0B6BDBC7598B02CE5CE /* ScanInsights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */; };
 		1BC4DDA8DD763B5B33281CC6 /* RoomScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA8881DF15E098F3B5EF2C0 /* RoomScanView.swift */; };
+		1E921FD30BD4772994984395 /* FixtureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61A1D95FA33EA8475EC58A7 /* FixtureCoordinator.swift */; };
 		2FC4595178904B44876382AA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE872844E29A3C4FFEBE10B2 /* SettingsView.swift */; };
 		33CD9B1A6264F53238B08B19 /* CameraProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FB03975DEE545D2EC58807 /* CameraProjection.swift */; };
 		33E61EB8CEA69CC805903687 /* WalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB64DEEFB05F6FE6F90A6A0 /* WalkthroughView.swift */; };
+		354663B1F59BCDA0E6C18191 /* FixturesCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EE3F951996B078BE3F8D98 /* FixturesCard.swift */; };
 		384DE18780DD854E31868057 /* Surfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8CB3FC9E24CEDD575CE73A /* Surfaces.swift */; };
 		3B544475A291FDC0E191C004 /* AskTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A4ED736DC92F8ECDE417C3 /* AskTools.swift */; };
 		3F59883D652EEC9624041543 /* RoomAreaGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB2D2BACEE7E1CECD159073 /* RoomAreaGeometry.swift */; };
@@ -31,6 +35,7 @@
 		4D79FB45210BE6CE512DB4EE /* RoomFactsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BED8C695B956FE82F7AC70F /* RoomFactsBuilder.swift */; };
 		4E0547B245E4416B5201E4F6 /* RoomSummaryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81835F59DB587A5646C131B5 /* RoomSummaryModel.swift */; };
 		4FDF1D79E222D2E5CD202823 /* FramePoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F3A30100DBA4C53851781F /* FramePoller.swift */; };
+		517BF54D3E6F0D88622A71AC /* FixtureStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1003BA9FBF864FACA84AC43 /* FixtureStyle.swift */; };
 		52856169B71BD3AF40245CDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D11D40B40029EFC5BEDC148 /* Assets.xcassets */; };
 		59E8865DF5A0B9D26C44BF8D /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701191646ABD1F617A3F8DC9 /* FeedbackView.swift */; };
 		5B1D85609CC4DFBEB423ECAE /* ScanDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17642C3635E149D219F0BEF9 /* ScanDetailView.swift */; };
@@ -54,6 +59,7 @@
 		9E0F75C6D0E877E46562FF2D /* Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0DDC8BDC99A259D2637BAA1 /* Scan.swift */; };
 		9F607409836A3BCBC2AA5F0A /* ObjectScanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990872D6DB115A1E09113A5 /* ObjectScanModel.swift */; };
 		A2CF362685DEF9D9BC4D9D80 /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5460470F247D91B3CF2EF5 /* DemoData.swift */; };
+		A8804C7E2334987D8F30231F /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F0DEBB3B831F0763A21E9E /* Fixtures.swift */; };
 		A9C566CF5995CC89AACC9F89 /* PhotorealObjectScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F32C313695BBBB9C4F9B7 /* PhotorealObjectScanView.swift */; };
 		AAEE4B15F984C61BEDC757F7 /* ScanEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0A2C78108C8A84E0711C65 /* ScanEntity.swift */; };
 		B23C018832AD64F8E4416E73 /* RoomCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108F29B102B3D2A925CD4C41 /* RoomCaptureController.swift */; };
@@ -77,6 +83,7 @@
 		D9BA17899874F2799F3A1734 /* ScanStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2803A721F32F200C292FDB5 /* ScanStore.swift */; };
 		DAB10E6B7A2A5653DFE734B9 /* FloorPlanBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04DACAB0CE204FCB270C5A4 /* FloorPlanBuilder.swift */; };
 		E249427B725BD48F05741D58 /* RoomFacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FC6DE6F465D8BCBEC03439 /* RoomFacts.swift */; };
+		F78ED1954A5A2324DCF33B3C /* FixtureViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFD66DB1346C6CD5FF1B3D9 /* FixtureViews.swift */; };
 		FFEB5E815D938EEAA9C8522E /* MeshScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739AA29D1D97EDA1F0AB018F /* MeshScanView.swift */; };
 /* End PBXBuildFile section */
 
@@ -103,6 +110,7 @@
 		42A4ED736DC92F8ECDE417C3 /* AskTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskTools.swift; sourceTree = "<group>"; };
 		4745A5C1FC9219A5BF0A6894 /* TorchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorchButton.swift; sourceTree = "<group>"; };
 		49E159D310346ECDF1378981 /* LidarObjectScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LidarObjectScanView.swift; sourceTree = "<group>"; };
+		4AFD66DB1346C6CD5FF1B3D9 /* FixtureViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureViews.swift; sourceTree = "<group>"; };
 		4F75BA97805F89D84B211C7B /* DeviceSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSupport.swift; sourceTree = "<group>"; };
 		505D35717F43743BE3A2C0DE /* ModelPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPreview.swift; sourceTree = "<group>"; };
 		54A9D05187AAC84C23B31AD7 /* RoomFloorChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFloorChrome.swift; sourceTree = "<group>"; };
@@ -112,6 +120,8 @@
 		6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanInsights.swift; sourceTree = "<group>"; };
 		64C42B062E78EB1C08AC219B /* MeshSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSettingsSection.swift; sourceTree = "<group>"; };
 		659C03586436A21AB4056DDE /* MeshExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshExporter.swift; sourceTree = "<group>"; };
+		67EE3F951996B078BE3F8D98 /* FixturesCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixturesCard.swift; sourceTree = "<group>"; };
+		69F0DEBB3B831F0763A21E9E /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
 		6BED8C695B956FE82F7AC70F /* RoomFactsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFactsBuilder.swift; sourceTree = "<group>"; };
 		6C73BD743E1FC00F840819AB /* ObjectScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectScanView.swift; sourceTree = "<group>"; };
 		6D8CB3FC9E24CEDD575CE73A /* Surfaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Surfaces.swift; sourceTree = "<group>"; };
@@ -137,17 +147,21 @@
 		9FB9A9F9B74EC571363C8288 /* RoomSummaryComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryComponents.swift; sourceTree = "<group>"; };
 		A18F0E88ED1186CDCED00AFC /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
 		A5E059FA2D2FA689557A0B2A /* TildaIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TildaIntents.swift; sourceTree = "<group>"; };
+		A61A1D95FA33EA8475EC58A7 /* FixtureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureCoordinator.swift; sourceTree = "<group>"; };
 		A6D112A53AFAFBB9A06EA6C6 /* Tilda.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Tilda.xcconfig; sourceTree = "<group>"; };
 		AE951ADAA80EF218F6DA3BD8 /* FrameRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameRecorder.swift; sourceTree = "<group>"; };
 		B0DDC8BDC99A259D2637BAA1 /* Scan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scan.swift; sourceTree = "<group>"; };
+		B1FA379D5D34B4603AE0ECC8 /* FixturePlacement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixturePlacement.swift; sourceTree = "<group>"; };
 		B2803A721F32F200C292FDB5 /* ScanStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanStore.swift; sourceTree = "<group>"; };
 		B666C3D79855790931332876 /* MeshColorizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshColorizer.swift; sourceTree = "<group>"; };
 		BB2AFD5D5E03174508BE3118 /* SpotlightIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightIndexer.swift; sourceTree = "<group>"; };
 		BB7DC3A4BB0AD0EAB25295CB /* PointCloudCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointCloudCore.swift; sourceTree = "<group>"; };
+		BBECE92753FD478D4D05E59C /* FixtureDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureDetector.swift; sourceTree = "<group>"; };
 		C30A8B32F37DCBF983B7CF63 /* InsightsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsCard.swift; sourceTree = "<group>"; };
 		CBD4AA36BA58305920A5D3BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D8953D429A42AADA1B4D167D /* TildaMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TildaMark.swift; sourceTree = "<group>"; };
 		E04DACAB0CE204FCB270C5A4 /* FloorPlanBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanBuilder.swift; sourceTree = "<group>"; };
+		E1003BA9FBF864FACA84AC43 /* FixtureStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureStyle.swift; sourceTree = "<group>"; };
 		E4F3A30100DBA4C53851781F /* FramePoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FramePoller.swift; sourceTree = "<group>"; };
 		E659F4F496563E95E5FC632E /* FloorPlanCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanCanvas.swift; sourceTree = "<group>"; };
 		E75A5E37E9415480C69B4775 /* ScanRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRow.swift; sourceTree = "<group>"; };
@@ -190,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				205AE324568F677E7DDA278F /* AppSettings.swift */,
+				69F0DEBB3B831F0763A21E9E /* Fixtures.swift */,
 				1AA5F716C6D92B15E4991C2E /* FloorPlan.swift */,
 				91FC6DE6F465D8BCBEC03439 /* RoomFacts.swift */,
 				B0DDC8BDC99A259D2637BAA1 /* Scan.swift */,
@@ -226,6 +241,7 @@
 		4DCBE57EB4CC7BA33877686A /* RoomSummary */ = {
 			isa = PBXGroup;
 			children = (
+				67EE3F951996B078BE3F8D98 /* FixturesCard.swift */,
 				9FB9A9F9B74EC571363C8288 /* RoomSummaryComponents.swift */,
 				86313C91B0E75AC395432C0A /* RoomSummaryExporter.swift */,
 				81835F59DB587A5646C131B5 /* RoomSummaryModel.swift */,
@@ -258,6 +274,9 @@
 				152CA85CD9DC3E325A1172B6 /* AnalysisCoordinator.swift */,
 				80B5DD82345CB9F07A6B857F /* AskScanView.swift */,
 				42A4ED736DC92F8ECDE417C3 /* AskTools.swift */,
+				A61A1D95FA33EA8475EC58A7 /* FixtureCoordinator.swift */,
+				BBECE92753FD478D4D05E59C /* FixtureDetector.swift */,
+				B1FA379D5D34B4603AE0ECC8 /* FixturePlacement.swift */,
 				6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */,
 				7079B4876FAEB07CD70335AB /* ScanIntelligence.swift */,
 				98D06CFC97DA48A1CE99C9B4 /* ScanMeasurements.swift */,
@@ -272,6 +291,14 @@
 				9EB64DEEFB05F6FE6F90A6A0 /* WalkthroughView.swift */,
 			);
 			path = Walkthrough;
+			sourceTree = "<group>";
+		};
+		A2668A0068CA08CE4CBD3BC9 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				E1003BA9FBF864FACA84AC43 /* FixtureStyle.swift */,
+			);
+			path = Fixtures;
 			sourceTree = "<group>";
 		};
 		A5C02E54FEE62E80D53A3214 /* App */ = {
@@ -356,6 +383,7 @@
 				FE872844E29A3C4FFEBE10B2 /* SettingsView.swift */,
 				0B36B620054B30A56FBF02F9 /* ShareSheet.swift */,
 				42D4266294A22973D8E302E5 /* Feedback */,
+				A2668A0068CA08CE4CBD3BC9 /* Fixtures */,
 				4DCBE57EB4CC7BA33877686A /* RoomSummary */,
 				F8E95ED545B3C982DCA576B8 /* Tour */,
 				69C07A59D8CE9B7943F01227 /* Walkthrough */,
@@ -375,6 +403,7 @@
 		F8E95ED545B3C982DCA576B8 /* Tour */ = {
 			isa = PBXGroup;
 			children = (
+				4AFD66DB1346C6CD5FF1B3D9 /* FixtureViews.swift */,
 				E659F4F496563E95E5FC632E /* FloorPlanCanvas.swift */,
 				800CD2A01A3E4D5B43B630E9 /* PhotoTourView.swift */,
 				8DF28D6E4FA1656A30B4E1EF /* TourModel.swift */,
@@ -463,6 +492,13 @@
 				D8C38088ACBAA768B8E5A890 /* ExportService.swift in Sources */,
 				5C728755BFB234CC9ABE543D /* FeedbackConfig.swift in Sources */,
 				59E8865DF5A0B9D26C44BF8D /* FeedbackView.swift in Sources */,
+				1E921FD30BD4772994984395 /* FixtureCoordinator.swift in Sources */,
+				0D767CF202BADAE42E7FDDB5 /* FixtureDetector.swift in Sources */,
+				12EE41A667BDC8DCFF0C4C33 /* FixturePlacement.swift in Sources */,
+				517BF54D3E6F0D88622A71AC /* FixtureStyle.swift in Sources */,
+				F78ED1954A5A2324DCF33B3C /* FixtureViews.swift in Sources */,
+				A8804C7E2334987D8F30231F /* Fixtures.swift in Sources */,
+				354663B1F59BCDA0E6C18191 /* FixturesCard.swift in Sources */,
 				1221B46109D42691A5CDE04B /* FloorPlan.swift in Sources */,
 				DAB10E6B7A2A5653DFE734B9 /* FloorPlanBuilder.swift in Sources */,
 				B325DDE8C6890247453F2F79 /* FloorPlanCanvas.swift in Sources */,
@@ -656,7 +692,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Tilda/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -678,7 +714,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Tilda/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

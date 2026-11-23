@@ -72,9 +72,9 @@ struct SettingsView: View {
                 MeshSettingsSection()
 
                 Section {
-                    Toggle("Name and summarize new scans", isOn: $aiAutoAnalyze)
+                    Toggle("Name, summarize and check new scans", isOn: $aiAutoAnalyze)
                 } header: { header("Apple Intelligence") } footer: {
-                    Text("Runs on your iPhone with Apple Intelligence. Nothing leaves your device.")
+                    Text("Names and summaries, plus a look through room scan photos for vents, bathroom fans and baseboard heaters. Runs on your iPhone with Apple Intelligence. Nothing leaves your device.")
                 }
                 .listRowBackground(Theme.card)
 

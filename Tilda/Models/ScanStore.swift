@@ -47,6 +47,11 @@ final class ScanStore {
         return FileManager.default.fileExists(atPath: url.path) ? url : nil
     }
 
+    /// Where `fixtures.json` lives for a Room scan (the file may not exist yet).
+    func fixturesURL(for scan: Scan) -> URL {
+        folderURL(for: scan).appendingPathComponent(FixtureLibrary.fileName)
+    }
+
     /// Moves a finished model file (usually a .usdz in a temp folder) into the library.
     @discardableResult
     /// `attachments` are extra files or folders (e.g. FrameRecorder's `frames/`, a `floorplan.json`) moved into the

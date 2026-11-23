@@ -70,8 +70,15 @@ enum DemoData {
                                                   openingArea: 0.9 * 2.03 + 2 * 1.3 * 1.3 + 1.2 * 2.1)],
                                     wallThickness: wall,
                                     totalGrossArea: grossArea(living))
+        let livingFixtures = [
+            fixture(.hvacVent, .floor, [1.2, 2.6]),
+            fixture(.hvacVent, .ceiling, [2.7, 1.8], confidence: 0.82),
+            fixture(.baseboardHeater, .wall, [1.65, 0.1], length: 1.3, axis: [1, 0]),
+            fixture(.baseboardHeater, .wall, [3.75, 0.1], length: 1.3, axis: [1, 0]),
+        ]
         write(name: "Living room", plan: livingPlan, facts: livingFacts, rooms: [living],
-              furniture: livingFurniture, date: .now.addingTimeInterval(-26 * 3600), root: root)
+              furniture: livingFurniture, fixtures: livingFixtures,
+              date: .now.addingTimeInterval(-26 * 3600), root: root)
 
         // Whole floor, three rooms merged, scanned today.
         var floorPlan = FloorPlan()
@@ -95,8 +102,16 @@ enum DemoData {
             wallThickness: wall,
             // Interior floor + exterior walls in full (33.2 m outline) + shared walls once (7.2 m).
             totalGrossArea: (5.4 * 4.2 + 3.4 * 4.2 + 3.0 * 3.6) + 33.2 * wall + 4 * wall * wall + 7.2 * wall)
+        let floorFixtures = livingFixtures + [
+            fixture(.hvacVent, .ceiling, [-1.7, 2.0], confidence: 0.9),
+            fixture(.baseboardHeater, .wall, [-1.9, 0.1], length: 1.2, axis: [1, 0]),
+            fixture(.bathroomFan, .ceiling, [-0.7, 3.4], confidence: 0.77),
+            fixture(.bathroomFan, .ceiling, [3.9, 5.6], source: .manual),
+            fixture(.hvacVent, .floor, [3.3, 7.3]),
+        ]
         write(name: "Main floor", plan: floorPlan, facts: floorFacts, rooms: [living, bedroom, kitchen],
-              furniture: allFurniture, date: .now.addingTimeInterval(-40 * 60), root: root)
+              furniture: allFurniture, fixtures: floorFixtures,
+              date: .now.addingTimeInterval(-40 * 60), root: root)
     }
 
     // MARK: - Facts
@@ -139,16 +154,27 @@ enum DemoData {
         .init(center: f.center, size: f.size, rotation: f.rotation, label: f.category)
     }
 
+    private static func fixture(_ kind: Fixture.Kind, _ surface: Fixture.Surface, _ at: SIMD2<Float>,
+                                length: Float? = nil, axis: SIMD2<Float>? = nil, confidence: Float? = 0.88,
+                                source: Fixture.Source = .detected) -> Fixture {
+        let y: Float = switch surface { case .floor: 0; case .wall: 0.15; case .ceiling: ceiling }
+        return Fixture(kind: kind, surface: surface, position: SIMD3(at.x, y, at.y), planPosition: at, length: length,
+                       axis: axis, photoFrame: nil, photoBox: nil, source: source,
+                       confidence: source == .manual ? nil : confidence)
+    }
+
     // MARK: - Files
 
     private static func write(name: String, plan: FloorPlan, facts: RoomFacts, rooms: [RoomSpec],
-                              furniture: [Furniture],
+                              furniture: [Furniture], fixtures: [Fixture],
                               date: Date, root: URL) {
         let scan = Scan(id: UUID(), name: name, kind: .room, createdAt: date, modelFileName: "model.usdz", mode: nil)
         let folder = root.appendingPathComponent(scan.id.uuidString, isDirectory: true)
         try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         try? plan.write(to: folder.appendingPathComponent(FloorPlan.fileName))
         try? facts.write(to: folder.appendingPathComponent(RoomFacts.fileName))
+        FixtureLibrary(fixtures: fixtures, detectedAt: .now, photosChecked: 18)
+            .write(to: folder.appendingPathComponent(FixtureLibrary.fileName))
         model(plan: plan, rooms: rooms, furniture: furniture).write(to: folder.appendingPathComponent("model.usdz"),
                                                       options: nil, delegate: nil, progressHandler: nil)
         let encoder = JSONEncoder()

@@ -21,7 +21,7 @@ struct RoomSummaryView: View {
             case .missing:
                 RoomSummaryEmptyState()
             case let .ready(facts, plan):
-                RoomSummaryScreen(name: scan.name, date: scan.createdAt, facts: facts, plan: plan)
+                RoomSummaryScreen(name: scan.name, date: scan.createdAt, facts: facts, plan: plan, scan: scan)
             }
         }
         .background(Theme.background)
@@ -68,10 +68,11 @@ struct RoomSummaryScreen: View {
     let date: Date
     let facts: RoomFacts
     let plan: FloorPlan?
+    var scan: Scan? = nil
 
     var body: some View {
         ScrollView {
-            RoomSummaryBody(name: name, date: date, facts: facts, plan: plan)
+            RoomSummaryBody(name: name, date: date, facts: facts, plan: plan, scan: scan)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
         }
@@ -83,19 +84,28 @@ struct RoomSummaryBody: View {
     let date: Date
     let facts: RoomFacts
     let plan: FloorPlan?
+    /// When set, the Fixtures card and plan markers use this scan's fixtures.
+    var scan: Scan? = nil
 
+    @Environment(FixtureCoordinator.self) private var fixtureCoordinator: FixtureCoordinator?
     @AppStorage(AppSettings.Key.units) private var unitsRaw = AppSettings.Units.imperial.rawValue
     @State private var shareItems: ShareItems?
     @State private var copied = false
     @State private var exportFailed = false
 
     private var units: AppSettings.Units { AppSettings.Units(rawValue: unitsRaw) ?? .imperial }
+    private var fixtures: [Fixture] { scan.map { fixtureCoordinator?.fixtures(for: $0.id) ?? [] } ?? [] }
+    private var fixtureLibrary: FixtureLibrary? {
+        guard let scan, let library = fixtureCoordinator?.library(for: scan.id), !library.fixtures.isEmpty else { return nil }
+        return library
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             header
             SummaryHero(facts: facts, units: units)
-            if let plan, !plan.walls.isEmpty { SummaryPlan(plan: plan) }
+            if let plan, !plan.walls.isEmpty { SummaryPlan(plan: plan, fixtures: fixtures) }
+            if let scan, fixtureCoordinator != nil { FixturesCard(scan: scan, units: units) }
             ForEach(Array(facts.rooms.enumerated()), id: \.offset) { _, room in
                 SummaryRoomCard(room: room, units: units)
             }
@@ -135,7 +145,7 @@ struct RoomSummaryBody: View {
     private var actions: some View {
         VStack(spacing: 10) {
             Button {
-                if let url = RoomSummaryExporter.makePDF(name: name, date: date, facts: facts, plan: plan, units: units) {
+                if let url = RoomSummaryExporter.makePDF(name: name, date: date, facts: facts, plan: plan, fixtures: fixtureLibrary, units: units) {
                     shareItems = ShareItems(urls: [url])
                 } else {
                     exportFailed = true
@@ -148,7 +158,7 @@ struct RoomSummaryBody: View {
                     .foregroundStyle(Theme.tile)
             }
             Button {
-                RoomSummaryExporter.copy(RoomSummaryText.make(name: name, facts: facts, units: units))
+                RoomSummaryExporter.copy(RoomSummaryText.make(name: name, facts: facts, fixtures: fixtureLibrary, units: units))
                 withAnimation(.easeOut(duration: 0.2)) { copied = true }
                 Task {
                     try? await Task.sleep(for: .seconds(2))

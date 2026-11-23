@@ -13,6 +13,7 @@ struct SummaryPalette {
     var secondary: Color
     var muted: Color
     var separator: Color
+    var isLight = false
 
     static let dark = SummaryPalette(
         background: Theme.background, card: Theme.card, hero: Theme.featured, accent: Theme.accent,
@@ -24,7 +25,7 @@ struct SummaryPalette {
         hero: Color(red: 0.89, green: 0.96, blue: 0.93), accent: Color(red: 0.12, green: 0.55, blue: 0.42),
         accentText: Color(red: 0.06, green: 0.40, blue: 0.30), primary: Color(red: 0.07, green: 0.09, blue: 0.08),
         secondary: Color(red: 0.30, green: 0.33, blue: 0.32), muted: Color(red: 0.38, green: 0.41, blue: 0.40),
-        separator: Color.black.opacity(0.12))
+        separator: Color.black.opacity(0.12), isLight: true)
 }
 
 private struct PaletteKey: EnvironmentKey { static let defaultValue = SummaryPalette.dark }
@@ -125,7 +126,19 @@ private extension Text {
 
 struct SummaryPlan: View {
     let plan: FloorPlan
+    var fixtures: [Fixture] = []
     @Environment(\.summaryPalette) private var p
+
+    private var fixtureKinds: [Fixture.Kind] { Fixture.Kind.allCases.filter { kind in fixtures.contains { $0.kind == kind } } }
+    private var accessibilitySummary: String {
+        var s = "Floor plan with \(plan.walls.count) walls, \(plan.doors.count) doors and \(plan.windows.count) windows"
+        let parts = fixtureKinds.map { kind in
+            let n = fixtures.filter { $0.kind == kind }.count
+            return "\(n) \(n == 1 ? kind.title.lowercased() : kind.pluralTitle.lowercased())"
+        }
+        if !parts.isEmpty { s += ". Marked: " + parts.joined(separator: ", ") }
+        return s
+    }
 
     private var aspect: CGFloat {
         let (lo, hi) = plan.bounds
@@ -139,11 +152,12 @@ struct SummaryPlan: View {
                 .aspectRatio(aspect, contentMode: .fit)
                 .frame(maxWidth: .infinity, maxHeight: 260)
                 .accessibilityElement()
-                .accessibilityLabel("Floor plan with \(plan.walls.count) walls, \(plan.doors.count) doors and \(plan.windows.count) windows")
-            HStack(spacing: 16) {
+                .accessibilityLabel(accessibilitySummary)
+            FlowLayout(spacing: 14) {
                 legend(p.accent, "Door")
                 legend(p.accentText, "Window")
                 legend(p.muted, "Opening")
+                ForEach(fixtureKinds, id: \.self) { FixtureLegendItem(kind: $0, light: p.isLight) }
             }
             .font(.caption)
             .foregroundStyle(p.secondary)
@@ -193,6 +207,8 @@ struct SummaryPlan: View {
         for s in plan.openings { gap(s, p.muted, 1.5, dash: [3, 3]) }
         for s in plan.windows { gap(s, p.accentText, 2) }
         for s in plan.doors { gap(s, p.accent, 3.5) }
+        FixtureMarker.draw(&ctx, fixtures: fixtures, point: pt, pointsPerMetre: scale, radius: 8.5,
+                           backdrop: p.card, light: p.isLight)
     }
 }
 
