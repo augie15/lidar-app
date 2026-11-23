@@ -30,6 +30,28 @@ Set up first: turn on Apple Intelligence if available, scan a furnished room and
 
 Optional extras if you have room (max 10): Ask screen answering "How much paint for the walls?" (caption "Ask your scan, on device"), and Shortcuts showing the Tilda actions ("Start a scan by voice").
 
+## Simulator set (taken 2026-11-23)
+
+In `docs/app-store/screenshots/`, 1320 x 2868 JPEG, no alpha, 9:41 status bar. Taken on the iPhone 17 Pro Max
+Simulator with the Debug-only sample library (launch with `-TildaDemoData`; see `Tilda/App/DemoData.swift`, compiled out
+of Release). The sample data is two room scans in the scanner's own format: real app screens, synthetic measurements.
+
+| File | Covers shot | Caption |
+|---|---|---|
+| `01-home.jpg` | 1 | Scan rooms and objects with LiDAR |
+| `02-room-summary.jpg` | 3 | Square footage in seconds |
+| `03-whole-floor.jpg` | 5 | Merge a whole floor |
+| `04-insights-export.jpg` | 8 | Export to USDZ, OBJ, STL and PLY |
+
+Still needed from the phone (the Simulator cannot scan, and its Apple Intelligence runtime fails on Ask):
+2 (live room scan), 4 (photo tour, needs real photos), 6 (photoreal object), 7 (mesh or point cloud), and the
+optional Ask screen. Upload order suggestion: 1, 2, 3, 4, 5, 6, 7, 8.
+
+To retake: build Debug for the Simulator, then
+`xcrun simctl status_bar booted override --time 9:41 --batteryLevel 100 --batteryState charged`,
+`xcrun simctl launch --terminate-running-process booted com.augie15.tilda -TildaDemoData` (seeds and replaces the
+library), relaunch without the flag, and `xcrun simctl io booted screenshot <file>.png`. Flatten alpha before upload.
+
 ## Tips
 
 - The app is dark-only. Use a 100% battery and a clean status bar (time 9:41 is a convention, not a rule).

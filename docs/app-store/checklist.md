@@ -52,7 +52,8 @@ Legend: **[x] done in the repo**, **[ ] owner only** (needs you in App Store Con
 - [ ] Answer the age rating questionnaire as in `age-rating.md` (4+).
 - [ ] Add the review contact and notes from `review-notes.md`. Sign-in required: off.
 - [ ] Content rights: answer No (the app does not show third-party content).
-- [ ] Take the device screenshots as in `screenshots.md` and upload the 6.9" set.
+- [x] Simulator screenshots 1, 3, 5 and 8 taken (`docs/app-store/screenshots/`, 1320 x 2868, no alpha).
+- [ ] Take device screenshots 2, 4, 6 and 7 (and optionally Ask) on the phone, then upload the 6.9" set.
 
 ## 5. Build and upload
 

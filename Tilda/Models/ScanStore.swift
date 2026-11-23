@@ -14,7 +14,12 @@ final class ScanStore {
         return url
     }()
 
-    init() { reload() }
+    init() {
+        #if DEBUG
+        if DemoData.isRequested { DemoData.seed(into: rootURL) }
+        #endif
+        reload()
+    }
 
     func folderURL(for scan: Scan) -> URL {
         rootURL.appendingPathComponent(scan.id.uuidString, isDirectory: true)
