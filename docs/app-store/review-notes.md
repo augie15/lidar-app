@@ -4,7 +4,7 @@ Paste into **App Review Information, Notes**. Attach nothing else. No sign-in is
 
 ## Contact
 
-Brett Auger, brett@augiesrentals.ca (phone: add yours in App Store Connect).
+Brett Auger, brett@augiesrentals.ca. Phone entered directly in App Store Connect (not kept in the repo).
 
 ## Sign-in
 
@@ -34,7 +34,7 @@ HOW TO TEST EACH MODE (no login)
 8. Feedback: Settings, Send feedback. Enter a title and tap the GitHub button to open a prefilled public GitHub issue page in an in-app browser. Nothing is submitted unless you submit it on GitHub.
 
 APPLE INTELLIGENCE (OPTIONAL)
-On supported iPhones with Apple Intelligence turned on, scans get an automatic name, summary and tags, and an Ask button lets you question a scan. This uses Apple's on-device Foundation Models and Vision only. Private Cloud Compute is not used. On other devices these features are simply absent and nothing else changes. Settings has a toggle for automatic summaries.
+On supported iPhones with Apple Intelligence turned on, scans get an automatic name, summary and tags, and an Ask button lets you question a scan. Room scan photos are also checked for HVAC vents, bathroom fans and baseboard heaters, which appear in the room summary and can be added or removed by hand in the photo tour. This uses Apple's on-device Foundation Models and Vision only. Private Cloud Compute is not used. On other devices these features are simply absent and nothing else changes. Settings has a toggle for automatic summaries.
 
 SIRI, SHORTCUTS AND SPOTLIGHT
 App Shortcuts (App Intents) let you say "Start a room scan in Tilda" or "Open my latest scan in Tilda". Scans are indexed in on-device Spotlight. No Siri usage description is needed.
