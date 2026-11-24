@@ -16,14 +16,15 @@ enum FixtureSceneMarkers {
     private static let prefix = "fixture-"
     private static let hitPadName = "fixture-hit"
 
-    /// Rebuilds all markers under one container node. Call again whenever the fixtures change.
+    /// Rebuilds all markers under one container node. Call again whenever the fixtures change. `throughWalls` draws them
+    /// on top of everything (the orbit preview); the first-person walkthrough passes false so walls hide other rooms'.
     static func install(_ fixtures: [Fixture], walls: [FloorPlan.Segment], in scene: SCNScene,
-                        visible: Bool = true, focused: UUID? = nil) {
+                        visible: Bool = true, focused: UUID? = nil, throughWalls: Bool = true) {
         scene.rootNode.childNode(withName: containerName, recursively: false)?.removeFromParentNode()
         let container = SCNNode()
         container.name = containerName
         container.isHidden = !visible
-        for f in fixtures { container.addChildNode(node(for: f, walls: walls, focused: f.id == focused)) }
+        for f in fixtures { container.addChildNode(node(for: f, walls: walls, focused: f.id == focused, throughWalls: throughWalls)) }
         scene.rootNode.addChildNode(container)
     }
 
@@ -49,12 +50,12 @@ enum FixtureSceneMarkers {
 
     // MARK: Nodes
 
-    static func node(for f: Fixture, walls: [FloorPlan.Segment], focused: Bool = false) -> SCNNode {
+    static func node(for f: Fixture, walls: [FloorPlan.Segment], focused: Bool = false, throughWalls: Bool = true) -> SCNNode {
         let uiColor = UIColor(f.kind.color())
         let material = SCNMaterial()
         material.lightingModel = .constant
         material.diffuse.contents = uiColor
-        material.readsFromDepthBuffer = false
+        material.readsFromDepthBuffer = !throughWalls
         material.writesToDepthBuffer = false
         material.isDoubleSided = true
 
@@ -63,7 +64,7 @@ enum FixtureSceneMarkers {
         root.simdPosition = f.position
 
         let body = SCNNode()
-        body.renderingOrder = 1000
+        body.renderingOrder = throughWalls ? 1000 : 0
         let axis = f.axis ?? FixturePlacement.snapToWall(f.planPosition, walls: walls)?.axis ?? SIMD2(1, 0)
         // Rotation about Y that turns the node's local +X onto the wall direction (plan y is world z).
         let yaw = -atan2(axis.y, axis.x)

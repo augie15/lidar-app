@@ -431,6 +431,24 @@ extension FixturePlacement {
         let addedHeater = newFixture(kind: .baseboardHeater, surface: .wall, at: [2, 0.7], room: editRoom)
         expect(addedHeater.planPosition == SIMD2<Float>(2, 0) && addedHeater.axis == [1, 0], "new heater snaps to the wall")
 
+        // Re-detection: dismissed finds stay gone, unchecked ones keep their id, touched ones are never duplicated.
+        func det(_ kind: Fixture.Kind, _ p: SIMD2<Float>) -> Fixture {
+            Fixture(kind: kind, surface: .ceiling, position: [p.x, 2.5, p.y], planPosition: p, length: nil, axis: nil,
+                    photoFrame: nil, photoBox: nil, source: .detected, confidence: 0.8)
+        }
+        var mergeLib = FixtureLibrary()
+        let oldUnchecked = det(.hvacVent, [1, 1])
+        var confirmedFan = det(.bathroomFan, [3, 1]); confirmedFan.confirmed = true
+        mergeLib.fixtures = [oldUnchecked, confirmedFan, det(.hvacVent, [5, 5])]
+        mergeLib.dismissed = [.init(kind: .hvacVent, planPosition: [2, 2])]
+        let merged2 = mergeLib.merging(detections: [det(.hvacVent, [1.2, 1]), det(.bathroomFan, [3.1, 1]),
+                                                    det(.hvacVent, [2.1, 2]), det(.hvacVent, [0, 3])], radius: mergeRadius)
+        expect(merged2.count == 3, "re-detect keeps the fan, the matched vent and one new vent (got \(merged2.count))")
+        expect(merged2.contains { $0.id == oldUnchecked.id && $0.planPosition == SIMD2<Float>(1.2, 1) },
+               "a fresh sighting of an unchecked find keeps its id")
+        expect(!merged2.contains { simd_distance($0.planPosition, [2.1, 2]) < 0.01 }, "a dismissed find stays deleted")
+        expect(!merged2.contains { simd_distance($0.planPosition, [5, 5]) < 0.01 }, "an unchecked find not seen again is dropped")
+
         // Old fixtures.json (no confirmed/edited keys) still decodes: detected is unchecked, manual is confirmed.
         let old = """
         {"fixtures":[{"id":"6F1E4B9A-0000-4000-8000-000000000001","kind":"hvacVent","surface":"floor","position":[1,0,2],

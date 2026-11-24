@@ -51,6 +51,7 @@ struct ModelPreview: UIViewRepresentable {
 
         struct Installed: Equatable {
             var fixtures: [Fixture]
+            var walls: [FloorPlan.Segment]
             var focused: UUID?
             var shown: Bool
         }
@@ -64,9 +65,9 @@ struct ModelPreview: UIViewRepresentable {
 
     private func syncFixtures(_ view: SCNView, _ coordinator: Coordinator) {
         guard let scene = view.scene else { return }
-        let state = Coordinator.Installed(fixtures: fixtures, focused: focusedFixture, shown: showFixtures)
+        let state = Coordinator.Installed(fixtures: fixtures, walls: walls, focused: focusedFixture, shown: showFixtures)
         guard coordinator.installed != state else { return }
-        if let old = coordinator.installed, old.fixtures == state.fixtures, old.focused == state.focused,
+        if let old = coordinator.installed, old.fixtures == state.fixtures, old.walls == state.walls, old.focused == state.focused,
            scene.rootNode.childNode(withName: FixtureSceneMarkers.containerName, recursively: false) != nil {
             FixtureSceneMarkers.setVisible(showFixtures, in: scene)   // only the toggle changed
         } else {

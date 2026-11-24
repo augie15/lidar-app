@@ -111,12 +111,7 @@ final class FixtureCoordinator {
         // A cancelled run leaves the saved results untouched.
         guard !output.cancelled else { return }
         var library = libraries[id] ?? FixtureLibrary()
-        let kept = library.fixtures.filter(\.isProtected)
-        // A fresh sighting of something the user already has (same kind, close by) is that fixture, not a new one.
-        let fresh = output.fixtures.filter { new in
-            !kept.contains { $0.kind == new.kind && simd_distance($0.planPosition, new.planPosition) < FixturePlacement.mergeRadius }
-        }
-        library.fixtures = kept + fresh
+        library.fixtures = library.merging(detections: output.fixtures, radius: FixturePlacement.mergeRadius)
         library.detectedAt = .now
         library.photosChecked = output.photosChecked
         if output.photosChecked == 0 { lastRunFailed.insert(id) }
@@ -155,6 +150,10 @@ final class FixtureCoordinator {
         guard var library = libraries[scan.id], let index = library.fixtures.firstIndex(where: { $0.id == fixtureID })
         else { return nil }
         let removed = library.fixtures.remove(at: index)
+        // A deleted detection stays deleted when the photos are checked again.
+        if removed.source == .detected {
+            library.dismissed = (library.dismissed ?? []) + [.init(kind: removed.kind, planPosition: removed.planPosition)]
+        }
         save(library, for: scan)
         return (removed, index)
     }
@@ -163,6 +162,9 @@ final class FixtureCoordinator {
     func restore(_ fixture: Fixture, at index: Int, scan: Scan) {
         var library = libraries[scan.id] ?? FixtureLibrary()
         guard !library.fixtures.contains(where: { $0.id == fixture.id }) else { return }
+        if let i = library.dismissed?.lastIndex(of: .init(kind: fixture.kind, planPosition: fixture.planPosition)) {
+            library.dismissed?.remove(at: i)
+        }
         library.fixtures.insert(fixture, at: min(index, library.fixtures.count))
         save(library, for: scan)
     }
@@ -193,8 +195,12 @@ final class FixtureCoordinator {
         update(id, scan: scan) { $0 = FixturePlacement.retargeted($0, kind: kind, surface: surface, room: room) }
     }
 
-    func setLength(_ length: Float?, for id: UUID, scan: Scan) {
-        update(id, scan: scan) { $0.length = length }
+    /// Changes a heater's length, then re-snaps it so the longer bar still ends on its wall.
+    func setLength(_ length: Float?, for id: UUID, room: FixturePlacement.Room, scan: Scan) {
+        update(id, scan: scan) {
+            $0.length = length
+            $0 = FixturePlacement.moved($0, to: $0.planPosition, room: room)
+        }
     }
 
     /// Moves a fixture to a plan point (wall kinds snap to a wall), keeping its height.

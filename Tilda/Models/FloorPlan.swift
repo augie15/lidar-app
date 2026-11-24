@@ -5,7 +5,7 @@ import simd
 /// Coordinates are ARKit world space projected onto the floor: x = world x, y = world z (metres).
 /// This is the same space as FrameRecorder camera positions, so photo spots line up with the plan.
 struct FloorPlan: Codable, Sendable {
-    struct Segment: Codable, Sendable {
+    struct Segment: Codable, Sendable, Equatable {
         var start: SIMD2<Float>
         var end: SIMD2<Float>
     }

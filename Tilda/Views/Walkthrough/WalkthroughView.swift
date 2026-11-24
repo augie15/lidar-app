@@ -230,7 +230,7 @@ final class WalkthroughModel: NSObject, ObservableObject, SCNSceneRendererDelega
 
     private func configure(_ scene: SCNScene) {
         ModelPreview.prepareMaterials(in: scene)
-        if !fixtures.isEmpty { FixtureSceneMarkers.install(fixtures, walls: plan?.walls ?? [], in: scene) }
+        if !fixtures.isEmpty { FixtureSceneMarkers.install(fixtures, walls: plan?.walls ?? [], in: scene, throughWalls: false) }
 
         let (minB, maxB) = scene.rootNode.boundingBox
         let bMin = SIMD3<Float>(Float(minB.x), Float(minB.y), Float(minB.z))

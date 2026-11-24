@@ -243,7 +243,7 @@ struct FixtureEditorView: View {
                 Button {
                     let n = coordinator.confirmAll(scan: scan)
                     UINotificationFeedbackGenerator().notificationOccurred(.success)
-                    UIAccessibility.post(notification: .announcement, argument: "\(n) fixtures confirmed")
+                    UIAccessibility.post(notification: .announcement, argument: n == 1 ? "1 fixture confirmed" : "\(n) fixtures confirmed")
                 } label: {
                     Label("Confirm all \(library.uncheckedCount)", systemImage: "checkmark.circle")
                         .font(.subheadline.weight(.semibold))
@@ -354,7 +354,7 @@ struct FixtureEditorView: View {
                 scrollTarget = f.id   // the row moves to its new section
             },
             onSurface: { coordinator.setKind(f.kind, surface: $0, for: f.id, room: room, scan: scan) },
-            onLength: { coordinator.setLength($0, for: f.id, scan: scan) },
+            onLength: { coordinator.setLength($0, for: f.id, room: room, scan: scan) },
             onConfirm: {
                 coordinator.confirm(f.id, scan: scan)
                 UINotificationFeedbackGenerator().notificationOccurred(.success)

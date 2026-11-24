@@ -127,8 +127,42 @@ struct FixtureLibrary: Codable, Sendable, Equatable {
     /// When photo detection last finished. Nil until it has run once (hand-tagged fixtures can exist before that).
     var detectedAt: Date?
     var photosChecked: Int?
+    /// Detections the user deleted, so a later run does not bring them back. Optional so files saved before it existed
+    /// still decode.
+    var dismissed: [Dismissal]?
+
+    /// Where a deleted detection was: a fresh sighting of the same kind this close by is the same false find.
+    struct Dismissal: Codable, Sendable, Equatable {
+        var kind: Fixture.Kind
+        var planPosition: SIMD2<Float>
+    }
 
     static let fileName = "fixtures.json"
+
+    /// The fixtures after a detection run. Fixtures the user has touched are kept. A fresh sighting close to one of
+    /// those (same kind, within `radius`) is that fixture, and one close to a dismissal stays deleted. A sighting close
+    /// to an unchecked earlier detection takes over its id, so selections and undo in an open editor still match.
+    /// Earlier unchecked detections that were not seen again are dropped.
+    func merging(detections: [Fixture], radius: Float) -> [Fixture] {
+        func near(_ a: Fixture.Kind, _ p: SIMD2<Float>, _ b: Fixture.Kind, _ q: SIMD2<Float>) -> Bool {
+            a == b && simd_distance(p, q) < radius
+        }
+        let kept = fixtures.filter(\.isProtected)
+        var unchecked = fixtures.filter { !$0.isProtected }
+        var fresh: [Fixture] = []
+        for var new in detections {
+            if kept.contains(where: { near($0.kind, $0.planPosition, new.kind, new.planPosition) }) { continue }
+            if (dismissed ?? []).contains(where: { near($0.kind, $0.planPosition, new.kind, new.planPosition) }) { continue }
+            if let i = unchecked.indices.min(by: {
+                   simd_distance(unchecked[$0].planPosition, new.planPosition) < simd_distance(unchecked[$1].planPosition, new.planPosition)
+               }), near(unchecked[i].kind, unchecked[i].planPosition, new.kind, new.planPosition) {
+                new.id = unchecked[i].id
+                unchecked.remove(at: i)
+            }
+            fresh.append(new)
+        }
+        return kept + fresh
+    }
 
     func count(of kind: Fixture.Kind) -> Int { fixtures.filter { $0.kind == kind }.count }
 
