@@ -3,6 +3,8 @@ import SwiftUI
 /// Full-screen tour: floor plan with photo-spot pins on top, swipeable portrait photos below.
 struct PhotoTourView: View {
     let scan: Scan
+    /// Open at the photo that shows this fixture and pulse its box (arriving from the fixture editor).
+    var focusFixture: UUID?
     @Environment(ScanStore.self) private var store
     @Environment(FixtureCoordinator.self) private var fixtureCoordinator
     @Environment(\.dismiss) private var dismiss
@@ -13,6 +15,7 @@ struct PhotoTourView: View {
     @State private var loaded = false
     @State private var ceilingHeight: Float?
     @State private var shownFixture: UUID?
+    @State private var pulsing: UUID?
 
     private var fixtures: [Fixture] { fixtureCoordinator.fixtures(for: scan.id) }
 
@@ -37,7 +40,7 @@ struct PhotoTourView: View {
                         .background(Theme.tile, in: RoundedRectangle(cornerRadius: Theme.radiusCard, style: .continuous))
                         .accessibilityActions {
                             ForEach(fixtures) { f in
-                                Button("Show \(f.kind.title.lowercased()), \(f.surface.rawValue)") { shownFixture = f.id }
+                                Button("Show \(f.kind.sentenceTitle), \(f.surface.rawValue)") { shownFixture = f.id }
                             }
                         }
                         .padding(.horizontal, 16)
@@ -85,6 +88,7 @@ struct PhotoTourView: View {
             ForEach(spots) { spot in
                 TourPhotoPage(spot: spot, isNear: abs(spot.id - selected) <= 1,
                               fixtures: fixtures.filter { $0.photoFrame == spot.frameFile && $0.photoBox != nil },
+                              pulsing: pulsing,
                               onSelect: { shownFixture = $0.id },
                               onAdd: { kind, surface in add(kind, surface, at: spot) })
                     .tag(spot.id)
@@ -126,6 +130,14 @@ struct PhotoTourView: View {
         ceilingHeight = result.2
         fixtureCoordinator.load(scan, store: store)
         loaded = true
+        if let focusFixture, let frame = fixtureCoordinator.fixtures(for: scan.id).first(where: { $0.id == focusFixture })?.photoFrame,
+           let spot = spots.first(where: { $0.frameFile == frame }) {
+            selected = spot.id
+            try? await Task.sleep(for: .milliseconds(500))   // let the photo appear first
+            pulsing = focusFixture
+            try? await Task.sleep(for: .seconds(4.5))
+            pulsing = nil
+        }
     }
 }
 
@@ -133,6 +145,7 @@ private struct TourPhotoPage: View {
     let spot: PhotoSpot
     let isNear: Bool
     let fixtures: [Fixture]
+    var pulsing: UUID?
     let onSelect: (Fixture) -> Void
     let onAdd: (Fixture.Kind, Fixture.Surface) -> Void
     @State private var image: UIImage?
@@ -143,7 +156,7 @@ private struct TourPhotoPage: View {
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
-                    .overlay { FixtureBoxesOverlay(fixtures: fixtures, onSelect: onSelect) }
+                    .overlay { FixtureBoxesOverlay(fixtures: fixtures, pulsing: pulsing, onSelect: onSelect) }
                     .clipShape(RoundedRectangle(cornerRadius: Theme.radiusCard, style: .continuous))
                     .accessibilityLabel("Photo \(spot.id + 1)")
             } else {

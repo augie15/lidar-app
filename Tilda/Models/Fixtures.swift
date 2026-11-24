@@ -16,6 +16,9 @@ struct Fixture: Codable, Identifiable, Sendable, Equatable {
     enum Kind: String, Codable, CaseIterable, Sendable {
         case hvacVent, bathroomFan, baseboardHeater
 
+        /// Title for use mid-sentence: lowercased, except the acronym ("HVAC vent", "bathroom fan").
+        var sentenceTitle: String { self == .hvacVent ? "HVAC vent" : title.lowercased() }
+        var sentencePluralTitle: String { self == .hvacVent ? "HVAC vents" : pluralTitle.lowercased() }
         var title: String {
             switch self {
             case .hvacVent: "HVAC vent"
@@ -58,6 +61,64 @@ struct Fixture: Codable, Identifiable, Sendable, Equatable {
     var source: Source
     /// 0...1, detected fixtures only.
     var confidence: Float?
+    /// The user has looked at this one and agrees it is real. Hand-tagged fixtures are always confirmed; detected ones
+    /// start unconfirmed. Files saved before this field existed decode as `source == .manual`.
+    var confirmed: Bool = false
+    /// The user changed its kind, surface, size or position. An edited fixture is also confirmed.
+    var edited: Bool = false
+}
+
+extension Fixture {
+    /// Detected by the model and not yet checked by the user.
+    var needsCheck: Bool { source == .detected && !confirmed }
+    /// A new detection run must not throw this away.
+    var isProtected: Bool { source == .manual || confirmed || edited }
+}
+
+extension Fixture.Kind {
+    /// Surfaces a fixture of this kind can sit on, most likely first.
+    var allowedSurfaces: [Fixture.Surface] {
+        switch self {
+        case .hvacVent: [.wall, .ceiling, .floor]
+        case .bathroomFan: [.ceiling, .wall]
+        case .baseboardHeater: [.wall]
+        }
+    }
+
+    /// Short name for tight spaces (segmented controls, chips).
+    var shortTitle: String {
+        switch self {
+        case .hvacVent: "Vent"
+        case .bathroomFan: "Fan"
+        case .baseboardHeater: "Heater"
+        }
+    }
+}
+
+extension Fixture {
+    private enum CodingKeys: String, CodingKey {
+        case id, kind, surface, position, planPosition, length, axis, photoFrame, photoBox, source, confidence,
+             confirmed, edited
+    }
+
+    // Written by hand (in an extension, so the memberwise init stays) because `confirmed` and `edited` are missing from
+    // files saved by version 1.0.
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        kind = try c.decode(Kind.self, forKey: .kind)
+        surface = try c.decode(Surface.self, forKey: .surface)
+        position = try c.decode(SIMD3<Float>.self, forKey: .position)
+        planPosition = try c.decode(SIMD2<Float>.self, forKey: .planPosition)
+        length = try c.decodeIfPresent(Float.self, forKey: .length)
+        axis = try c.decodeIfPresent(SIMD2<Float>.self, forKey: .axis)
+        photoFrame = try c.decodeIfPresent(String.self, forKey: .photoFrame)
+        photoBox = try c.decodeIfPresent(NormalizedBox.self, forKey: .photoBox)
+        source = try c.decode(Source.self, forKey: .source)
+        confidence = try c.decodeIfPresent(Float.self, forKey: .confidence)
+        confirmed = try c.decodeIfPresent(Bool.self, forKey: .confirmed) ?? (source == .manual)
+        edited = try c.decodeIfPresent(Bool.self, forKey: .edited) ?? false
+    }
 }
 
 /// Everything saved in `fixtures.json`.
@@ -70,6 +131,9 @@ struct FixtureLibrary: Codable, Sendable, Equatable {
     static let fileName = "fixtures.json"
 
     func count(of kind: Fixture.Kind) -> Int { fixtures.filter { $0.kind == kind }.count }
+
+    /// Detected fixtures the user has not checked yet.
+    var uncheckedCount: Int { fixtures.filter(\.needsCheck).count }
 
     /// Sum of heater lengths in metres, ignoring heaters whose length is unknown.
     var heaterLength: Float {
@@ -97,7 +161,7 @@ struct FixtureLibrary: Codable, Sendable, Equatable {
         let parts: [String] = Fixture.Kind.allCases.compactMap { kind in
             let n = count(of: kind)
             guard n > 0 else { return nil }
-            var s = "\(n) \(n == 1 ? kind.title.lowercased() : kind.pluralTitle.lowercased())"
+            var s = "\(n) \(n == 1 ? kind.sentenceTitle : kind.sentencePluralTitle)"
             if kind == .baseboardHeater, heaterLength > 0 { s += " (about \(lengthText(heaterLength)) in total)" }
             return s
         }

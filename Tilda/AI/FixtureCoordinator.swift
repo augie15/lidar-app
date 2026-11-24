@@ -3,7 +3,8 @@ import Observation
 import simd
 
 /// Owns every scan's fixtures: loads and saves `fixtures.json`, runs photo detection in the background (one scan at a
-/// time, cancellable, never on the main thread), and applies hand-tagged additions and deletions.
+/// time, cancellable, never on the main thread), and applies the user's edits: adds, moves, kind and length changes,
+/// confirmations and deletions (with restore for undo). Every change is saved to `fixtures.json` straight away.
 @MainActor
 @Observable
 final class FixtureCoordinator {
@@ -54,7 +55,8 @@ final class FixtureCoordinator {
 
     // MARK: Detection
 
-    /// "Find fixtures" / "Scan photos again". Hand-tagged fixtures are kept; earlier detections are replaced.
+    /// "Find fixtures" / "Scan photos again". Fixtures the user has touched are kept (hand-tagged, confirmed or edited);
+    /// earlier detections nobody has checked are replaced.
     func detect(_ scan: Scan, store: ScanStore) {
         self.store = store
         guard running[scan.id] == nil, !queue.contains(scan.id) else { return }
@@ -109,7 +111,12 @@ final class FixtureCoordinator {
         // A cancelled run leaves the saved results untouched.
         guard !output.cancelled else { return }
         var library = libraries[id] ?? FixtureLibrary()
-        library.fixtures = library.fixtures.filter { $0.source == .manual } + output.fixtures
+        let kept = library.fixtures.filter(\.isProtected)
+        // A fresh sighting of something the user already has (same kind, close by) is that fixture, not a new one.
+        let fresh = output.fixtures.filter { new in
+            !kept.contains { $0.kind == new.kind && simd_distance($0.planPosition, new.planPosition) < FixturePlacement.mergeRadius }
+        }
+        library.fixtures = kept + fresh
         library.detectedAt = .now
         library.photosChecked = output.photosChecked
         if output.photosChecked == 0 { lastRunFailed.insert(id) }
@@ -128,27 +135,91 @@ final class FixtureCoordinator {
         let floorY = plan?.floorY ?? 0
         let target = FixturePlacement.manualPlan(spot: spot.position, facing: spot.facing, walls: plan?.walls ?? [])
         let ceilingY = floorY + (ceilingHeight ?? FixturePlacement.defaultCeilingHeight)
-        let y: Float = switch surface {
-        case .floor: floorY
-        case .ceiling: ceilingY
-        case .wall: kind == .baseboardHeater ? floorY + 0.15 : floorY + 0.3
-        }
+        let y = FixturePlacement.height(kind: kind, surface: surface,
+                                        room: .init(floorY: floorY, ceilingY: ceilingY, walls: plan?.walls ?? []))
         let fixture = Fixture(kind: kind, surface: surface, position: SIMD3(target.point.x, y, target.point.y),
                               planPosition: target.point, length: nil,
-                              axis: kind == .baseboardHeater ? target.axis : nil,
+                              axis: surface == .wall ? target.axis : nil,
                               photoFrame: spot.frameFile.isEmpty ? nil : spot.frameFile, photoBox: nil,
-                              source: .manual, confidence: nil)
+                              source: .manual, confidence: nil, confirmed: true)
         var library = libraries[scan.id] ?? FixtureLibrary()
         library.fixtures.append(fixture)
         save(library, for: scan)
         return fixture
     }
 
-    func delete(_ fixtureID: UUID, scan: Scan, store: ScanStore) {
-        self.store = store
-        guard var library = libraries[scan.id] else { return }
-        library.fixtures.removeAll { $0.id == fixtureID }
+    /// Removes a fixture and returns it with its list position, so `restore` can put it back (undo).
+    @discardableResult
+    func delete(_ fixtureID: UUID, scan: Scan, store: ScanStore? = nil) -> (fixture: Fixture, index: Int)? {
+        if let store { self.store = store }
+        guard var library = libraries[scan.id], let index = library.fixtures.firstIndex(where: { $0.id == fixtureID })
+        else { return nil }
+        let removed = library.fixtures.remove(at: index)
         save(library, for: scan)
+        return (removed, index)
+    }
+
+    /// Puts a deleted fixture back where it was.
+    func restore(_ fixture: Fixture, at index: Int, scan: Scan) {
+        var library = libraries[scan.id] ?? FixtureLibrary()
+        guard !library.fixtures.contains(where: { $0.id == fixture.id }) else { return }
+        library.fixtures.insert(fixture, at: min(index, library.fixtures.count))
+        save(library, for: scan)
+    }
+
+    // MARK: Editing
+
+    /// Adds a fixture at a point on the plan. Needs no photo. Wall kinds snap to the nearest wall.
+    @discardableResult
+    func add(kind: Fixture.Kind, surface: Fixture.Surface, at point: SIMD2<Float>, room: FixturePlacement.Room,
+             scan: Scan) -> Fixture {
+        let fixture = FixturePlacement.newFixture(kind: kind, surface: surface, at: point, room: room)
+        var library = libraries[scan.id] ?? FixtureLibrary()
+        library.fixtures.append(fixture)
+        save(library, for: scan)
+        return fixture
+    }
+
+    /// Applies a change to one fixture. The fixture counts as edited and checked from then on.
+    func update(_ id: UUID, scan: Scan, _ change: (inout Fixture) -> Void) {
+        guard var library = libraries[scan.id], let i = library.fixtures.firstIndex(where: { $0.id == id }) else { return }
+        change(&library.fixtures[i])
+        library.fixtures[i].edited = true
+        library.fixtures[i].confirmed = true
+        save(library, for: scan)
+    }
+
+    func setKind(_ kind: Fixture.Kind, surface: Fixture.Surface, for id: UUID, room: FixturePlacement.Room, scan: Scan) {
+        update(id, scan: scan) { $0 = FixturePlacement.retargeted($0, kind: kind, surface: surface, room: room) }
+    }
+
+    func setLength(_ length: Float?, for id: UUID, scan: Scan) {
+        update(id, scan: scan) { $0.length = length }
+    }
+
+    /// Moves a fixture to a plan point (wall kinds snap to a wall), keeping its height.
+    func move(_ id: UUID, to point: SIMD2<Float>, room: FixturePlacement.Room, scan: Scan) {
+        update(id, scan: scan) { $0 = FixturePlacement.moved($0, to: point, room: room) }
+    }
+
+    func confirm(_ id: UUID, scan: Scan) {
+        guard var library = libraries[scan.id], let i = library.fixtures.firstIndex(where: { $0.id == id }),
+              !library.fixtures[i].confirmed else { return }
+        library.fixtures[i].confirmed = true
+        save(library, for: scan)
+    }
+
+    /// Marks every unchecked detection as checked. Returns how many changed.
+    @discardableResult
+    func confirmAll(scan: Scan) -> Int {
+        guard var library = libraries[scan.id] else { return 0 }
+        var n = 0
+        for i in library.fixtures.indices where library.fixtures[i].needsCheck {
+            library.fixtures[i].confirmed = true
+            n += 1
+        }
+        if n > 0 { save(library, for: scan) }
+        return n
     }
 
     private func save(_ library: FixtureLibrary, for scan: Scan) {

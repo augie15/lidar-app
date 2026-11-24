@@ -248,6 +248,81 @@ enum FixturePlacement {
         }
     }
 
+    // MARK: Editing
+
+    /// Height of a fixture's centre above the world origin for a surface: floor and ceiling units sit on the plane,
+    /// wall units low on the wall (heaters right above the floor).
+    static func height(kind: Fixture.Kind, surface: Fixture.Surface, room: Room) -> Float {
+        switch surface {
+        case .floor: room.floorY
+        case .ceiling: room.ceilingY
+        case .wall: room.floorY + (kind == .baseboardHeater ? 0.15 : 0.3)
+        }
+    }
+
+    struct WallSnap: Sendable, Equatable {
+        var point: SIMD2<Float>
+        var axis: SIMD2<Float>
+        var distance: Float
+    }
+
+    /// Nearest point on any wall segment. `inset` keeps the point at least that far from either end of the segment
+    /// (so a heater of length `2 * inset` stays on the wall); a segment shorter than `2 * inset` snaps to its middle.
+    static func snapToWall(_ p: SIMD2<Float>, walls: [FloorPlan.Segment], inset: Float = 0) -> WallSnap? {
+        var best: WallSnap?
+        for w in walls {
+            let e = w.end - w.start
+            let l = simd_length(e)
+            guard l > 1e-3 else { continue }
+            let along = simd_dot(p - w.start, e) / l
+            let lo = min(inset, l / 2), hi = l - lo
+            let c = min(max(along, lo), hi)
+            let q = w.start + e / l * c
+            let d = simd_distance(q, p)
+            if best == nil || d < best!.distance { best = WallSnap(point: q, axis: e / l, distance: d) }
+        }
+        return best
+    }
+
+    /// The fixture moved to a plan point, keeping its height. A fixture on a wall is pulled onto the nearest wall
+    /// segment (and takes its direction); anything else goes exactly where it is put. Flags are the caller's business.
+    static func moved(_ f: Fixture, to p: SIMD2<Float>, room: Room) -> Fixture {
+        var out = f
+        if f.surface == .wall, let snap = snapToWall(p, walls: room.walls, inset: (f.length ?? 0) / 2) {
+            out.planPosition = snap.point
+            out.axis = snap.axis
+        } else {
+            out.planPosition = p
+        }
+        out.position = SIMD3(out.planPosition.x, f.position.y, out.planPosition.y)
+        return out
+    }
+
+    /// The fixture with a new kind and/or surface. Height follows the surface; a move onto a wall snaps it to the
+    /// nearest one. A surface the kind cannot sit on falls back to its first allowed one. Only heaters keep a length.
+    static func retargeted(_ f: Fixture, kind: Fixture.Kind, surface: Fixture.Surface, room: Room) -> Fixture {
+        var out = f
+        out.kind = kind
+        out.surface = kind.allowedSurfaces.contains(surface) ? surface : kind.allowedSurfaces[0]
+        if kind != .baseboardHeater { out.length = nil }
+        let y = height(kind: kind, surface: out.surface, room: room)
+        out.position.y = y
+        if out.surface == .wall {
+            out = moved(out, to: f.planPosition, room: room)
+        } else {
+            out.axis = nil
+        }
+        return out
+    }
+
+    /// A hand-tagged fixture at a plan point, already confirmed. No photo needed.
+    static func newFixture(kind: Fixture.Kind, surface: Fixture.Surface, at p: SIMD2<Float>, room: Room) -> Fixture {
+        let base = Fixture(kind: kind, surface: kind.allowedSurfaces.contains(surface) ? surface : kind.allowedSurfaces[0],
+                           position: SIMD3(p.x, room.floorY, p.y), planPosition: p, length: nil, axis: nil,
+                           photoFrame: nil, photoBox: nil, source: .manual, confidence: nil, confirmed: true)
+        return retargeted(base, kind: kind, surface: base.surface, room: room)
+    }
+
     // MARK: Manual tagging
 
     /// Where a hand-tagged fixture goes: about `reach` metres out from the photo spot along its facing direction,
@@ -324,6 +399,53 @@ extension FixturePlacement {
                             sighting([6, 2.4, 6], 0.9, kind: .bathroomFan)])
         expect(merged.count == 2, "merge keeps two fixtures (got \(merged.count))")
         expect(merged.first { $0.kind == .hvacVent }?.confidence == 0.8, "merged fixture keeps the best photo")
+
+        // Snap and move: walls along the x axis at z = 0 and the y axis at x = 4 (a corner).
+        let editRoom = Room(floorY: 0, ceilingY: 2.5, walls: [.init(start: [0, 0], end: [4, 0]), .init(start: [4, 0], end: [4, 3])])
+        let snap = snapToWall([1.5, 0.4], walls: editRoom.walls)
+        expect(snap.map { simd_distance($0.point, [1.5, 0]) < 1e-4 && $0.axis == [1, 0] && abs($0.distance - 0.4) < 1e-4 } ?? false,
+               "snap lands on the nearest wall")
+        expect(snapToWall([3.8, 1.0], walls: editRoom.walls)?.point == SIMD2<Float>(4, 1), "snap prefers the closer wall")
+        expect(snapToWall([0.1, 0.2], walls: editRoom.walls, inset: 0.6)?.point == SIMD2<Float>(0.6, 0), "snap keeps a heater's ends on the wall")
+        expect(snapToWall([1, 1], walls: []) == nil, "no walls, no snap")
+
+        let editHeater = Fixture(kind: .baseboardHeater, surface: .wall, position: [1, 0.15, 0], planPosition: [1, 0], length: 1.2,
+                             axis: [1, 0], photoFrame: nil, photoBox: nil, source: .detected, confidence: 0.9)
+        let m = moved(editHeater, to: [3.9, 2.0], room: editRoom)
+        expect(m.planPosition == SIMD2<Float>(4, 2) && m.axis == [0, 1], "heater moved onto the side wall turns with it")
+        expect(m.position == SIMD3<Float>(4, 0.15, 2), "move keeps height and writes the 3D position")
+        let end = moved(editHeater, to: [3.7, 0.1], room: editRoom)
+        expect(end.planPosition.x <= 3.4 + 1e-4 && end.planPosition.y == 0, "heater centre stays clear of the wall end")
+
+        let vent = Fixture(kind: .hvacVent, surface: .ceiling, position: [2, 2.5, 1], planPosition: [2, 1], length: nil,
+                           axis: nil, photoFrame: nil, photoBox: nil, source: .detected, confidence: 0.8)
+        let mv = moved(vent, to: [1, 2], room: editRoom)
+        expect(mv.position == SIMD3<Float>(1, 2.5, 2) && mv.planPosition == SIMD2<Float>(1, 2), "ceiling vent moves freely at ceiling height")
+        let onWall = retargeted(vent, kind: .hvacVent, surface: .wall, room: editRoom)
+        expect(onWall.planPosition == SIMD2<Float>(2, 0) && abs(onWall.position.y - 0.3) < 1e-4, "changing to wall snaps and drops to wall height")
+        let asHeater = retargeted(vent, kind: .baseboardHeater, surface: .ceiling, room: editRoom)
+        expect(asHeater.surface == .wall && abs(asHeater.position.y - 0.15) < 1e-4, "a heater always ends up on a wall")
+        expect(retargeted(editHeater, kind: .bathroomFan, surface: .ceiling, room: editRoom).length == nil, "length is dropped when not a heater")
+        let added = newFixture(kind: .bathroomFan, surface: .ceiling, at: [1, 1], room: editRoom)
+        expect(added.confirmed && added.source == .manual && added.position == SIMD3<Float>(1, 2.5, 1), "new fan sits at ceiling height, confirmed")
+        let addedHeater = newFixture(kind: .baseboardHeater, surface: .wall, at: [2, 0.7], room: editRoom)
+        expect(addedHeater.planPosition == SIMD2<Float>(2, 0) && addedHeater.axis == [1, 0], "new heater snaps to the wall")
+
+        // Old fixtures.json (no confirmed/edited keys) still decodes: detected is unchecked, manual is confirmed.
+        let old = """
+        {"fixtures":[{"id":"6F1E4B9A-0000-4000-8000-000000000001","kind":"hvacVent","surface":"floor","position":[1,0,2],
+        "planPosition":[1,2],"source":"detected","confidence":0.8},
+        {"id":"6F1E4B9A-0000-4000-8000-000000000002","kind":"bathroomFan","surface":"ceiling","position":[1,2.4,2],
+        "planPosition":[1,2],"source":"manual"}]}
+        """
+        if let lib = try? JSONDecoder().decode(FixtureLibrary.self, from: Data(old.utf8)) {
+            expect(lib.fixtures.count == 2 && lib.fixtures[0].needsCheck && lib.fixtures[1].confirmed && !lib.fixtures[1].needsCheck,
+                   "old library decodes with defaults")
+            let round = try? JSONDecoder().decode(FixtureLibrary.self, from: JSONEncoder().encode(lib))
+            expect(round == lib, "library round-trips with the new fields")
+        } else {
+            failures.append("old library failed to decode")
+        }
         return failures
     }
 }

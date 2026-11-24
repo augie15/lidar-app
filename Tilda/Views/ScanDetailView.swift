@@ -19,6 +19,13 @@ struct ScanDetailView: View {
     @State private var showWalkthrough = false
     @State private var showAsk = false
     @State private var showRoomSummary = false
+    @State private var showFixtureMarkers = true
+    @State private var editor: FixtureEditorRequest?
+    /// Set when the editor closes with a fixture selected: the 3D preview pulses it for a moment.
+    @State private var focusedFixture: UUID?
+    /// Set when the editor asks for the photo tour: the tour opens once the editor has gone.
+    @State private var tourFocus: UUID?
+    @State private var planWalls: [FloorPlan.Segment] = []
 
     private var scan: Scan? { store.scans.first { $0.id == scanID } }
 
@@ -32,14 +39,28 @@ struct ScanDetailView: View {
         }
         .background(Theme.background)
         .quickLookPreview($arPreviewURL)
-        .fullScreenCover(isPresented: $showTour) {
-            if let scan { PhotoTourView(scan: scan).environment(store).environment(fixtureCoordinator) }
+        .fullScreenCover(isPresented: $showTour, onDismiss: { tourFocus = nil }) {
+            if let scan {
+                PhotoTourView(scan: scan, focusFixture: tourFocus).environment(store).environment(fixtureCoordinator)
+            }
         }
         .fullScreenCover(isPresented: $showWalkthrough) {
             if let scan {
-                WalkthroughView(modelURL: store.modelURL(for: scan), floorPlanURL: store.floorPlanURL(for: scan))
+                WalkthroughView(modelURL: store.modelURL(for: scan), floorPlanURL: store.floorPlanURL(for: scan),
+                                fixtures: scan.kind == .room ? fixtureCoordinator.fixtures(for: scan.id) : [])
             }
         }
+        .sheet(item: $editor, onDismiss: {
+            if tourFocus != nil { showTour = true }
+        }) { request in
+            if let scan {
+                FixtureEditorView(scan: scan, focus: request.focus, onClose: { id in pulse(id) },
+                                  onOpenTour: { tourFocus = $0 })
+                    .environment(store)
+                    .environment(fixtureCoordinator)
+            }
+        }
+        .task(id: scanID) { await loadWalls() }
         .sheet(isPresented: $showAsk) {
             if let scan {
                 AskScanView(scan: scan, folder: store.folderURL(for: scan), modelURL: store.modelURL(for: scan),
@@ -69,9 +90,14 @@ struct ScanDetailView: View {
         let formats = ExportFormat.available(in: store.folderURL(for: scan))
         return ScrollView {
             VStack(alignment: .leading, spacing: 20) {
-                ModelPreview(url: url)
+                ModelPreview(url: url, fixtures: markerFixtures(for: scan), walls: planWalls,
+                             showFixtures: showFixtureMarkers, focusedFixture: focusedFixture,
+                             onSelectFixture: { id in editor = FixtureEditorRequest(focus: id) })
                     .frame(height: 380)
                     .clipShape(RoundedRectangle(cornerRadius: Theme.radiusCard, style: .continuous))
+                    .overlay(alignment: .topLeading) {
+                        if !markerFixtures(for: scan).isEmpty { fixtureToggle }
+                    }
                     .overlay(alignment: .bottomTrailing) {
                         if url.pathExtension.lowercased() == "usdz" {
                             Button { arPreviewURL = url } label: {
@@ -92,6 +118,10 @@ struct ScanDetailView: View {
                     .foregroundStyle(Theme.textSecondary)
 
                 viewButtons(for: scan)
+
+                if scan.kind == .room {
+                    FixturesRow(scan: scan) { editor = FixtureEditorRequest() }
+                }
 
                 InsightsCard(insights: analysis.insights[scan.id], busy: analysis.isBusy(scan.id)) {
                     analysis.reanalyze(scan, store: store)
@@ -161,6 +191,46 @@ struct ScanDetailView: View {
         } message: {
             Text(exportError ?? "")
         }
+    }
+
+    private func markerFixtures(for scan: Scan) -> [Fixture] {
+        scan.kind == .room ? fixtureCoordinator.fixtures(for: scan.id) : []
+    }
+
+    /// "Fixtures" chip on the preview: shows or hides the 3D markers.
+    private var fixtureToggle: some View {
+        Button { showFixtureMarkers.toggle() } label: {
+            HStack(spacing: 6) {
+                Image(systemName: showFixtureMarkers ? "eye" : "eye.slash")
+                    .font(.system(size: 12, weight: .semibold))
+                Text("Fixtures").font(.footnote.weight(.semibold))
+            }
+            .foregroundStyle(showFixtureMarkers ? Theme.tile : Theme.textPrimary)
+            .padding(.horizontal, 14)
+            .frame(minHeight: 44)
+            .background(showFixtureMarkers ? Theme.accent : Color.black.opacity(0.55), in: Capsule())
+        }
+        .buttonStyle(PressableStyle())
+        .padding(6)
+        .accessibilityLabel("Fixtures")
+        .accessibilityValue(showFixtureMarkers ? "Shown" : "Hidden")
+        .accessibilityHint("Shows or hides vent, fan and heater markers in the 3D preview")
+    }
+
+    private func pulse(_ id: UUID?) {
+        guard let id else { return }
+        showFixtureMarkers = true
+        focusedFixture = id
+        Task {
+            try? await Task.sleep(for: .seconds(4))
+            if focusedFixture == id { focusedFixture = nil }
+        }
+    }
+
+    private func loadWalls() async {
+        guard let scan, scan.kind == .room, let url = store.floorPlanURL(for: scan) else { return }
+        planWalls = await Task.detached { FloorPlan.load(from: url)?.walls ?? [] }.value
+        fixtureCoordinator.load(scan, store: store)
     }
 
     @ViewBuilder

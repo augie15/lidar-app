@@ -71,9 +71,9 @@ enum DemoData {
                                     wallThickness: wall,
                                     totalGrossArea: grossArea(living))
         let livingFixtures = [
-            fixture(.hvacVent, .floor, [1.2, 2.6]),
+            fixture(.hvacVent, .floor, [1.2, 2.6], confirmed: true),
             fixture(.hvacVent, .ceiling, [2.7, 1.8], confidence: 0.82),
-            fixture(.baseboardHeater, .wall, [1.65, 0.1], length: 1.3, axis: [1, 0]),
+            fixture(.baseboardHeater, .wall, [1.65, 0.1], length: 1.3, axis: [1, 0], confirmed: true),
             fixture(.baseboardHeater, .wall, [3.75, 0.1], length: 1.3, axis: [1, 0]),
         ]
         write(name: "Living room", plan: livingPlan, facts: livingFacts, rooms: [living],
@@ -156,11 +156,12 @@ enum DemoData {
 
     private static func fixture(_ kind: Fixture.Kind, _ surface: Fixture.Surface, _ at: SIMD2<Float>,
                                 length: Float? = nil, axis: SIMD2<Float>? = nil, confidence: Float? = 0.88,
-                                source: Fixture.Source = .detected) -> Fixture {
+                                source: Fixture.Source = .detected, confirmed: Bool = false) -> Fixture {
         let y: Float = switch surface { case .floor: 0; case .wall: 0.15; case .ceiling: ceiling }
         return Fixture(kind: kind, surface: surface, position: SIMD3(at.x, y, at.y), planPosition: at, length: length,
                        axis: axis, photoFrame: nil, photoBox: nil, source: source,
-                       confidence: source == .manual ? nil : confidence)
+                       confidence: source == .manual ? nil : confidence,
+                       confirmed: confirmed || source == .manual)
     }
 
     // MARK: - Files

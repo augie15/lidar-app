@@ -55,7 +55,7 @@ enum FixtureMarker {
     ///   - backdrop: colour of the surface behind the plan, used for badge outlines and the glyph.
     static func draw(_ ctx: inout GraphicsContext, fixtures: [Fixture], point: (SIMD2<Float>) -> CGPoint,
                      pointsPerMetre: CGFloat, radius: CGFloat, backdrop: Color, light: Bool = false,
-                     selected: UUID? = nil) {
+                     selected: UUID? = nil, markUnchecked: Bool = false) {
         // Heater runs first, so every badge sits on top of them.
         for f in fixtures where f.kind == .baseboardHeater {
             let c = point(f.planPosition)
@@ -72,12 +72,12 @@ enum FixtureMarker {
         let ordered = fixtures.filter { $0.id != selected } + fixtures.filter { $0.id == selected }
         for f in ordered {
             badge(&ctx, f, at: point(f.planPosition), radius: radius, backdrop: backdrop, light: light,
-                  selected: f.id == selected)
+                  selected: f.id == selected, unchecked: markUnchecked && f.needsCheck)
         }
     }
 
     private static func badge(_ ctx: inout GraphicsContext, _ f: Fixture, at c: CGPoint, radius r: CGFloat,
-                              backdrop: Color, light: Bool, selected: Bool) {
+                              backdrop: Color, light: Bool, selected: Bool, unchecked: Bool) {
         let color = f.kind.color(light: light)
         let rect: CGRect
         let path: Path
@@ -94,6 +94,9 @@ enum FixtureMarker {
         }
         if selected {
             ctx.stroke(path, with: .color(.white), style: StrokeStyle(lineWidth: 3.5))
+        } else if unchecked {
+            // Dashed outline: detected, not checked yet.
+            ctx.stroke(path, with: .color(.white.opacity(0.85)), style: StrokeStyle(lineWidth: 2.5, dash: [3, 3]))
         }
         ctx.fill(path, with: .color(color))
         ctx.stroke(path, with: .color(backdrop), lineWidth: 1.5)
@@ -104,11 +107,22 @@ enum FixtureMarker {
     }
 
     /// Nearest fixture to a tap, within `reach` points.
+    /// Pass `pointsPerMetre` to let a tap anywhere along a heater's drawn run count.
     static func hit(at location: CGPoint, fixtures: [Fixture], point: (SIMD2<Float>) -> CGPoint,
-                    reach: CGFloat = 22) -> Fixture? {
-        fixtures.map { ($0, hypot(point($0.planPosition).x - location.x, point($0.planPosition).y - location.y)) }
-            .filter { $0.1 <= reach }
-            .min { $0.1 < $1.1 }?.0
+                    reach: CGFloat = 22, pointsPerMetre: CGFloat = 0) -> Fixture? {
+        func distance(_ f: Fixture) -> CGFloat {
+            let c = point(f.planPosition)
+            guard f.kind == .baseboardHeater, pointsPerMetre > 0 else { return hypot(c.x - location.x, c.y - location.y) }
+            let axis = f.axis ?? SIMD2(1, 0)
+            let half = CGFloat(f.length ?? 0.6) * pointsPerMetre / 2
+            let a = CGPoint(x: c.x - CGFloat(axis.x) * half, y: c.y - CGFloat(axis.y) * half)
+            let b = CGPoint(x: c.x + CGFloat(axis.x) * half, y: c.y + CGFloat(axis.y) * half)
+            let ab = CGVector(dx: b.x - a.x, dy: b.y - a.y)
+            let l2 = ab.dx * ab.dx + ab.dy * ab.dy
+            let t = l2 > 0 ? min(max(((location.x - a.x) * ab.dx + (location.y - a.y) * ab.dy) / l2, 0), 1) : 0
+            return hypot(a.x + ab.dx * t - location.x, a.y + ab.dy * t - location.y)
+        }
+        return fixtures.map { ($0, distance($0)) }.filter { $0.1 <= reach }.min { $0.1 < $1.1 }?.0
     }
 }
 

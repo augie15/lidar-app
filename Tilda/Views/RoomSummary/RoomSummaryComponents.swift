@@ -134,7 +134,7 @@ struct SummaryPlan: View {
         var s = "Floor plan with \(plan.walls.count) walls, \(plan.doors.count) doors and \(plan.windows.count) windows"
         let parts = fixtureKinds.map { kind in
             let n = fixtures.filter { $0.kind == kind }.count
-            return "\(n) \(n == 1 ? kind.title.lowercased() : kind.pluralTitle.lowercased())"
+            return "\(n) \(n == 1 ? kind.sentenceTitle : kind.sentencePluralTitle)"
         }
         if !parts.isEmpty { s += ". Marked: " + parts.joined(separator: ", ") }
         return s

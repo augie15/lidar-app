@@ -12,7 +12,7 @@ struct TildaApp: App {
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains("-TildaSelfCheck") {
             let failures = FixturePlacement.selfCheck()
-            print(failures.isEmpty ? "FixturePlacement self-check: all passed" : "FixturePlacement self-check FAILED: \(failures)")
+            NSLog("%@", failures.isEmpty ? "FixturePlacement self-check: all passed" : "FixturePlacement self-check FAILED: \(failures)")
         }
         #endif
     }

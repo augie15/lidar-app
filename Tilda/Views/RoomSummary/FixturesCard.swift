@@ -75,7 +75,7 @@ struct FixturesCard: View {
             message("Couldn't read the photos this time.", detail: "Try again in a moment.")
         } else if library?.detectedAt != nil {
             message("No vents, fans or heaters found.",
-                    detail: "Open the photo tour to add any that were missed.")
+                    detail: "Open the fixture editor on the scan page to add any that were missed.")
         } else if case let .unavailable(reason) = support {
             message("Not checked yet.", detail: reason)
         } else {
@@ -92,10 +92,13 @@ struct FixturesCard: View {
     }
 
     @ViewBuilder private var note: some View {
-        if found {
-            Text(library?.fixtures.contains { $0.source == .detected } == true
-                 ? "Found in your scan photos on this iPhone, so check them in the photo tour. Add or remove any that are wrong there."
-                 : "Added by hand in the photo tour.")
+        if let library, found {
+            let unchecked = library.uncheckedCount
+            Text(unchecked > 0
+                 ? "\(unchecked) found in your scan photos on this iPhone \(unchecked == 1 ? "is" : "are") still to check. Review, move or remove fixtures from the scan page."
+                 : library.fixtures.contains { $0.source == .detected }
+                    ? "Found in your scan photos on this iPhone and checked by you. Edit them from the scan page."
+                    : "Added by hand. Edit them from the scan page.")
                 .font(.caption)
                 .foregroundStyle(p.muted)
                 .fixedSize(horizontal: false, vertical: true)

@@ -20,17 +20,20 @@
 		19ABE0B6BDBC7598B02CE5CE /* ScanInsights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */; };
 		1BC4DDA8DD763B5B33281CC6 /* RoomScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA8881DF15E098F3B5EF2C0 /* RoomScanView.swift */; };
 		1E921FD30BD4772994984395 /* FixtureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61A1D95FA33EA8475EC58A7 /* FixtureCoordinator.swift */; };
+		20F5DE1015BBB1C0794449C3 /* FixtureSceneMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640BD88AA618A8ED7F229212 /* FixtureSceneMarkers.swift */; };
 		2FC4595178904B44876382AA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE872844E29A3C4FFEBE10B2 /* SettingsView.swift */; };
 		33CD9B1A6264F53238B08B19 /* CameraProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FB03975DEE545D2EC58807 /* CameraProjection.swift */; };
 		33E61EB8CEA69CC805903687 /* WalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB64DEEFB05F6FE6F90A6A0 /* WalkthroughView.swift */; };
 		354663B1F59BCDA0E6C18191 /* FixturesCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EE3F951996B078BE3F8D98 /* FixturesCard.swift */; };
 		384DE18780DD854E31868057 /* Surfaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8CB3FC9E24CEDD575CE73A /* Surfaces.swift */; };
 		3B544475A291FDC0E191C004 /* AskTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A4ED736DC92F8ECDE417C3 /* AskTools.swift */; };
+		3E117C57781C1D0F211EC7B1 /* FixturesRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A986F00679968643F164644 /* FixturesRow.swift */; };
 		3F59883D652EEC9624041543 /* RoomAreaGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB2D2BACEE7E1CECD159073 /* RoomAreaGeometry.swift */; };
 		40AA10DA1AF32C9D95BAAEF7 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18F0E88ED1186CDCED00AFC /* NavigationRouter.swift */; };
 		423F39FFFA4926532B647576 /* MeshCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34976E9723DA6D0D9E19AE0A /* MeshCaptureController.swift */; };
 		460893D531B37644A6F3B421 /* LidarMeshCropper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F875C0E0FCE78EB04EEC1DC /* LidarMeshCropper.swift */; };
 		4768E69A3F0BAD3113F67D14 /* MeshExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659C03586436A21AB4056DDE /* MeshExporter.swift */; };
+		4B2897564DCAFC271044502B /* FixtureEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56EBE1F5F47E090825151DA4 /* FixtureEditorView.swift */; };
 		4CE5ACB9EC89F7DC5BB9B540 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71913AD745B2EA5ECFBD79C5 /* HomeView.swift */; };
 		4D79FB45210BE6CE512DB4EE /* RoomFactsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BED8C695B956FE82F7AC70F /* RoomFactsBuilder.swift */; };
 		4E0547B245E4416B5201E4F6 /* RoomSummaryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81835F59DB587A5646C131B5 /* RoomSummaryModel.swift */; };
@@ -114,14 +117,17 @@
 		4F75BA97805F89D84B211C7B /* DeviceSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSupport.swift; sourceTree = "<group>"; };
 		505D35717F43743BE3A2C0DE /* ModelPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelPreview.swift; sourceTree = "<group>"; };
 		54A9D05187AAC84C23B31AD7 /* RoomFloorChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFloorChrome.swift; sourceTree = "<group>"; };
+		56EBE1F5F47E090825151DA4 /* FixtureEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureEditorView.swift; sourceTree = "<group>"; };
 		57E21AB453DA65E87A0A4458 /* TildaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TildaApp.swift; sourceTree = "<group>"; };
 		5A5AF7B8F7F49A4585905C8F /* ScanChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanChrome.swift; sourceTree = "<group>"; };
 		5D0A2C78108C8A84E0711C65 /* ScanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanEntity.swift; sourceTree = "<group>"; };
 		6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanInsights.swift; sourceTree = "<group>"; };
+		640BD88AA618A8ED7F229212 /* FixtureSceneMarkers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureSceneMarkers.swift; sourceTree = "<group>"; };
 		64C42B062E78EB1C08AC219B /* MeshSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSettingsSection.swift; sourceTree = "<group>"; };
 		659C03586436A21AB4056DDE /* MeshExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshExporter.swift; sourceTree = "<group>"; };
 		67EE3F951996B078BE3F8D98 /* FixturesCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixturesCard.swift; sourceTree = "<group>"; };
 		69F0DEBB3B831F0763A21E9E /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
+		6A986F00679968643F164644 /* FixturesRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixturesRow.swift; sourceTree = "<group>"; };
 		6BED8C695B956FE82F7AC70F /* RoomFactsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFactsBuilder.swift; sourceTree = "<group>"; };
 		6C73BD743E1FC00F840819AB /* ObjectScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectScanView.swift; sourceTree = "<group>"; };
 		6D8CB3FC9E24CEDD575CE73A /* Surfaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Surfaces.swift; sourceTree = "<group>"; };
@@ -296,6 +302,9 @@
 		A2668A0068CA08CE4CBD3BC9 /* Fixtures */ = {
 			isa = PBXGroup;
 			children = (
+				56EBE1F5F47E090825151DA4 /* FixtureEditorView.swift */,
+				640BD88AA618A8ED7F229212 /* FixtureSceneMarkers.swift */,
+				6A986F00679968643F164644 /* FixturesRow.swift */,
 				E1003BA9FBF864FACA84AC43 /* FixtureStyle.swift */,
 			);
 			path = Fixtures;
@@ -494,11 +503,14 @@
 				59E8865DF5A0B9D26C44BF8D /* FeedbackView.swift in Sources */,
 				1E921FD30BD4772994984395 /* FixtureCoordinator.swift in Sources */,
 				0D767CF202BADAE42E7FDDB5 /* FixtureDetector.swift in Sources */,
+				4B2897564DCAFC271044502B /* FixtureEditorView.swift in Sources */,
 				12EE41A667BDC8DCFF0C4C33 /* FixturePlacement.swift in Sources */,
+				20F5DE1015BBB1C0794449C3 /* FixtureSceneMarkers.swift in Sources */,
 				517BF54D3E6F0D88622A71AC /* FixtureStyle.swift in Sources */,
 				F78ED1954A5A2324DCF33B3C /* FixtureViews.swift in Sources */,
 				A8804C7E2334987D8F30231F /* Fixtures.swift in Sources */,
 				354663B1F59BCDA0E6C18191 /* FixturesCard.swift in Sources */,
+				3E117C57781C1D0F211EC7B1 /* FixturesRow.swift in Sources */,
 				1221B46109D42691A5CDE04B /* FloorPlan.swift in Sources */,
 				DAB10E6B7A2A5653DFE734B9 /* FloorPlanBuilder.swift in Sources */,
 				B325DDE8C6890247453F2F79 /* FloorPlanCanvas.swift in Sources */,

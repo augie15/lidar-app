@@ -9,8 +9,9 @@ struct WalkthroughView: View {
     @State private var showHint = true
     @State private var lookAnchor: CGSize = .zero
 
-    init(modelURL: URL, floorPlanURL: URL?) {
-        _model = StateObject(wrappedValue: WalkthroughModel(modelURL: modelURL, floorPlanURL: floorPlanURL))
+    init(modelURL: URL, floorPlanURL: URL?, fixtures: [Fixture] = []) {
+        _model = StateObject(wrappedValue: WalkthroughModel(modelURL: modelURL, floorPlanURL: floorPlanURL,
+                                                            fixtures: fixtures))
     }
 
     var body: some View {
@@ -175,6 +176,7 @@ final class WalkthroughModel: NSObject, ObservableObject, SCNSceneRendererDelega
 
     private let modelURL: URL
     private let plan: FloorPlan?
+    private let fixtures: [Fixture]
 
     static let eyeHeight: Float = 1.6
     static let walkSpeed: Float = 1.2        // metres per second at full stick
@@ -191,8 +193,9 @@ final class WalkthroughModel: NSObject, ObservableObject, SCNSceneRendererDelega
     private var walls: [(SIMD2<Float>, SIMD2<Float>)] = []
     private var gaps: [(SIMD2<Float>, SIMD2<Float>)] = []
 
-    init(modelURL: URL, floorPlanURL: URL?) {
+    init(modelURL: URL, floorPlanURL: URL?, fixtures: [Fixture] = []) {
         self.modelURL = modelURL
+        self.fixtures = fixtures
         self.plan = floorPlanURL.flatMap { FloorPlan.load(from: $0) }
         super.init()
         if let plan {
@@ -227,6 +230,7 @@ final class WalkthroughModel: NSObject, ObservableObject, SCNSceneRendererDelega
 
     private func configure(_ scene: SCNScene) {
         ModelPreview.prepareMaterials(in: scene)
+        if !fixtures.isEmpty { FixtureSceneMarkers.install(fixtures, walls: plan?.walls ?? [], in: scene) }
 
         let (minB, maxB) = scene.rootNode.boundingBox
         let bMin = SIMD3<Float>(Float(minB.x), Float(minB.y), Float(minB.z))

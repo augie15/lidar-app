@@ -2,6 +2,11 @@
 
 All notable changes to Tilda are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [Unreleased]
+
+### Added
+- Fixture review: HVAC vents, bathroom fans and baseboard heaters are highlighted on the floor plan, the 3D model and the walkthrough, with counts on the scan page. Found fixtures can be confirmed, moved, retyped, resized (heater length), deleted with undo, or added by tapping the plan.
+
 ## [1.0.0] - 2026-11-23
 
 First App Store version (build 2), submitted to App Review on 2026-11-23.

@@ -8,21 +8,39 @@ extension NormalizedBox {
     }
 }
 
+/// The kind, then surface choices of the add menus: vents ask floor, wall or ceiling; fans ceiling or wall; heaters
+/// always go on a wall.
+struct FixtureKindMenuItems: View {
+    let onPick: (Fixture.Kind, Fixture.Surface) -> Void
+
+    var body: some View {
+        Menu {
+            surfaceButtons(.hvacVent)
+        } label: { Label(Fixture.Kind.hvacVent.title, systemImage: Fixture.Kind.hvacVent.symbol) }
+        Menu {
+            surfaceButtons(.bathroomFan)
+        } label: { Label(Fixture.Kind.bathroomFan.title, systemImage: Fixture.Kind.bathroomFan.symbol) }
+        Button { onPick(.baseboardHeater, .wall) } label: {
+            Label(Fixture.Kind.baseboardHeater.title, systemImage: Fixture.Kind.baseboardHeater.symbol)
+        }
+    }
+
+    private func surfaceButtons(_ kind: Fixture.Kind) -> some View {
+        ForEach(kind.allowedSurfaces, id: \.self) { surface in
+            Button(surface == .ceiling ? "In the ceiling" : surface == .floor ? "On the floor" : "On a wall") {
+                onPick(kind, surface)
+            }
+        }
+    }
+}
+
 /// "Add fixture" button on a tour photo. Hand tagging works with or without Apple Intelligence.
 struct AddFixtureMenu: View {
     let onAdd: (Fixture.Kind, Fixture.Surface) -> Void
 
     var body: some View {
         Menu {
-            Menu {
-                surfaceButtons(.hvacVent, [.wall, .ceiling, .floor])
-            } label: { Label(Fixture.Kind.hvacVent.title, systemImage: Fixture.Kind.hvacVent.symbol) }
-            Menu {
-                surfaceButtons(.bathroomFan, [.ceiling, .wall])
-            } label: { Label(Fixture.Kind.bathroomFan.title, systemImage: Fixture.Kind.bathroomFan.symbol) }
-            Button { onAdd(.baseboardHeater, .wall) } label: {
-                Label(Fixture.Kind.baseboardHeater.title, systemImage: Fixture.Kind.baseboardHeater.symbol)
-            }
+            FixtureKindMenuItems(onPick: onAdd)
         } label: {
             Label("Add fixture", systemImage: "plus")
                 .font(.footnote.weight(.semibold))
@@ -33,20 +51,16 @@ struct AddFixtureMenu: View {
         }
         .accessibilityHint("Marks a vent, fan or heater on the plan near this photo")
     }
-
-    private func surfaceButtons(_ kind: Fixture.Kind, _ surfaces: [Fixture.Surface]) -> some View {
-        ForEach(surfaces, id: \.self) { surface in
-            Button(surface == .ceiling ? "In the ceiling" : surface == .floor ? "On the floor" : "On a wall") {
-                onAdd(kind, surface)
-            }
-        }
-    }
 }
 
 /// Outlines of fixtures the model found in this photo. Tap one to open it.
 struct FixtureBoxesOverlay: View {
     let fixtures: [Fixture]
+    /// The fixture to pulse for a moment (arriving from the editor).
+    var pulsing: UUID?
     let onSelect: (Fixture) -> Void
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var pulse = false
 
     var body: some View {
         GeometryReader { geo in
@@ -54,16 +68,80 @@ struct FixtureBoxesOverlay: View {
                 if let box = f.photoBox?.displayedRight {
                     let rect = CGRect(x: box.minX * geo.size.width, y: box.minY * geo.size.height,
                                       width: box.width * geo.size.width, height: box.height * geo.size.height)
+                    let isPulsing = f.id == pulsing
                     Button { onSelect(f) } label: {
                         RoundedRectangle(cornerRadius: 6, style: .continuous)
-                            .stroke(f.kind.color(), lineWidth: 2.5)
-                            .background(f.kind.color().opacity(0.12), in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+                            .stroke(isPulsing ? .white : f.kind.color(), lineWidth: isPulsing && pulse ? 6 : 2.5)
+                            .background(f.kind.color().opacity(isPulsing && pulse ? 0.35 : 0.12),
+                                        in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+                            .scaleEffect(isPulsing && pulse && !reduceMotion ? 1.12 : 1)
                             .frame(width: max(rect.width, 44), height: max(rect.height, 44))
                     }
                     .position(x: rect.midX, y: rect.midY)
                     .accessibilityLabel(f.accessibilityTitle)
                     .accessibilityHint("Shows details")
                 }
+            }
+        }
+        .task(id: pulsing) {
+            guard pulsing != nil else { pulse = false; return }
+            if reduceMotion { pulse = true; return }
+            for _ in 0..<4 {
+                withAnimation(.easeInOut(duration: 0.5)) { pulse = true }
+                try? await Task.sleep(for: .milliseconds(500))
+                withAnimation(.easeInOut(duration: 0.5)) { pulse = false }
+                try? await Task.sleep(for: .milliseconds(500))
+            }
+        }
+    }
+}
+
+/// The keyframe that shows a fixture, with its box drawn on top. The box pulses once the photo has loaded when
+/// `pulse` is set. Shared by the detail sheet and the editor's "View photo".
+struct FixturePhotoView: View {
+    let fixture: Fixture
+    let framesURL: URL?
+    var pulse = false
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var image: UIImage?
+    @State private var emphasis = false
+
+    var body: some View {
+        ZStack {
+            if let image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+                    .overlay {
+                        if let box = fixture.photoBox?.displayedRight {
+                            GeometryReader { geo in
+                                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                    .stroke(emphasis ? .white : fixture.kind.color(), lineWidth: emphasis ? 6 : 3)
+                                    .scaleEffect(emphasis && !reduceMotion ? 1.1 : 1)
+                                    .frame(width: box.width * geo.size.width, height: box.height * geo.size.height)
+                                    .position(x: box.midX * geo.size.width, y: box.midY * geo.size.height)
+                            }
+                            .accessibilityHidden(true)
+                        }
+                    }
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.radiusSmall, style: .continuous))
+                    .accessibilityLabel("Photo showing the \(fixture.kind.sentenceTitle)")
+            } else {
+                RoundedRectangle(cornerRadius: Theme.radiusSmall, style: .continuous).fill(Theme.card)
+                    .aspectRatio(3 / 4, contentMode: .fit)
+                    .overlay { ProgressView().tint(Theme.accent) }
+            }
+        }
+        .task(id: fixture.photoFrame) {
+            guard let frame = fixture.photoFrame, let framesURL else { return }
+            image = await TourImageLoader.load(framesURL.appendingPathComponent(frame))
+            guard pulse, image != nil, !reduceMotion else { return }
+            for _ in 0..<3 {
+                withAnimation(.easeInOut(duration: 0.45)) { emphasis = true }
+                try? await Task.sleep(for: .milliseconds(450))
+                withAnimation(.easeInOut(duration: 0.45)) { emphasis = false }
+                try? await Task.sleep(for: .milliseconds(450))
             }
         }
     }
@@ -77,7 +155,6 @@ struct FixtureDetailSheet: View {
 
     @Environment(\.dismiss) private var dismiss
     @AppStorage(AppSettings.Key.units) private var unitsRaw = AppSettings.Units.imperial.rawValue
-    @State private var image: UIImage?
     @State private var confirmDelete = false
 
     private var formatter: RoomSummaryFormatter {
@@ -104,14 +181,10 @@ struct FixtureDetailSheet: View {
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
         .preferredColorScheme(.dark)
-        .confirmationDialog("Remove this \(fixture.kind.title.lowercased())?", isPresented: $confirmDelete,
+        .confirmationDialog("Remove this \(fixture.kind.sentenceTitle)?", isPresented: $confirmDelete,
                             titleVisibility: .visible) {
             Button("Remove", role: .destructive) { onDelete(); dismiss() }
             Button("Keep", role: .cancel) {}
-        }
-        .task(id: fixture.photoFrame) {
-            guard let frame = fixture.photoFrame, let framesURL else { return }
-            image = await TourImageLoader.load(framesURL.appendingPathComponent(frame))
         }
     }
 
@@ -138,32 +211,9 @@ struct FixtureDetailSheet: View {
 
     @ViewBuilder private var photo: some View {
         if fixture.photoFrame != nil {
-            ZStack {
-                if let image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                        .overlay {
-                            if let box = fixture.photoBox?.displayedRight {
-                                GeometryReader { geo in
-                                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                        .stroke(fixture.kind.color(), lineWidth: 3)
-                                        .frame(width: box.width * geo.size.width, height: box.height * geo.size.height)
-                                        .position(x: box.midX * geo.size.width, y: box.midY * geo.size.height)
-                                }
-                                .accessibilityHidden(true)
-                            }
-                        }
-                        .clipShape(RoundedRectangle(cornerRadius: Theme.radiusSmall, style: .continuous))
-                        .accessibilityLabel("Photo showing the \(fixture.kind.title.lowercased())")
-                } else {
-                    RoundedRectangle(cornerRadius: Theme.radiusSmall, style: .continuous).fill(Theme.card)
-                        .aspectRatio(3 / 4, contentMode: .fit)
-                        .overlay { ProgressView().tint(Theme.accent) }
-                }
-            }
-            .frame(maxHeight: 420)
-            .frame(maxWidth: .infinity)
+            FixturePhotoView(fixture: fixture, framesURL: framesURL)
+                .frame(maxHeight: 420)
+                .frame(maxWidth: .infinity)
         }
     }
 
@@ -205,7 +255,7 @@ struct FixtureTourLegend: View {
                             .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(kind.color())
                             .accessibilityHidden(true)
-                        Text("\(n) \(n == 1 ? kind.title.lowercased() : kind.pluralTitle.lowercased())")
+                        Text("\(n) \(n == 1 ? kind.sentenceTitle : kind.sentencePluralTitle)")
                             .monospacedDigit()
                     }
                     .accessibilityElement(children: .combine)

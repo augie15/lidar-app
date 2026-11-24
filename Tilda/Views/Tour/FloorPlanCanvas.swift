@@ -23,6 +23,11 @@ struct PlanTransform {
         CGPoint(x: origin.x + CGFloat(p.x - minPoint.x) * scale,
                 y: origin.y + CGFloat(p.y - minPoint.y) * scale)
     }
+
+    /// The inverse of `point`: a spot in the view back to plan metres.
+    func plan(_ p: CGPoint) -> SIMD2<Float> {
+        SIMD2(Float((p.x - origin.x) / scale) + minPoint.x, Float((p.y - origin.y) / scale) + minPoint.y)
+    }
 }
 
 /// Top-down plan with tappable photo-spot pins.
@@ -61,6 +66,18 @@ struct FloorPlanCanvas: View {
     }
 
     private func draw(_ ctx: inout GraphicsContext, _ t: PlanTransform) {
+        Self.drawBase(&ctx, plan: plan, t)
+
+        // Pins: unselected first so the selected pin sits on top.
+        for spot in spots where spot.id != selected { drawPin(&ctx, t, spot, active: false) }
+        if let spot = spots.first(where: { $0.id == selected }) { drawPin(&ctx, t, spot, active: true) }
+
+        FixtureMarker.draw(&ctx, fixtures: fixtures, point: t.point, pointsPerMetre: t.scale, radius: 10,
+                           backdrop: Theme.tile, selected: selectedFixture.wrappedValue)
+    }
+
+    /// Furniture, walls, openings, windows and doors. Shared with the fixture editor.
+    static func drawBase(_ ctx: inout GraphicsContext, plan: FloorPlan, _ t: PlanTransform) {
         // Furniture: faint rounded rectangles.
         for box in plan.objects {
             let c = t.point(box.center)
@@ -96,13 +113,6 @@ struct FloorPlanCanvas: View {
             ctx.stroke(line(s), with: .color(Theme.background), style: StrokeStyle(lineWidth: 6, lineCap: .butt))
             ctx.stroke(line(s), with: .color(Theme.accent), style: StrokeStyle(lineWidth: 4, lineCap: .round))
         }
-
-        // Pins: unselected first so the selected pin sits on top.
-        for spot in spots where spot.id != selected { drawPin(&ctx, t, spot, active: false) }
-        if let spot = spots.first(where: { $0.id == selected }) { drawPin(&ctx, t, spot, active: true) }
-
-        FixtureMarker.draw(&ctx, fixtures: fixtures, point: t.point, pointsPerMetre: t.scale, radius: 10,
-                           backdrop: Theme.tile, selected: selectedFixture.wrappedValue)
     }
 
     private func drawPin(_ ctx: inout GraphicsContext, _ t: PlanTransform, _ spot: PhotoSpot, active: Bool) {

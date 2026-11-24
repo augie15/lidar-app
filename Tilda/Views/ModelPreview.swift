@@ -4,6 +4,14 @@ import SwiftUI
 /// Interactive 3D preview of a scan: drag to orbit, pinch to zoom.
 struct ModelPreview: UIViewRepresentable {
     let url: URL
+    /// Room scans: fixtures drawn as markers at their world positions, and the walls used to turn wall markers.
+    var fixtures: [Fixture] = []
+    var walls: [FloorPlan.Segment] = []
+    var showFixtures = true
+    /// The fixture to pulse (set when arriving from the editor).
+    var focusedFixture: UUID?
+    /// Called with the fixture id when a marker is tapped.
+    var onSelectFixture: ((UUID) -> Void)?
 
     func makeUIView(context: Context) -> SCNView {
         let view = SCNView()
@@ -13,18 +21,59 @@ struct ModelPreview: UIViewRepresentable {
         view.antialiasingMode = .multisampling4X
         context.coordinator.url = url
         load(into: view, coordinator: context.coordinator)
+        let tap = UITapGestureRecognizer(target: context.coordinator, action: #selector(Coordinator.tapped(_:)))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+        context.coordinator.view = view
+        context.coordinator.onSelect = onSelectFixture
+        syncFixtures(view, context.coordinator)
         return view
     }
 
     func updateUIView(_ view: SCNView, context: Context) {
-        guard context.coordinator.url != url else { return }
-        context.coordinator.url = url
-        load(into: view, coordinator: context.coordinator)
+        context.coordinator.onSelect = onSelectFixture
+        if context.coordinator.url != url {
+            context.coordinator.url = url
+            context.coordinator.installed = nil
+            load(into: view, coordinator: context.coordinator)
+        }
+        syncFixtures(view, context.coordinator)
     }
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
-    final class Coordinator { var url: URL? }
+    final class Coordinator: NSObject {
+        var url: URL?
+        weak var view: SCNView?
+        var onSelect: ((UUID) -> Void)?
+        /// What the scene currently shows, so unrelated SwiftUI updates do not rebuild the markers.
+        var installed: Installed?
+
+        struct Installed: Equatable {
+            var fixtures: [Fixture]
+            var focused: UUID?
+            var shown: Bool
+        }
+
+        @objc func tapped(_ gesture: UITapGestureRecognizer) {
+            guard let view, gesture.state == .ended,
+                  let id = FixtureSceneMarkers.fixtureID(at: gesture.location(in: view), in: view) else { return }
+            onSelect?(id)
+        }
+    }
+
+    private func syncFixtures(_ view: SCNView, _ coordinator: Coordinator) {
+        guard let scene = view.scene else { return }
+        let state = Coordinator.Installed(fixtures: fixtures, focused: focusedFixture, shown: showFixtures)
+        guard coordinator.installed != state else { return }
+        if let old = coordinator.installed, old.fixtures == state.fixtures, old.focused == state.focused,
+           scene.rootNode.childNode(withName: FixtureSceneMarkers.containerName, recursively: false) != nil {
+            FixtureSceneMarkers.setVisible(showFixtures, in: scene)   // only the toggle changed
+        } else {
+            FixtureSceneMarkers.install(fixtures, walls: walls, in: scene, visible: showFixtures, focused: focusedFixture)
+        }
+        coordinator.installed = state
+    }
 
     private func load(into view: SCNView, coordinator: Coordinator) {
         // Point clouds (PLY with no faces) are read by our own parser: SceneKit's loader turns them into bogus triangles.
