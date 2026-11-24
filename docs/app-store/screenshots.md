@@ -58,3 +58,14 @@ library), relaunch without the flag, and `xcrun simctl io booted screenshot <fil
 - Apple Intelligence screens (Insights card, Ask) only show on supported iPhones. Do not claim features in captions that are not visible.
 - Captions are marketing text. Keep them factual: do not use "best", prices or other-platform names.
 - Do not show GitHub, the feedback screen or any third-party UI in screenshots.
+
+## Creative assets (header and search result)
+
+In `docs/app-store/creative/`, rendered by `scripts/render-creative.swift` (uses the real `TildaMark` and the screenshots above):
+
+| File | Placement | Size | Art safe area |
+|---|---|---|---|
+| `header.png` | Product page header | 3840 x 1646 PNG (21:9) | 1646 x 661 at (1097, 493) |
+| `search.png` | Search result | 3840 x 2560 PNG (3:2) | 2168 x 1030 at (836, 765) |
+
+Both have no alpha and no prices, URLs or other platforms' logos. Upload them on the version page under "Header and Search Results". This is not possible while a version is Waiting for Review (App Store Connect hides the upload), so add them to the next version, or after release if App Store Connect allows editing them then.
