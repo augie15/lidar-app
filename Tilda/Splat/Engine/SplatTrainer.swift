@@ -213,6 +213,11 @@ enum SplatTrainer {
                 let dest = checkpointURL(scanFolder)
                 if fm.fileExists(atPath: dest.path) { _ = try fm.replaceItemAt(dest, withItemAt: tmp) }
                 else { try fm.moveItem(at: tmp, to: dest) }
+                // Resumable scratch (hundreds of MB): keep it out of iCloud and computer backups.
+                var noBackup = URLResourceValues()
+                noBackup.isExcludedFromBackup = true
+                var destURL = dest
+                try? destURL.setResourceValues(noBackup)
                 let info = SplatCheckpointInfo(quality: quality, iteration: iteration, totalIterations: total)
                 try JSONEncoder().encode(info).write(to: checkpointInfoURL(scanFolder), options: .atomic)
                 lastCheckpoint = iteration

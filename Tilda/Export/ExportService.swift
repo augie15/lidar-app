@@ -111,6 +111,10 @@ enum ExportService {
         let staging = dir.appendingPathComponent("\(base) photos", isDirectory: true)
         do {
             try fm.copyItem(at: frames, to: staging)
+            // Views rendered from the 3D photo live beside the photos for fixture checks; they are not camera photos.
+            for folder in [FixtureDetectorStorage.folder, FixtureDetectorStorage.tempFolder] {
+                try? fm.removeItem(at: staging.appendingPathComponent(folder, isDirectory: true))
+            }
             try? fm.copyItem(at: modelURL, to: staging.appendingPathComponent("model.\(modelURL.pathExtension)"))
         } catch { throw ExportError.failed("photos", underlying: error) }
 

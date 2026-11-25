@@ -35,20 +35,26 @@ final class SplatViewRenderer: @unchecked Sendable {
         let renderer = try SplatRenderer(device: device, colorFormat: Self.colorFormat, depthFormat: .depth32Float,
                                          sampleCount: 1, maxViewCount: 1, maxSimultaneousRenders: 3,
                                          clearColor: MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1))
-        let reader = try AutodetectSceneReader(url)
         var pending: [SplatPoint] = []
         var any = false
-        for try await batch in try await reader.read() {
-            try Task.checkCancellation()
-            pending.append(contentsOf: batch)
-            if pending.count >= 200_000 {
-                await renderer.addChunk(try SplatChunk(device: device, from: pending))
-                pending.removeAll(keepingCapacity: true)
-                any = true
+        do {
+            let reader = try AutodetectSceneReader(url)
+            for try await batch in try await reader.read() {
+                try Task.checkCancellation()
+                pending.append(contentsOf: batch)
+                if pending.count >= 200_000 {
+                    await renderer.addChunk(try SplatChunk(device: device, from: pending))
+                    pending.removeAll(keepingCapacity: true)
+                    any = true
+                }
             }
+            if !pending.isEmpty { await renderer.addChunk(try SplatChunk(device: device, from: pending)); any = true }
+            guard any else { throw RenderError.empty }
+        } catch {
+            // Chunks already uploaded would otherwise stay alive with the sorter polling them for ever.
+            await renderer.removeAllChunks()
+            throw error
         }
-        if !pending.isEmpty { await renderer.addChunk(try SplatChunk(device: device, from: pending)); any = true }
-        guard any else { throw RenderError.empty }
         renderer.onSortComplete = { [weak self] _ in self?.sortFinished() }
         self.renderer = renderer
     }

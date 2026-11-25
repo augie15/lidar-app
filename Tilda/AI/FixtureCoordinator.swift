@@ -137,9 +137,19 @@ final class FixtureCoordinator {
         }
         let output = await withTaskCancellationHandler { await work.value } onCancel: { work.cancel() }
 
-        // A cancelled run leaves the saved results untouched.
-        guard !output.cancelled else { return }
         var library = libraries[id] ?? FixtureLibrary()
+        // A cancelled run leaves the saved results untouched, except that a run cancelled after its new views were
+        // swapped in must still drop references to the old ones (the new files reuse their names).
+        guard !output.cancelled else {
+            if output.replacedViews {
+                for i in library.fixtures.indices where FixtureDetectorStorage.isRenderedView(library.fixtures[i].photoFrame) {
+                    library.fixtures[i].photoFrame = nil
+                    library.fixtures[i].photoBox = nil
+                }
+                save(library, for: scan)
+            }
+            return
+        }
         if output.replacedViews {
             // The old views are gone, and new ones reuse their names, so fixtures the user kept can't point at them.
             for i in library.fixtures.indices where FixtureDetectorStorage.isRenderedView(library.fixtures[i].photoFrame) {

@@ -6,7 +6,9 @@ import UIKit
 struct InsightsCard: View {
     let insights: ScanInsights?
     let busy: Bool
-    var currentFocus: ScanFocus = AppSettings.focus
+    /// Read live, so the "Rewrite for …" offer follows a focus change without reopening the scan.
+    @AppStorage(AppSettings.Key.scanFocus) private var focusRaw = ScanFocus.general.rawValue
+    private var currentFocus: ScanFocus { ScanFocus(rawValue: focusRaw) ?? .general }
     let onAnalyze: () -> Void
 
     @State private var showAllFacts = false
