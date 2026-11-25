@@ -101,6 +101,16 @@ struct SettingsView: View {
                 .listRowBackground(Theme.card)
 
                 Section {
+                    NavigationLink {
+                        LicensesView()
+                    } label: {
+                        Label("Open-source licences", systemImage: "doc.text")
+                            .foregroundStyle(Theme.textPrimary)
+                    }
+                } header: { header("Legal") }
+                .listRowBackground(Theme.card)
+
+                Section {
                     Text("Tilda · The Instant LiDAR Digitizing App · Free, private, on-device")
                         .font(.footnote)
                         .foregroundStyle(Theme.textMuted)

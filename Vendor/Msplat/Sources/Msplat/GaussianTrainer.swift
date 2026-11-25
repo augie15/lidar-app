@@ -1,0 +1,324 @@
+import MsplatCore
+import Foundation
+
+/// Trains a 3D Gaussian Splatting scene on a dataset.
+@available(
+    *,
+    deprecated,
+    message: "Use MsplatSession, which reports initialization failures and enforces exclusive native-engine ownership"
+)
+public class GaussianTrainer {
+    private let handle: MsplatTrainer
+    private let dataset: GaussianDataset
+
+    /// Create a trainer.
+    /// - Parameters:
+    ///   - dataset: The loaded dataset. Retained for the trainer's lifetime.
+    ///   - config: Training configuration.
+    public init(
+        dataset: GaussianDataset,
+        config: TrainingConfig = TrainingConfig()
+    ) throws {
+        try config.validate()
+        self.dataset = dataset
+        handle = try withNativeEngineLock {
+            var nativeConfig = config.toC()
+            var limits = msplat_default_training_limits()
+            var refinementOptions = config.toRefinementOptionsV8()
+            var maskOptions = config.toTrainingMaskOptionsV11()
+            var appearanceOptions = config.toAppearanceOptionsV18()
+            var trainer: MsplatTrainer?
+            var nativeError = MsplatErrorInfo()
+            let status = msplat_trainer_create_v18(
+                dataset.handle,
+                &nativeConfig,
+                MemoryLayout<MsplatConfig>.size,
+                &limits,
+                MemoryLayout<MsplatTrainingLimits>.size,
+                &refinementOptions,
+                MemoryLayout<MsplatRefinementOptionsV8>.size,
+                &maskOptions,
+                MemoryLayout<MsplatTrainingMaskOptionsV11>.size,
+                &appearanceOptions,
+                MemoryLayout<MsplatAppearanceOptionsV18>.size,
+                &trainer,
+                &nativeError
+            )
+            try checkNativeStatus(status, error: &nativeError)
+            guard let trainer else {
+                throw MsplatError.internalFailure(
+                    "Native trainer creation returned no handle"
+                )
+            }
+            return trainer
+        }
+    }
+
+    deinit {
+        withNativeEngineLock {
+            var nativeError = MsplatErrorInfo()
+            _ = msplat_trainer_destroy_v2(handle, &nativeError)
+        }
+    }
+
+    /// Run one training step.
+    @discardableResult
+    public func step() -> TrainingStats {
+        withNativeEngineLock {
+            TrainingStats(from: msplat_trainer_step(handle))
+        }
+    }
+
+    /// Train for all remaining iterations (blocking, no progress callbacks).
+    /// For progress reporting, use `step()` in a loop instead.
+    public func train() {
+        withNativeEngineLock { msplat_trainer_train(handle) }
+    }
+
+    /// Poll submission and completed-GPU progress between calls to `step()`.
+    /// The legacy blocking `train()` call holds the engine lock until it returns.
+    public func trainingMetrics() throws -> TrainingTelemetry {
+        try withNativeEngineLock {
+            var metrics = MsplatTrainingMetricsV12()
+            var nativeError = MsplatErrorInfo()
+            let status = msplat_trainer_metrics_v12(
+                handle,
+                &metrics,
+                MemoryLayout<MsplatTrainingMetricsV12>.size,
+                &nativeError
+            )
+            try checkNativeStatus(status, error: &nativeError)
+            return TrainingTelemetry(from: metrics)
+        }
+    }
+
+    /// Return live categorized native-buffer and process-memory measurements.
+    public func memoryMetrics() throws -> TrainingMemorySnapshot {
+        try withNativeEngineLock {
+            var metrics = MsplatTrainingMemoryMetricsV17()
+            var nativeError = MsplatErrorInfo()
+            let status = msplat_trainer_memory_metrics_v17(
+                handle,
+                &metrics,
+                MemoryLayout<MsplatTrainingMemoryMetricsV17>.size,
+                &nativeError
+            )
+            try checkNativeStatus(status, error: &nativeError)
+            return TrainingMemorySnapshot(from: metrics)
+        }
+    }
+
+    /// Evaluate on held-out test views.
+    public func evaluate() -> EvalMetrics {
+        withNativeEngineLock {
+            EvalMetrics(from: msplat_trainer_evaluate(handle))
+        }
+    }
+
+    /// Render a camera view as RGB float32 pixel data.
+    public func render(cameraIndex: Int, useTest: Bool = false) -> PixelData {
+        guard let nativeIndex = Int32(exactly: cameraIndex) else { return .empty }
+        let buf = withNativeEngineLock {
+            msplat_trainer_render(handle, nativeIndex, useTest)
+        }
+        let count = Int(buf.width) * Int(buf.height) * 3
+        let data = Array(UnsafeBufferPointer(start: buf.data, count: count))
+        free(buf.data)
+        return PixelData(pixels: data, width: Int(buf.width), height: Int(buf.height))
+    }
+
+    /// Render from an arbitrary camera-to-world pose (4x4 row-major, OpenGL convention).
+    /// Uses intrinsics (focal length, resolution) from the given reference camera.
+    public func renderFromPose(camToWorld: [Float], refCameraIndex: Int = 0) -> PixelData {
+        guard camToWorld.count == 16, camToWorld.allSatisfy(\.isFinite),
+              let nativeIndex = Int32(exactly: refCameraIndex) else { return .empty }
+        let buf = withNativeEngineLock {
+            camToWorld.withUnsafeBufferPointer { pointer in
+                msplat_trainer_render_pose(handle, pointer.baseAddress, nativeIndex)
+            }
+        }
+        let count = Int(buf.width) * Int(buf.height) * 3
+        let data = Array(UnsafeBufferPointer(start: buf.data, count: count))
+        free(buf.data)
+        return PixelData(pixels: data, width: Int(buf.width), height: Int(buf.height))
+    }
+
+    /// Zero-copy render from an arbitrary camera pose into capacity-described
+    /// RGBA8 storage.
+    ///
+    /// Pass an empty buffer to query dimensions without rendering. Otherwise,
+    /// the buffer must hold at least `width * height * 4` bytes. An undersized
+    /// buffer throws
+    /// ``MsplatRenderBufferError/insufficientCapacity(required:actual:)``
+    /// before native rendering begins.
+    public func renderFromPoseToBuffer(
+        camToWorld: [Float],
+        refCameraIndex: Int = 0,
+        rgba: UnsafeMutableRawBufferPointer,
+        width: inout Int32,
+        height: inout Int32
+    ) throws {
+        width = 0
+        height = 0
+        guard camToWorld.count == 16, camToWorld.allSatisfy(\.isFinite) else {
+            throw MsplatError.invalidArgument(
+                "A camera pose must contain exactly 16 finite values"
+            )
+        }
+        guard let nativeIndex = Int32(exactly: refCameraIndex) else {
+            throw MsplatError.invalidArgument(
+                "Reference camera index is outside the supported range"
+            )
+        }
+
+        try withNativeEngineLock {
+            var queriedWidth: Int32 = 0
+            var queriedHeight: Int32 = 0
+            var queryError = MsplatErrorInfo()
+            let queryStatus = camToWorld.withUnsafeBufferPointer { pointer in
+                msplat_trainer_render_pose_to_buffer_v2(
+                    handle,
+                    pointer.baseAddress,
+                    nativeIndex,
+                    nil,
+                    0,
+                    &queriedWidth,
+                    &queriedHeight,
+                    &queryError
+                )
+            }
+            try checkNativeStatus(queryStatus, error: &queryError)
+
+            width = queriedWidth
+            height = queriedHeight
+            guard !rgba.isEmpty else { return }
+
+            let layout = try checkedImageLayout(
+                width: Int(queriedWidth),
+                height: Int(queriedHeight),
+                components: 4
+            )
+            guard rgba.count >= layout.elementCount else {
+                throw MsplatRenderBufferError.insufficientCapacity(
+                    required: layout.elementCount,
+                    actual: rgba.count
+                )
+            }
+            guard let destination = rgba.baseAddress else {
+                throw MsplatRenderBufferError.insufficientCapacity(
+                    required: layout.elementCount,
+                    actual: 0
+                )
+            }
+
+            var renderedWidth: Int32 = 0
+            var renderedHeight: Int32 = 0
+            var renderError = MsplatErrorInfo()
+            let renderStatus = camToWorld.withUnsafeBufferPointer { pointer in
+                msplat_trainer_render_pose_to_buffer_v2(
+                    handle,
+                    pointer.baseAddress,
+                    nativeIndex,
+                    destination.assumingMemoryBound(to: UInt8.self),
+                    rgba.count,
+                    &renderedWidth,
+                    &renderedHeight,
+                    &renderError
+                )
+            }
+            try checkNativeStatus(renderStatus, error: &renderError)
+            guard renderedWidth == queriedWidth, renderedHeight == queriedHeight else {
+                throw MsplatError.internalFailure(
+                    "Render dimensions changed while filling the RGBA buffer"
+                )
+            }
+            width = renderedWidth
+            height = renderedHeight
+        }
+    }
+
+    /// Zero-copy render from an arbitrary camera pose into a pre-allocated RGBA uint8 buffer.
+    /// For real-time display loops where allocation overhead matters.
+    ///
+    /// Pass `nil` for `rgba` to query dimensions without rendering (for buffer pre-allocation).
+    /// Buffer must hold at least `width × height × 4` bytes.
+    @available(
+        *,
+        deprecated,
+        message: "Use the throwing UnsafeMutableRawBufferPointer overload, which validates buffer capacity"
+    )
+    public func renderFromPoseToBuffer(camToWorld: [Float], refCameraIndex: Int = 0,
+                                       rgba: UnsafeMutablePointer<UInt8>?,
+                                       width: inout Int32, height: inout Int32) {
+        guard camToWorld.count == 16, camToWorld.allSatisfy(\.isFinite),
+              let nativeIndex = Int32(exactly: refCameraIndex) else {
+            width = 0
+            height = 0
+            return
+        }
+        withNativeEngineLock {
+            camToWorld.withUnsafeBufferPointer { pointer in
+                msplat_trainer_render_pose_to_buffer(
+                    handle, pointer.baseAddress, nativeIndex, rgba, &width, &height
+                )
+            }
+        }
+    }
+
+    /// Export scene as PLY.
+    public func exportPly(to path: String) {
+        withNativeEngineLock { msplat_trainer_export_ply(handle, path) }
+    }
+
+    /// Export scene as .splat.
+    public func exportSplat(to path: String) {
+        withNativeEngineLock { msplat_trainer_export_splat(handle, path) }
+    }
+
+    /// Export scene as .spz.
+    public func exportSpz(to path: String) {
+        withNativeEngineLock { msplat_trainer_export_spz(handle, path) }
+    }
+
+    /// Save full training state for resume.
+    public func saveCheckpoint(to path: String) {
+        withNativeEngineLock { msplat_trainer_save_checkpoint(handle, path) }
+    }
+
+    /// Load checkpoint and resume training. Returns the saved iteration.
+    @discardableResult
+    public func loadCheckpoint(from path: String) -> Int {
+        withNativeEngineLock {
+            Int(msplat_trainer_load_checkpoint(handle, path))
+        }
+    }
+
+    /// Current number of gaussians.
+    public var splatCount: Int {
+        withNativeEngineLock { Int(msplat_trainer_splat_count(handle)) }
+    }
+
+    /// Current training iteration.
+    public var iteration: Int {
+        withNativeEngineLock { Int(msplat_trainer_iteration(handle)) }
+    }
+}
+
+/// RGB float32 pixel data from a render.
+public struct PixelData: Sendable {
+    public let pixels: [Float]  // RGB, HWC layout
+    public let width: Int
+    public let height: Int
+
+    static let empty = PixelData(pixels: [], width: 0, height: 0)
+}
+
+/// Synchronize the GPU (wait for all commands to complete).
+public func msplatSync() {
+    withNativeEngineLock { msplat_sync() }
+}
+
+/// Release cached GPU resources after all trainers are idle.
+public func msplatCleanup() {
+    withNativeEngineLock { msplat_cleanup() }
+}

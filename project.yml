@@ -24,3 +24,18 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: Tilda/Tilda.entitlements
+    dependencies:
+      - package: Msplat
+      - package: MetalSplatter
+        product: MetalSplatter
+      - package: MetalSplatter
+        product: SplatIO
+packages:
+  # Gaussian splat training on the iPhone (Apache-2.0), built from source by scripts/build-msplat.sh.
+  Msplat:
+    path: Vendor/Msplat
+  # Gaussian splat rendering (MIT).
+  MetalSplatter:
+    url: https://github.com/scier/MetalSplatter
+    revision: 464eb37c55d90d7362a79120fdf8b50d4ae03296   # main 2026-07-19: reads SH degree 0-3 PLYs (1.0.1 needs all 45 f_rest)

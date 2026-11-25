@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01022BFCDF2B318AEC9A93D4 /* License-MetalSplatter.txt in Resources */ = {isa = PBXBuildFile; fileRef = 88C38C846078F655356A86D5 /* License-MetalSplatter.txt */; };
 		048A8C3298F51548D05CA586 /* InsightsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30A8B32F37DCBF983B7CF63 /* InsightsCard.swift */; };
 		06D94E59FEF64689BFFCF1A7 /* RoomSummaryPDFBlocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C567687F6FAE58D85A5818 /* RoomSummaryPDFBlocks.swift */; };
 		0748498D6ABD4FBB96AA1FAF /* AskScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B5DD82345CB9F07A6B857F /* AskScanView.swift */; };
@@ -14,13 +15,17 @@
 		0B7E3B86880445C8AC1CA4F1 /* FrameRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE951ADAA80EF218F6DA3BD8 /* FrameRecorder.swift */; };
 		0C57EE8A8341BE979D827C6A /* PointGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA1F6FD076AA9B190577AC5 /* PointGeometry.swift */; };
 		0D767CF202BADAE42E7FDDB5 /* FixtureDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBECE92753FD478D4D05E59C /* FixtureDetector.swift */; };
+		0EC79673F4479C6EFE224750 /* License-spz-swift.txt in Resources */ = {isa = PBXBuildFile; fileRef = 94402864F3732BDE7A7E9741 /* License-spz-swift.txt */; };
 		1221B46109D42691A5CDE04B /* FloorPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AA5F716C6D92B15E4991C2E /* FloorPlan.swift */; };
 		12EE41A667BDC8DCFF0C4C33 /* FixturePlacement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FA379D5D34B4603AE0ECC8 /* FixturePlacement.swift */; };
 		1625459AB2333CD0ADF0A381 /* PhotoTourView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800CD2A01A3E4D5B43B630E9 /* PhotoTourView.swift */; };
 		19ABE0B6BDBC7598B02CE5CE /* ScanInsights.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */; };
 		1BC4DDA8DD763B5B33281CC6 /* RoomScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA8881DF15E098F3B5EF2C0 /* RoomScanView.swift */; };
 		1E921FD30BD4772994984395 /* FixtureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61A1D95FA33EA8475EC58A7 /* FixtureCoordinator.swift */; };
+		1FCB91B721C26ABA61C79331 /* SplatSeedPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13EFA29CF78BF94F992C64A9 /* SplatSeedPoints.swift */; };
+		200D083B400DF98B4B6FE10C /* SplatDebugSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89E13834685FEEF738D3FEBB /* SplatDebugSample.swift */; };
 		20F5DE1015BBB1C0794449C3 /* FixtureSceneMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640BD88AA618A8ED7F229212 /* FixtureSceneMarkers.swift */; };
+		28CBC3D6CF26FBBA0812B626 /* SplatDatasetBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E33B9D5B83877660D874E7C /* SplatDatasetBuilder.swift */; };
 		2FC4595178904B44876382AA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE872844E29A3C4FFEBE10B2 /* SettingsView.swift */; };
 		33CD9B1A6264F53238B08B19 /* CameraProjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8FB03975DEE545D2EC58807 /* CameraProjection.swift */; };
 		33E61EB8CEA69CC805903687 /* WalkthroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EB64DEEFB05F6FE6F90A6A0 /* WalkthroughView.swift */; };
@@ -37,8 +42,10 @@
 		4CE5ACB9EC89F7DC5BB9B540 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71913AD745B2EA5ECFBD79C5 /* HomeView.swift */; };
 		4D79FB45210BE6CE512DB4EE /* RoomFactsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BED8C695B956FE82F7AC70F /* RoomFactsBuilder.swift */; };
 		4E0547B245E4416B5201E4F6 /* RoomSummaryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81835F59DB587A5646C131B5 /* RoomSummaryModel.swift */; };
+		4EF2D70DF18ED7FADEA31576 /* SplatMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DA90240461C4CD4A38624B /* SplatMetalView.swift */; };
 		4FDF1D79E222D2E5CD202823 /* FramePoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F3A30100DBA4C53851781F /* FramePoller.swift */; };
 		517BF54D3E6F0D88622A71AC /* FixtureStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1003BA9FBF864FACA84AC43 /* FixtureStyle.swift */; };
+		51CDA4878174FF31CB4A1B99 /* SplatPhotoPrep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B75E9822D085355698B68B5 /* SplatPhotoPrep.swift */; };
 		52856169B71BD3AF40245CDC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D11D40B40029EFC5BEDC148 /* Assets.xcassets */; };
 		59E8865DF5A0B9D26C44BF8D /* FeedbackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 701191646ABD1F617A3F8DC9 /* FeedbackView.swift */; };
 		5B1D85609CC4DFBEB423ECAE /* ScanDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17642C3635E149D219F0BEF9 /* ScanDetailView.swift */; };
@@ -50,6 +57,7 @@
 		6B01165206FACAA28206941E /* RoomSummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4B4FDCC11BF29B5F5CE653A /* RoomSummaryView.swift */; };
 		6B70255A4024174CBAF6EC0B /* ModeTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26BEAAACE5DE8E1EDBA4B390 /* ModeTile.swift */; };
 		6C81F819271E392510F6B9B7 /* PointCloudCapture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142B0BE242F3FB60371500E8 /* PointCloudCapture.swift */; };
+		7166BF4996AFE449A456FAD6 /* SplatIO in Frameworks */ = {isa = PBXBuildFile; productRef = 662ED52D9AE79D2069E0B7DF /* SplatIO */; };
 		74767336589704B46FAFEF19 /* AnalysisCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 152CA85CD9DC3E325A1172B6 /* AnalysisCoordinator.swift */; };
 		7820A944E96E06456D9C4A12 /* PointCloudCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7DC3A4BB0AD0EAB25295CB /* PointCloudCore.swift */; };
 		7B55C94166A5E482F441FC50 /* ObjectSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F2B6718E3F03C3C0F7289 /* ObjectSettingsSection.swift */; };
@@ -59,18 +67,25 @@
 		8518A5DE6DCD16C4CB22AEEF /* TorchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4745A5C1FC9219A5BF0A6894 /* TorchButton.swift */; };
 		8871AC5DF826EC5DE28AE4EF /* MeshSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C42B062E78EB1C08AC219B /* MeshSettingsSection.swift */; };
 		9653BBD2779E169A5FE35198 /* MeshColorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B666C3D79855790931332876 /* MeshColorizer.swift */; };
+		9A88B14D798716B7DD893AB2 /* SplatMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6273C6A4C8F4BA24DC2E5240 /* SplatMath.swift */; };
 		9E0F75C6D0E877E46562FF2D /* Scan.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0DDC8BDC99A259D2637BAA1 /* Scan.swift */; };
 		9F607409836A3BCBC2AA5F0A /* ObjectScanModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9990872D6DB115A1E09113A5 /* ObjectScanModel.swift */; };
 		A2CF362685DEF9D9BC4D9D80 /* DemoData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5460470F247D91B3CF2EF5 /* DemoData.swift */; };
 		A8804C7E2334987D8F30231F /* Fixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F0DEBB3B831F0763A21E9E /* Fixtures.swift */; };
+		A943928DCADC473C740D9788 /* LicensesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C93B110EB934021ED5F44C69 /* LicensesView.swift */; };
 		A9C566CF5995CC89AACC9F89 /* PhotorealObjectScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086F32C313695BBBB9C4F9B7 /* PhotorealObjectScanView.swift */; };
+		AA4B36A1A01F42F3045325D1 /* SplatCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40FC2D2DC4EF4C36654442BF /* SplatCoordinator.swift */; };
 		AAEE4B15F984C61BEDC757F7 /* ScanEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D0A2C78108C8A84E0711C65 /* ScanEntity.swift */; };
+		B01F11382A090E1FA9148AEF /* License-msplat-ios.txt in Resources */ = {isa = PBXBuildFile; fileRef = 830BB90459BFE11C38E840B3 /* License-msplat-ios.txt */; };
+		B19D94C20E2EC5775C3A86EA /* SplatTrainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FE0449C4526BA484232E004 /* SplatTrainer.swift */; };
 		B23C018832AD64F8E4416E73 /* RoomCaptureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 108F29B102B3D2A925CD4C41 /* RoomCaptureController.swift */; };
 		B325DDE8C6890247453F2F79 /* FloorPlanCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E659F4F496563E95E5FC632E /* FloorPlanCanvas.swift */; };
 		B53FE7F4124E8AE888FB5ED0 /* TildaIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5E059FA2D2FA689557A0B2A /* TildaIntents.swift */; };
 		B5EAEE602BCB068E6FD46B9C /* ModelPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D35717F43743BE3A2C0DE /* ModelPreview.swift */; };
+		BA674F8200BC18EFB599270A /* SplatViewerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7528F16045AD8653987F52D3 /* SplatViewerView.swift */; };
 		BD61D9C391B81183D3778135 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B36B620054B30A56FBF02F9 /* ShareSheet.swift */; };
 		BFCF47D9A561EC4D20153975 /* ObjectScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C73BD743E1FC00F840819AB /* ObjectScanView.swift */; };
+		BFDE1D8BF6726D66E3AB10D9 /* MetalSplatter in Frameworks */ = {isa = PBXBuildFile; productRef = 85EA881B2449A44C16998EFA /* MetalSplatter */; };
 		C0D60E6946D22DA27C43FC7B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 8CA86C1EFB7F019F1ABBB390 /* PrivacyInfo.xcprivacy */; };
 		C2CD596563CB36760576BDE9 /* SpotlightIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2AFD5D5E03174508BE3118 /* SpotlightIndexer.swift */; };
 		C336B0BDFCAC431B96145D30 /* ObjectScanChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A62DFCCBEFB99F9886BA43 /* ObjectScanChrome.swift */; };
@@ -78,6 +93,7 @@
 		C6469719853F05F0D4EF8449 /* TildaMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8953D429A42AADA1B4D167D /* TildaMark.swift */; };
 		C73E6F94F20632CAB91F3AAF /* ScanIntelligence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7079B4876FAEB07CD70335AB /* ScanIntelligence.swift */; };
 		CB2183BA53A01C27B81DD02D /* RoomSummaryComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB9A9F9B74EC571363C8288 /* RoomSummaryComponents.swift */; };
+		CB223CDBAA9946A1E0BE76CF /* Msplat in Frameworks */ = {isa = PBXBuildFile; productRef = 656C3F5F816A059F1D8FEA3A /* Msplat */; };
 		D05573450ADE8BF9EA144012 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 205AE324568F677E7DDA278F /* AppSettings.swift */; };
 		D53639AB92002EDA2F6C4803 /* RoomFloorChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54A9D05187AAC84C23B31AD7 /* RoomFloorChrome.swift */; };
 		D702B3210AE8EB9DCF284A78 /* DeviceSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F75BA97805F89D84B211C7B /* DeviceSupport.swift */; };
@@ -85,6 +101,7 @@
 		D8C38088ACBAA768B8E5A890 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F798CA0E323A1411DA4652C /* ExportService.swift */; };
 		D9BA17899874F2799F3A1734 /* ScanStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2803A721F32F200C292FDB5 /* ScanStore.swift */; };
 		DAB10E6B7A2A5653DFE734B9 /* FloorPlanBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04DACAB0CE204FCB270C5A4 /* FloorPlanBuilder.swift */; };
+		DB0C225C8E5125A34E0E461E /* SplatCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FFF275C24BA2E44A7186F6 /* SplatCard.swift */; };
 		E249427B725BD48F05741D58 /* RoomFacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FC6DE6F465D8BCBEC03439 /* RoomFacts.swift */; };
 		F78ED1954A5A2324DCF33B3C /* FixtureViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFD66DB1346C6CD5FF1B3D9 /* FixtureViews.swift */; };
 		FFEB5E815D938EEAA9C8522E /* MeshScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 739AA29D1D97EDA1F0AB018F /* MeshScanView.swift */; };
@@ -99,6 +116,8 @@
 		0F798CA0E323A1411DA4652C /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
 		108F29B102B3D2A925CD4C41 /* RoomCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomCaptureController.swift; sourceTree = "<group>"; };
 		11E9EB55428D115BE2605EA8 /* RoomExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomExporter.swift; sourceTree = "<group>"; };
+		12FFF275C24BA2E44A7186F6 /* SplatCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatCard.swift; sourceTree = "<group>"; };
+		13EFA29CF78BF94F992C64A9 /* SplatSeedPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatSeedPoints.swift; sourceTree = "<group>"; };
 		142B0BE242F3FB60371500E8 /* PointCloudCapture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointCloudCapture.swift; sourceTree = "<group>"; };
 		15118E0F9D59C9F4D6CD8F99 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		152CA85CD9DC3E325A1172B6 /* AnalysisCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalysisCoordinator.swift; sourceTree = "<group>"; };
@@ -108,8 +127,12 @@
 		26BEAAACE5DE8E1EDBA4B390 /* ModeTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeTile.swift; sourceTree = "<group>"; };
 		29C567687F6FAE58D85A5818 /* RoomSummaryPDFBlocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryPDFBlocks.swift; sourceTree = "<group>"; };
 		2F875C0E0FCE78EB04EEC1DC /* LidarMeshCropper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LidarMeshCropper.swift; sourceTree = "<group>"; };
+		2FEF7AA39F63F61360A4F94B /* Msplat */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Msplat; path = Vendor/Msplat; sourceTree = SOURCE_ROOT; };
 		34976E9723DA6D0D9E19AE0A /* MeshCaptureController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshCaptureController.swift; sourceTree = "<group>"; };
+		3B75E9822D085355698B68B5 /* SplatPhotoPrep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatPhotoPrep.swift; sourceTree = "<group>"; };
 		3BA8881DF15E098F3B5EF2C0 /* RoomScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScanView.swift; sourceTree = "<group>"; };
+		3E33B9D5B83877660D874E7C /* SplatDatasetBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatDatasetBuilder.swift; sourceTree = "<group>"; };
+		40FC2D2DC4EF4C36654442BF /* SplatCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatCoordinator.swift; sourceTree = "<group>"; };
 		42A4ED736DC92F8ECDE417C3 /* AskTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskTools.swift; sourceTree = "<group>"; };
 		4745A5C1FC9219A5BF0A6894 /* TorchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TorchButton.swift; sourceTree = "<group>"; };
 		49E159D310346ECDF1378981 /* LidarObjectScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LidarObjectScanView.swift; sourceTree = "<group>"; };
@@ -121,7 +144,10 @@
 		57E21AB453DA65E87A0A4458 /* TildaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TildaApp.swift; sourceTree = "<group>"; };
 		5A5AF7B8F7F49A4585905C8F /* ScanChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanChrome.swift; sourceTree = "<group>"; };
 		5D0A2C78108C8A84E0711C65 /* ScanEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanEntity.swift; sourceTree = "<group>"; };
+		5FE0449C4526BA484232E004 /* SplatTrainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatTrainer.swift; sourceTree = "<group>"; };
 		6053DEB5E727EE77EFF0A598 /* ScanInsights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanInsights.swift; sourceTree = "<group>"; };
+		6167F9CC7198B4EDC25F90D6 /* Tilda.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Tilda.entitlements; sourceTree = "<group>"; };
+		6273C6A4C8F4BA24DC2E5240 /* SplatMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatMath.swift; sourceTree = "<group>"; };
 		640BD88AA618A8ED7F229212 /* FixtureSceneMarkers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureSceneMarkers.swift; sourceTree = "<group>"; };
 		64C42B062E78EB1C08AC219B /* MeshSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshSettingsSection.swift; sourceTree = "<group>"; };
 		659C03586436A21AB4056DDE /* MeshExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshExporter.swift; sourceTree = "<group>"; };
@@ -135,18 +161,23 @@
 		7079B4876FAEB07CD70335AB /* ScanIntelligence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanIntelligence.swift; sourceTree = "<group>"; };
 		71913AD745B2EA5ECFBD79C5 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		739AA29D1D97EDA1F0AB018F /* MeshScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshScanView.swift; sourceTree = "<group>"; };
+		7528F16045AD8653987F52D3 /* SplatViewerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatViewerView.swift; sourceTree = "<group>"; };
 		7EB2D2BACEE7E1CECD159073 /* RoomAreaGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomAreaGeometry.swift; sourceTree = "<group>"; };
 		800CD2A01A3E4D5B43B630E9 /* PhotoTourView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoTourView.swift; sourceTree = "<group>"; };
 		80B5DD82345CB9F07A6B857F /* AskScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AskScanView.swift; sourceTree = "<group>"; };
 		81835F59DB587A5646C131B5 /* RoomSummaryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryModel.swift; sourceTree = "<group>"; };
 		82A62DFCCBEFB99F9886BA43 /* ObjectScanChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectScanChrome.swift; sourceTree = "<group>"; };
+		830BB90459BFE11C38E840B3 /* License-msplat-ios.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "License-msplat-ios.txt"; sourceTree = "<group>"; };
 		838F2B6718E3F03C3C0F7289 /* ObjectSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectSettingsSection.swift; sourceTree = "<group>"; };
 		8544760B33A2F1FDFEDD11A9 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		86313C91B0E75AC395432C0A /* RoomSummaryExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryExporter.swift; sourceTree = "<group>"; };
+		88C38C846078F655356A86D5 /* License-MetalSplatter.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "License-MetalSplatter.txt"; sourceTree = "<group>"; };
+		89E13834685FEEF738D3FEBB /* SplatDebugSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatDebugSample.swift; sourceTree = "<group>"; };
 		8CA86C1EFB7F019F1ABBB390 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8D11D40B40029EFC5BEDC148 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8DF28D6E4FA1656A30B4E1EF /* TourModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TourModel.swift; sourceTree = "<group>"; };
 		91FC6DE6F465D8BCBEC03439 /* RoomFacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFacts.swift; sourceTree = "<group>"; };
+		94402864F3732BDE7A7E9741 /* License-spz-swift.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "License-spz-swift.txt"; sourceTree = "<group>"; };
 		98D06CFC97DA48A1CE99C9B4 /* ScanMeasurements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanMeasurements.swift; sourceTree = "<group>"; };
 		9990872D6DB115A1E09113A5 /* ObjectScanModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectScanModel.swift; sourceTree = "<group>"; };
 		9EB64DEEFB05F6FE6F90A6A0 /* WalkthroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughView.swift; sourceTree = "<group>"; };
@@ -163,7 +194,9 @@
 		BB2AFD5D5E03174508BE3118 /* SpotlightIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotlightIndexer.swift; sourceTree = "<group>"; };
 		BB7DC3A4BB0AD0EAB25295CB /* PointCloudCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointCloudCore.swift; sourceTree = "<group>"; };
 		BBECE92753FD478D4D05E59C /* FixtureDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixtureDetector.swift; sourceTree = "<group>"; };
+		C2DA90240461C4CD4A38624B /* SplatMetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatMetalView.swift; sourceTree = "<group>"; };
 		C30A8B32F37DCBF983B7CF63 /* InsightsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsCard.swift; sourceTree = "<group>"; };
+		C93B110EB934021ED5F44C69 /* LicensesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicensesView.swift; sourceTree = "<group>"; };
 		CBD4AA36BA58305920A5D3BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D8953D429A42AADA1B4D167D /* TildaMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TildaMark.swift; sourceTree = "<group>"; };
 		E04DACAB0CE204FCB270C5A4 /* FloorPlanBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorPlanBuilder.swift; sourceTree = "<group>"; };
@@ -176,6 +209,19 @@
 		FE25CE59F5321D7F1351426C /* Tilda.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Tilda.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE872844E29A3C4FFEBE10B2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CA4D88FDA7F0B86FA8BCB1AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB223CDBAA9946A1E0BE76CF /* Msplat in Frameworks */,
+				BFDE1D8BF6726D66E3AB10D9 /* MetalSplatter in Frameworks */,
+				7166BF4996AFE449A456FAD6 /* SplatIO in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		0254BCA3FCF6F39324D49BBD /* Scanning */ = {
@@ -227,6 +273,17 @@
 			path = Config;
 			sourceTree = "<group>";
 		};
+		276E9EF28AD54EF6AC56897C /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				12FFF275C24BA2E44A7186F6 /* SplatCard.swift */,
+				89E13834685FEEF738D3FEBB /* SplatDebugSample.swift */,
+				C2DA90240461C4CD4A38624B /* SplatMetalView.swift */,
+				7528F16045AD8653987F52D3 /* SplatViewerView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		42D4266294A22973D8E302E5 /* Feedback */ = {
 			isa = PBXGroup;
 			children = (
@@ -269,6 +326,7 @@
 			isa = PBXGroup;
 			children = (
 				24AB6253714F56DEF59ABABB /* Config */,
+				D40CECD149C26665FBC67927 /* Packages */,
 				E2D5CD0ED75BF6A8316898E0 /* Tilda */,
 				4DC117F2F4FC7E72E99AAA1B /* Products */,
 			);
@@ -329,6 +387,16 @@
 			path = Intents;
 			sourceTree = "<group>";
 		};
+		B12E3B9F73EB2688DA30E045 /* Licenses */ = {
+			isa = PBXGroup;
+			children = (
+				88C38C846078F655356A86D5 /* License-MetalSplatter.txt */,
+				830BB90459BFE11C38E840B3 /* License-msplat-ios.txt */,
+				94402864F3732BDE7A7E9741 /* License-spz-swift.txt */,
+			);
+			path = Licenses;
+			sourceTree = "<group>";
+		};
 		CCF138135CEC451DD0113A6D /* Room */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,18 +412,37 @@
 			path = Room;
 			sourceTree = "<group>";
 		};
+		D40CECD149C26665FBC67927 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				2FEF7AA39F63F61360A4F94B /* Msplat */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		D6631DD4E8DF1E67FCE4AFA8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				B12E3B9F73EB2688DA30E045 /* Licenses */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		E2D5CD0ED75BF6A8316898E0 /* Tilda */ = {
 			isa = PBXGroup;
 			children = (
 				8D11D40B40029EFC5BEDC148 /* Assets.xcassets */,
 				CBD4AA36BA58305920A5D3BA /* Info.plist */,
 				8CA86C1EFB7F019F1ABBB390 /* PrivacyInfo.xcprivacy */,
+				6167F9CC7198B4EDC25F90D6 /* Tilda.entitlements */,
 				696DE1E907F3C218609D2EFB /* AI */,
 				A5C02E54FEE62E80D53A3214 /* App */,
 				5A1298744F140506AF38FA2A /* Export */,
 				AD0A095BE24849F076E9296B /* Intents */,
 				1AD2B8ADF621D4F8AEA2BB61 /* Models */,
+				D6631DD4E8DF1E67FCE4AFA8 /* Resources */,
 				0254BCA3FCF6F39324D49BBD /* Scanning */,
+				EBCBEC185FE11B237F49CB04 /* Splat */,
 				EFF7C49729714B67778AA492 /* Theme */,
 				EE7DBB81731FCDE7FA86D398 /* Views */,
 			);
@@ -378,6 +465,16 @@
 			path = Mesh;
 			sourceTree = "<group>";
 		};
+		EBCBEC185FE11B237F49CB04 /* Splat */ = {
+			isa = PBXGroup;
+			children = (
+				40FC2D2DC4EF4C36654442BF /* SplatCoordinator.swift */,
+				FE6139433EACA08CE77BDF8F /* Engine */,
+				276E9EF28AD54EF6AC56897C /* UI */,
+			);
+			path = Splat;
+			sourceTree = "<group>";
+		};
 		EE7DBB81731FCDE7FA86D398 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -385,6 +482,7 @@
 				8544760B33A2F1FDFEDD11A9 /* FlowLayout.swift */,
 				71913AD745B2EA5ECFBD79C5 /* HomeView.swift */,
 				C30A8B32F37DCBF983B7CF63 /* InsightsCard.swift */,
+				C93B110EB934021ED5F44C69 /* LicensesView.swift */,
 				505D35717F43743BE3A2C0DE /* ModelPreview.swift */,
 				26BEAAACE5DE8E1EDBA4B390 /* ModeTile.swift */,
 				17642C3635E149D219F0BEF9 /* ScanDetailView.swift */,
@@ -420,6 +518,18 @@
 			path = Tour;
 			sourceTree = "<group>";
 		};
+		FE6139433EACA08CE77BDF8F /* Engine */ = {
+			isa = PBXGroup;
+			children = (
+				3E33B9D5B83877660D874E7C /* SplatDatasetBuilder.swift */,
+				6273C6A4C8F4BA24DC2E5240 /* SplatMath.swift */,
+				3B75E9822D085355698B68B5 /* SplatPhotoPrep.swift */,
+				13EFA29CF78BF94F992C64A9 /* SplatSeedPoints.swift */,
+				5FE0449C4526BA484232E004 /* SplatTrainer.swift */,
+			);
+			path = Engine;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -429,6 +539,7 @@
 			buildPhases = (
 				45F2631A6325D3CEB347BFC4 /* Sources */,
 				AAF51B83880398726B557FAB /* Resources */,
+				CA4D88FDA7F0B86FA8BCB1AB /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -436,6 +547,9 @@
 			);
 			name = Tilda;
 			packageProductDependencies = (
+				656C3F5F816A059F1D8FEA3A /* Msplat */,
+				85EA881B2449A44C16998EFA /* MetalSplatter */,
+				662ED52D9AE79D2069E0B7DF /* SplatIO */,
 			);
 			productName = Tilda;
 			productReference = FE25CE59F5321D7F1351426C /* Tilda.app */;
@@ -464,6 +578,10 @@
 			);
 			mainGroup = 6096124A54C869FC7EA7BCFE;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				BAD83E323E3E3FBFD26E3641 /* XCRemoteSwiftPackageReference "MetalSplatter" */,
+				C504F345709AE2FD22B2D09D /* XCLocalSwiftPackageReference "Vendor/Msplat" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4DC117F2F4FC7E72E99AAA1B /* Products */;
 			projectDirPath = "";
@@ -480,6 +598,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				52856169B71BD3AF40245CDC /* Assets.xcassets in Resources */,
+				01022BFCDF2B318AEC9A93D4 /* License-MetalSplatter.txt in Resources */,
+				B01F11382A090E1FA9148AEF /* License-msplat-ios.txt in Resources */,
+				0EC79673F4479C6EFE224750 /* License-spz-swift.txt in Resources */,
 				C0D60E6946D22DA27C43FC7B /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -519,6 +640,7 @@
 				0B7E3B86880445C8AC1CA4F1 /* FrameRecorder.swift in Sources */,
 				4CE5ACB9EC89F7DC5BB9B540 /* HomeView.swift in Sources */,
 				048A8C3298F51548D05CA586 /* InsightsCard.swift in Sources */,
+				A943928DCADC473C740D9788 /* LicensesView.swift in Sources */,
 				460893D531B37644A6F3B421 /* LidarMeshCropper.swift in Sources */,
 				81335551D2D40D1131CE7833 /* LidarObjectScanView.swift in Sources */,
 				423F39FFFA4926532B647576 /* MeshCaptureController.swift in Sources */,
@@ -561,6 +683,16 @@
 				D9BA17899874F2799F3A1734 /* ScanStore.swift in Sources */,
 				2FC4595178904B44876382AA /* SettingsView.swift in Sources */,
 				BD61D9C391B81183D3778135 /* ShareSheet.swift in Sources */,
+				DB0C225C8E5125A34E0E461E /* SplatCard.swift in Sources */,
+				AA4B36A1A01F42F3045325D1 /* SplatCoordinator.swift in Sources */,
+				28CBC3D6CF26FBBA0812B626 /* SplatDatasetBuilder.swift in Sources */,
+				200D083B400DF98B4B6FE10C /* SplatDebugSample.swift in Sources */,
+				9A88B14D798716B7DD893AB2 /* SplatMath.swift in Sources */,
+				4EF2D70DF18ED7FADEA31576 /* SplatMetalView.swift in Sources */,
+				51CDA4878174FF31CB4A1B99 /* SplatPhotoPrep.swift in Sources */,
+				1FCB91B721C26ABA61C79331 /* SplatSeedPoints.swift in Sources */,
+				B19D94C20E2EC5775C3A86EA /* SplatTrainer.swift in Sources */,
+				BA674F8200BC18EFB599270A /* SplatViewerView.swift in Sources */,
 				C2CD596563CB36760576BDE9 /* SpotlightIndexer.swift in Sources */,
 				384DE18780DD854E31868057 /* Surfaces.swift in Sources */,
 				5FD9565E553E14ED0FA4236C /* Theme.swift in Sources */,
@@ -702,6 +834,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Tilda/Tilda.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
@@ -724,6 +857,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Tilda/Tilda.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 3;
@@ -763,6 +897,41 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		C504F345709AE2FD22B2D09D /* XCLocalSwiftPackageReference "Vendor/Msplat" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Vendor/Msplat;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BAD83E323E3E3FBFD26E3641 /* XCRemoteSwiftPackageReference "MetalSplatter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scier/MetalSplatter";
+			requirement = {
+				kind = revision;
+				revision = 464eb37c55d90d7362a79120fdf8b50d4ae03296;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		656C3F5F816A059F1D8FEA3A /* Msplat */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Msplat;
+		};
+		662ED52D9AE79D2069E0B7DF /* SplatIO */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BAD83E323E3E3FBFD26E3641 /* XCRemoteSwiftPackageReference "MetalSplatter" */;
+			productName = SplatIO;
+		};
+		85EA881B2449A44C16998EFA /* MetalSplatter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BAD83E323E3E3FBFD26E3641 /* XCRemoteSwiftPackageReference "MetalSplatter" */;
+			productName = MetalSplatter;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F976BC404BA256A48E252604 /* Project object */;
 }

@@ -24,7 +24,7 @@ Apple defines "collect" as transmitting data off the device in a way that lets y
 
 Other facts that support the label:
 
-- No accounts, analytics, advertising, crash-reporting or third-party SDKs. The code contains no `URLSession` or other networking calls (checked by grep).
+- No accounts, analytics, advertising, crash-reporting or third-party SDKs. The two open-source libraries (msplat-ios for splat training, MetalSplatter for splat viewing) run on device only. The code, including both libraries, contains no `URLSession` or other networking calls (checked by grep and by `strings` on the msplat static library).
 - No advertising identifier, no tracking, no data sharing with data brokers.
 - The privacy manifest (`Tilda/PrivacyInfo.xcprivacy`) declares no collected data types and no tracking domains.
 

@@ -7,7 +7,7 @@ Scan a room, a whole floor or an object with your iPhone's LiDAR scanner and exp
 -->
 **App Store: coming soon.** Website: <https://augie15.github.io/lidar-app/>
 
-Tilda is free, private and runs entirely on your iPhone. There are no accounts, no ads, no tracking and no servers. It uses only Apple frameworks, so your scans leave the phone only when you choose to export or share them.
+Tilda is free, private and runs entirely on your iPhone. There are no accounts, no ads, no tracking and no servers. It uses Apple frameworks plus two open-source libraries for 3D photos (msplat-ios and MetalSplatter), which also run entirely on the phone. Your scans leave the phone only when you choose to export or share them.
 
 ## Features
 
@@ -27,6 +27,11 @@ Tilda is free, private and runs entirely on your iPhone. There are no accounts, 
 - **Point cloud:** a dense colored cloud built from the LiDAR depth map.
 - **Surfaces:** the mesh colored by type (wall, floor, ceiling, table, seat, door, window).
 - LiDAR depth options: confidence level, maximum range (1.5, 3 or 5 m), point spacing (5, 10 or 20 mm), remove people, and 4K camera color.
+
+### 3D photos (Gaussian splats)
+- Turn a scan with photos into a photo-real 3D splat, trained on the iPhone. Needs an iPhone 15 Pro or later Pro model.
+- Apple's on-device Vision models drop blurry photos and mask out people walking through, so they are not baked in.
+- View it with orbit, pan and zoom, or share the `.ply` for other splat viewers.
 
 ### Export
 - USDZ, OBJ, STL and PLY through the share sheet (AirDrop, Files, Mail). Point clouds export as PLY.
@@ -66,6 +71,7 @@ For example: `![Home](docs/images/home.png)`. App Store sizes are listed in [doc
 - iOS 26 or later.
 - Xcode 27 or later to build from source.
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen).
+- The splat trainer is vendored prebuilt from source in `Vendor/Msplat`. To rebuild it, run `scripts/build-msplat.sh` (needs CMake and Xcode's Metal Toolchain).
 
 ## Build from source
 

@@ -3,7 +3,7 @@
 **Tilda = The Instant LiDAR Digitizing App.** A free iPhone app (built and tested on an iPhone 17 Pro Max) that scans rooms, objects and spaces with LiDAR and exports them in a few taps.
 
 ## Principles
-- **Completely free.** Only Apple frameworks: RoomPlan, RealityKit Object Capture, ARKit, ModelIO, SceneKit, QuickLook, Vision, Foundation Models and App Intents. No accounts, no servers, no ads, no third-party libraries, no in-app purchases.
+- **Completely free.** Apple frameworks (RoomPlan, RealityKit Object Capture, ARKit, ModelIO, SceneKit, QuickLook, Vision, Foundation Models and App Intents) plus two on-device open-source libraries for Gaussian splats: msplat-ios (Apache-2.0, vendored and built from source in `Vendor/Msplat`) and MetalSplatter (MIT). No accounts, no servers, no ads, no networking, no in-app purchases.
 - **On-device and private.** Scans never leave the phone unless you export or share them. The app makes no network calls.
 - **Simple.** One home screen with three scan buttons and a list of saved scans.
 

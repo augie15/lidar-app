@@ -2,6 +2,37 @@
 
 Parked ideas, not scheduled. Each has the reasoning so it can be picked up later without redoing the research.
 
+## Gaussian splats on the phone
+
+**Status:** built (2026-11-24) as "3D photos", using msplat-ios for training and MetalSplatter for viewing. Kept here for the reasoning; see CHANGELOG.
+
+**Idea:** turn a scan into a Gaussian splat on the iPhone itself, with no server and no account, and view it in the app. Pro phones only (17 Pro and later; 12 GB of memory on the 17 Pro).
+
+### Why Tilda is well placed
+
+- It already records photos with ARKit camera poses (the Nerfstudio-style `transforms.json` export), so it skips the slow step where desktop tools work out each camera position.
+- LiDAR depth gives a starting point cloud. That trains faster than random points and keeps the room's true size and shape.
+- Scaniverse already trains splats on iPhone in a minute or two for a room-sized scene, so this is known to work.
+
+### Two stages
+
+1. **Viewer (cheap):** open and view splat files (`.ply` / `.splat`) in the app. MetalSplatter is an open-source Swift and Metal renderer (MIT licence) that could be added as a package. A recent iPhone can show a few million splats smoothly.
+2. **On-device training (the big job):** no Swift library exists for this. It needs the splat drawing and the training step written as Metal compute shaders. Expect a few weeks to get it working well.
+
+### Constraints
+
+- **Memory and heat:** cap the number of splats (around 1 to 2 million) and the photo resolution. Training takes minutes and warms the phone.
+- **Running time:** use `BGContinuedProcessingTask` (iOS 26) so training can continue with a progress bar after the user leaves the app.
+- **Privacy:** everything stays on the device, matching "Data Not Collected".
+- Keep the photos-and-poses export for people who use desktop tools (Nerfstudio, Postshot, gsplat).
+
+### Work when picked up
+
+1. Check the current versions and licences of MetalSplatter and any Swift splat trainers that have appeared since.
+2. Build the viewer stage and test performance on a 17 Pro.
+3. Prototype training on one saved room: LiDAR points to start, then pose-based training. Measure time, memory and heat.
+4. Decide on the user-facing flow: a "Make splat" action on a saved scan, Pro-only, with a time estimate.
+
 ## Optional tip jar ("Support Tilda")
 
 **Status:** parked (2026-11-23). Revisit once there is real uptake data from version 1.0.

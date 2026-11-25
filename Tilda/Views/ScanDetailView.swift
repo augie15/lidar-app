@@ -7,6 +7,7 @@ struct ScanDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AnalysisCoordinator.self) private var analysis
     @Environment(FixtureCoordinator.self) private var fixtureCoordinator
+    @Environment(SplatCoordinator.self) private var splatCoordinator
 
     @State private var exportingFormat: ExportFormat?
     @State private var shareItems: ShareItems?
@@ -19,6 +20,9 @@ struct ScanDetailView: View {
     @State private var showWalkthrough = false
     @State private var showAsk = false
     @State private var showRoomSummary = false
+    @State private var showSplatViewer = false
+    /// Bumped when a splat file appears or goes away, since the file system isn't observable.
+    @State private var splatRevision = 0
     @State private var showFixtureMarkers = true
     @State private var editor: FixtureEditorRequest?
     /// Set when the editor closes with a fixture selected: the 3D preview pulses it for a moment.
@@ -50,6 +54,25 @@ struct ScanDetailView: View {
                                 fixtures: scan.kind == .room ? fixtureCoordinator.fixtures(for: scan.id) : [])
             }
         }
+        .fullScreenCover(isPresented: $showSplatViewer, onDismiss: { splatRevision += 1 }) {
+            if let scan, let splatURL = store.splatURL(for: scan) {
+                SplatViewerView(scan: scan, splatURL: splatURL)
+                    .environment(store)
+                    .environment(splatCoordinator)
+            } else {
+                // No file (the DEBUG card preview, or it was removed meanwhile): never leave a cover with no way out.
+                VStack(spacing: 16) {
+                    Text("This 3D photo isn't on your iPhone any more.")
+                        .font(.headline).foregroundStyle(.white)
+                        .multilineTextAlignment(.center)
+                    Button("Close") { showSplatViewer = false }
+                        .buttonStyle(FixtureButtonStyle(prominent: true))
+                }
+                .padding(32)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.black.ignoresSafeArea())
+            }
+        }
         .sheet(item: $editor, onDismiss: {
             if tourFocus != nil { showTour = true }
         }) { request in
@@ -61,6 +84,15 @@ struct ScanDetailView: View {
             }
         }
         .task(id: scanID) { await loadWalls() }
+        #if DEBUG
+        .task(id: scanID) {
+            guard SplatDebugSample.isRequested, let scan else { return }
+            await SplatDebugSample.write(to: store.folderURL(for: scan).appendingPathComponent("splat.ply"))
+            splatRevision += 1
+        }
+        #endif
+        // Watched from a child view: reading the phase here would rebuild this whole page on every progress tick.
+        .background { SplatFileWatcher(scanID: scanID) { splatRevision += 1 } }
         .sheet(isPresented: $showAsk) {
             if let scan {
                 AskScanView(scan: scan, folder: store.folderURL(for: scan), modelURL: store.modelURL(for: scan),
@@ -86,6 +118,7 @@ struct ScanDetailView: View {
     }
 
     private func content(for scan: Scan) -> some View {
+        _ = splatRevision
         let url = store.modelURL(for: scan)
         let formats = ExportFormat.available(in: store.folderURL(for: scan))
         return ScrollView {
@@ -118,6 +151,11 @@ struct ScanDetailView: View {
                     .foregroundStyle(Theme.textSecondary)
 
                 viewButtons(for: scan)
+
+                if SplatCard.isVisible(scan: scan, store: store) {
+                    SplatCard(scan: scan) { showSplatViewer = true }
+                        .environment(splatCoordinator)
+                }
 
                 if scan.kind == .room {
                     FixturesRow(scan: scan) { editor = FixtureEditorRequest() }
@@ -239,11 +277,13 @@ struct ScanDetailView: View {
         let canWalk = scan.kind == .room || scan.kind == .mesh
         let showSummary = scan.kind == .room
         let canAsk = ScanIntelligence.isModelAvailable
-        if hasTour || canWalk || showSummary || canAsk {
+        let hasSplat = store.splatURL(for: scan) != nil || SplatCardPreview.hasSplat == true
+        if hasTour || canWalk || showSummary || canAsk || hasSplat {
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
                 if showSummary { viewButton("Room summary", symbol: "list.bullet.rectangle") { showRoomSummary = true } }
                 if hasTour { viewButton("Photo tour", symbol: "photo.on.rectangle.angled") { showTour = true } }
                 if canWalk { viewButton("Walk through", symbol: "figure.walk") { showWalkthrough = true } }
+                if hasSplat { viewButton("3D photo", symbol: "cube.transparent") { showSplatViewer = true } }
                 if canAsk { viewButton("Ask", symbol: "sparkles") { showAsk = true } }
             }
         }

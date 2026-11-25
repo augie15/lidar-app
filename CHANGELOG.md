@@ -5,6 +5,7 @@ All notable changes to Tilda are listed here. The format follows [Keep a Changel
 ## [Unreleased]
 
 ### Added
+- 3D photos: train a Gaussian splat from a scan's photos on the iPhone (Pro models with 8 GB or more), with blurry photos skipped and people masked out by on-device Vision, then view or share it. Uses msplat-ios (Apache-2.0, built from source) and MetalSplatter (MIT); licences are in Settings.
 - Fixture review: HVAC vents, bathroom fans and baseboard heaters are highlighted on the floor plan, the 3D model and the walkthrough, with counts on the scan page. Found fixtures can be confirmed, moved, retyped, resized (heater length), deleted with undo, or added by tapping the plan.
 
 ## [1.0.0] - 2026-11-23
