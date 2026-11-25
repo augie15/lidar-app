@@ -66,7 +66,8 @@ struct HomeView: View {
 
     /// Shows "What do you scan for?" once, from the home screen only: never over a scan, a detail screen or Settings.
     private func maybeAskFocus() {
-        guard !AppSettings.focusPromptAnswered, !showFocusPrompt, activeKind == nil, path.isEmpty, !showSettings,
+        // The focus only shapes Apple Intelligence summaries, which need iOS 26.
+        guard #available(iOS 26.0, *), !AppSettings.focusPromptAnswered, !showFocusPrompt, activeKind == nil, path.isEmpty, !showSettings,
               router.pendingKind == nil, router.pendingScanID == nil, !router.pendingLatest else { return }
         showFocusPrompt = true
     }

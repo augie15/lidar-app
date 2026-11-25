@@ -69,7 +69,7 @@ FREE AND PRIVATE
 - Data leaves your phone only when you choose to export or share a file.
 
 REQUIREMENTS
-- An iPhone with a LiDAR scanner (Pro models, iPhone 12 Pro and later) running iOS 26 or later. Without LiDAR, Tilda explains that scanning is not available.
+- An iPhone with a LiDAR scanner (Pro models, iPhone 12 Pro and later) running iOS 18 or later (Apple Intelligence features need iOS 26). Without LiDAR, Tilda explains that scanning is not available.
 - Apple Intelligence features need a supported iPhone with Apple Intelligence turned on.
 
 Tips: walk slowly, keep walls, floor and corners in view, and use the flash in dark rooms.

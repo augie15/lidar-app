@@ -7,6 +7,7 @@ import simd
 
 private func m(_ v: Double) -> String { MeasureFormat.length(v) }
 
+@available(iOS 26.0, *)
 struct RoomFactsTool: Tool {
     let measurements: ScanMeasurements
     let name = "roomFacts"
@@ -47,6 +48,7 @@ struct RoomFactsTool: Tool {
     }
 }
 
+@available(iOS 26.0, *)
 struct WallLengthsTool: Tool {
     let measurements: ScanMeasurements
     let name = "wallLengths"
@@ -71,6 +73,7 @@ struct WallLengthsTool: Tool {
     }
 }
 
+@available(iOS 26.0, *)
 struct SurfaceAreasTool: Tool {
     let measurements: ScanMeasurements
     let name = "surfaceAreas"
@@ -88,6 +91,7 @@ struct SurfaceAreasTool: Tool {
     }
 }
 
+@available(iOS 26.0, *)
 struct ObjectDimensionsTool: Tool {
     let measurements: ScanMeasurements
     let name = "objectDimensions"
@@ -111,6 +115,7 @@ struct ObjectDimensionsTool: Tool {
     }
 }
 
+@available(iOS 26.0, *)
 struct PaintEstimateTool: Tool {
     let measurements: ScanMeasurements
     let name = "paintEstimate"
@@ -136,6 +141,7 @@ struct PaintEstimateTool: Tool {
     }
 }
 
+@available(iOS 26.0, *)
 struct FitCheckTool: Tool {
     let measurements: ScanMeasurements
     let name = "fitCheck"

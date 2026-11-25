@@ -4,6 +4,7 @@ import ImageIO
 import Vision
 
 /// Guided-generation output. Only a name and a summary; every number in the summary must come from the facts passed in.
+@available(iOS 26.0, *)
 @Generable
 struct GeneratedScanSummary {
     @Guide(description: "A short title of one to four words, such as \"Living room\" or \"Oak side table\". No dates, no measurements, no quotation marks.")
@@ -17,11 +18,15 @@ struct GeneratedScanSummary {
 /// (SystemLanguageModel, never Private Cloud Compute) for the name and summary.
 enum ScanIntelligence {
     /// True when the on-device Apple Intelligence model can answer right now.
-    static var isModelAvailable: Bool { SystemLanguageModel.default.availability == .available }
+    static var isModelAvailable: Bool {
+        guard #available(iOS 26.0, *) else { return false }
+        return SystemLanguageModel.default.availability == .available
+    }
 
     /// A short, calm reason the model cannot be used, or nil when it is available.
     static var unavailableNote: String? {
-        switch SystemLanguageModel.default.availability {
+        guard #available(iOS 26.0, *) else { return "Names and summaries need iOS 26 or later with Apple Intelligence." }
+        return switch SystemLanguageModel.default.availability {
         case .available: nil
         case .unavailable(.deviceNotEligible): "Apple Intelligence isn't available on this iPhone."
         case .unavailable(.appleIntelligenceNotEnabled): "Turn on Apple Intelligence in Settings to get names and summaries."
@@ -39,7 +44,7 @@ enum ScanIntelligence {
         let vision = await VisionPass.run(folder: folder, kind: scan.kind)
 
         var name = "", summary = "", usedModel = false
-        if isModelAvailable,
+        if #available(iOS 26.0, *), isModelAvailable,
            let generated = await generate(scan: scan, measurements: measurements, facts: facts, vision: vision, focus: focus) {
             name = generated.suggestedName.trimmingCharacters(in: .whitespacesAndNewlines.union(.init(charactersIn: "\"“”.")))
             summary = generated.summary.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -56,6 +61,7 @@ enum ScanIntelligence {
 
     // MARK: Foundation Models
 
+    @available(iOS 26.0, *)
     private static func generate(scan: Scan, measurements: ScanMeasurements, facts: [ScanInsights.Fact],
                                  vision: VisionPass.Result, focus: ScanFocus) async -> GeneratedScanSummary? {
         var instructions = """

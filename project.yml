@@ -2,7 +2,7 @@ name: Tilda
 options:
   bundleIdPrefix: com.augie15
   deploymentTarget:
-    iOS: "26.0"
+    iOS: "18.0"
   createIntermediateGroups: true
 configFiles:
   Debug: Config/Tilda.xcconfig

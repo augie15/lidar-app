@@ -11,6 +11,7 @@ private struct ChatMessage: Identifiable {
 
 /// Chat sheet that answers questions about one scan with the on-device Apple Intelligence model.
 /// Tools return exact numbers from the scan files; nothing leaves the iPhone.
+@available(iOS 26.0, *)
 struct AskScanView: View {
     let scan: Scan
     let folder: URL

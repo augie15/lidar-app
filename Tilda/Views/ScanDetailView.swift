@@ -94,7 +94,7 @@ struct ScanDetailView: View {
         // Watched from a child view: reading the phase here would rebuild this whole page on every progress tick.
         .background { SplatFileWatcher(scanID: scanID) { splatRevision += 1 } }
         .sheet(isPresented: $showAsk) {
-            if let scan {
+            if #available(iOS 26.0, *), let scan {
                 AskScanView(scan: scan, folder: store.folderURL(for: scan), modelURL: store.modelURL(for: scan),
                             insights: analysis.insights[scan.id])
                     .presentationDetents([.large])

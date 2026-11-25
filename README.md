@@ -68,7 +68,7 @@ For example: `![Home](docs/images/home.png)`. App Store sizes are listed in [doc
 ## Requirements
 
 - An iPhone or iPad Pro with a LiDAR scanner. The app is built for iPhone and tested on an iPhone 17 Pro Max.
-- iOS 26 or later.
+- iOS 18 or later. Names, summaries and Ask need iOS 26 with Apple Intelligence; finding fixtures from photos needs iOS 27.
 - Xcode 27 or later to build from source.
 - [XcodeGen](https://github.com/yonaskolb/XcodeGen).
 - The splat trainer is vendored prebuilt from source in `Vendor/Msplat`. To rebuild it, run `scripts/build-msplat.sh` (needs CMake and Xcode's Metal Toolchain).

@@ -63,7 +63,7 @@ struct FixtureEditorView: View {
             .background(Theme.background)
             .overlay(alignment: .bottom) { toast }
             .navigationTitle("Fixtures")
-            .navigationSubtitle(subtitle)
+            .modifier(NavigationSubtitle(text: subtitle))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) { Button("Done") { close() } }
@@ -673,5 +673,13 @@ private struct FixturePhotoSheet: View {
         .presentationDetents([.large])
         .presentationDragIndicator(.visible)
         .preferredColorScheme(.dark)
+    }
+}
+
+/// `navigationSubtitle` exists from iOS 26; on earlier versions the counts simply aren't shown under the title.
+private struct NavigationSubtitle: ViewModifier {
+    let text: String
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) { content.navigationSubtitle(text) } else { content }
     }
 }

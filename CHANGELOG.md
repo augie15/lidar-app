@@ -11,6 +11,9 @@ All notable changes to Tilda are listed here. The format follows [Keep a Changel
 - 3D photos: train a Gaussian splat from a scan's photos on the iPhone (Pro models with 8 GB or more), with blurry photos skipped and people masked out by on-device Vision, then view or share it. Before training, a photo check rates the expected result (Good, Fair or Likely soft) from photo count for the room size, repeat views, height variety and ceiling coverage, with what to do differently. While scanning, frames blurred by fast turning are skipped, and Dense photo density now keeps up to 900 photos. Training takes a cooling break when the phone gets hot (iOS thermal state serious) and stops with a checkpoint at critical. Uses msplat-ios (Apache-2.0, built from source) and MetalSplatter (MIT); licences are in Settings.
 - Fixture review: HVAC vents, bathroom fans and baseboard heaters are highlighted on the floor plan, the 3D model and the walkthrough, with counts on the scan page. Found fixtures can be confirmed, moved, retyped, resized (heater length), deleted with undo, or added by tapping the plan.
 
+### Changed
+- Tilda now runs on iOS 18 and later (was iOS 26), for iPhones that can't be updated, such as managed company devices. On iOS 18 to 25, Insights show measurements and tags without a written summary, Ask and the scan focus prompt are hidden, and everything else works.
+
 ### Fixed
 - Fixture checks now include photos tilted up at the ceiling (the tour's photo picker ignored tilt, so a fan above a door could be skipped), and a bathroom fan with a built-in light is no longer rejected as a light.
 - Closing the 3D photo viewer now releases the splat's memory.

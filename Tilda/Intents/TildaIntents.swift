@@ -4,7 +4,10 @@ import Foundation
 struct StartRoomScanIntent: AppIntent {
     static let title: LocalizedStringResource = "Start a room scan"
     static let description = IntentDescription("Opens Tilda ready to scan a room.")
+    @available(iOS 26.0, *)
     static var supportedModes: IntentModes { .foreground }
+    /// iOS 18 to 25: the older way to say "open the app".
+    static let openAppWhenRun = true
 
     @MainActor func perform() async throws -> some IntentResult {
         NavigationRouter.shared.pendingKind = .room
@@ -15,7 +18,10 @@ struct StartRoomScanIntent: AppIntent {
 struct StartObjectScanIntent: AppIntent {
     static let title: LocalizedStringResource = "Start an object scan"
     static let description = IntentDescription("Opens Tilda ready to scan an object.")
+    @available(iOS 26.0, *)
     static var supportedModes: IntentModes { .foreground }
+    /// iOS 18 to 25: the older way to say "open the app".
+    static let openAppWhenRun = true
 
     @MainActor func perform() async throws -> some IntentResult {
         NavigationRouter.shared.pendingKind = .object
@@ -26,7 +32,10 @@ struct StartObjectScanIntent: AppIntent {
 struct StartMeshScanIntent: AppIntent {
     static let title: LocalizedStringResource = "Start a mesh scan"
     static let description = IntentDescription("Opens Tilda ready to capture a LiDAR mesh.")
+    @available(iOS 26.0, *)
     static var supportedModes: IntentModes { .foreground }
+    /// iOS 18 to 25: the older way to say "open the app".
+    static let openAppWhenRun = true
 
     @MainActor func perform() async throws -> some IntentResult {
         NavigationRouter.shared.pendingKind = .mesh
@@ -37,7 +46,10 @@ struct StartMeshScanIntent: AppIntent {
 struct OpenLatestScanIntent: AppIntent {
     static let title: LocalizedStringResource = "Open my latest scan"
     static let description = IntentDescription("Opens your most recent scan in Tilda.")
+    @available(iOS 26.0, *)
     static var supportedModes: IntentModes { .foreground }
+    /// iOS 18 to 25: the older way to say "open the app".
+    static let openAppWhenRun = true
 
     @MainActor func perform() async throws -> some IntentResult {
         NavigationRouter.shared.pendingLatest = true
@@ -48,7 +60,10 @@ struct OpenLatestScanIntent: AppIntent {
 struct OpenScanIntent: OpenIntent {
     static let title: LocalizedStringResource = "Open a scan"
     static let description = IntentDescription("Opens a scan from your library in Tilda.")
+    @available(iOS 26.0, *)
     static var supportedModes: IntentModes { .foreground }
+    /// iOS 18 to 25: the older way to say "open the app".
+    static let openAppWhenRun = true
 
     @Parameter(title: "Scan") var target: ScanEntity
 

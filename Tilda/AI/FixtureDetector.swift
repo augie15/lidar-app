@@ -40,6 +40,7 @@ enum FixtureDetectionSupport {
 
 // MARK: - Guided generation
 
+@available(iOS 26.0, *)
 @Generable
 enum GeneratedFixtureKind {
     case hvacVent
@@ -47,6 +48,7 @@ enum GeneratedFixtureKind {
     case baseboardHeater
 }
 
+@available(iOS 26.0, *)
 @Generable
 enum GeneratedFixtureSurface {
     case floor
@@ -54,6 +56,7 @@ enum GeneratedFixtureSurface {
     case ceiling
 }
 
+@available(iOS 26.0, *)
 @Generable
 struct GeneratedFixtureSighting {
     @Guide(description: "Which of the three fixture types this is.")
@@ -75,6 +78,7 @@ struct GeneratedFixtureSighting {
     var confidence: Double
 }
 
+@available(iOS 26.0, *)
 @Generable
 struct GeneratedFixtureScan {
     @Guide(description: "Every vent, bathroom fan or baseboard heater clearly visible in the photo. Empty when there are none.",
@@ -83,6 +87,7 @@ struct GeneratedFixtureScan {
 }
 
 /// A baseboard heater seen by the heater-only pass.
+@available(iOS 26.0, *)
 @Generable
 struct GeneratedHeaterSighting {
     @Guide(description: "Left edge of the heater as a fraction of the photo width, 0 at the left edge and 1 at the right.", .range(0...1))
@@ -97,6 +102,7 @@ struct GeneratedHeaterSighting {
     var confidence: Double
 }
 
+@available(iOS 26.0, *)
 @Generable
 struct GeneratedHeaterScan {
     @Guide(description: "Every baseboard heater clearly visible in the photo. Empty when there are none.", .maximumCount(4))
@@ -105,6 +111,7 @@ struct GeneratedHeaterScan {
 
 /// The close-up second look at one heater candidate. The clues come first and the verdict last, so the verdict
 /// follows from what was seen.
+@available(iOS 26.0, *)
 @Generable
 struct GeneratedHeaterVerdict {
     @Guide(description: "True when the front or top has fins, slots or louvres (a grille of parallel openings).")
@@ -122,6 +129,7 @@ struct GeneratedHeaterVerdict {
 }
 
 /// The close-up second look at one vent or fan candidate. Clues first, verdict last.
+@available(iOS 26.0, *)
 @Generable
 struct GeneratedVentVerdict {
     @Guide(description: "True when there is a cover with parallel slats, louvres, a grid of holes or a mesh grille.")
