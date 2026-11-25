@@ -33,14 +33,14 @@ enum ScanIntelligence {
     static func load(folder: URL) -> ScanInsights? { ScanInsights.load(from: folder) }
 
     /// Analyses a scan and saves `insights.json`. Returns nil only when nothing at all could be derived.
-    static func analyze(scan: Scan, folder: URL, modelURL: URL) async -> ScanInsights? {
+    static func analyze(scan: Scan, folder: URL, modelURL: URL, focus: ScanFocus = AppSettings.focus) async -> ScanInsights? {
         let measurements = await ScanMeasurements.load(folder: folder, modelURL: modelURL)
         let facts = measurements.facts(kind: scan.kind)
         let vision = await VisionPass.run(folder: folder, kind: scan.kind)
 
         var name = "", summary = "", usedModel = false
         if isModelAvailable,
-           let generated = await generate(scan: scan, measurements: measurements, facts: facts, vision: vision) {
+           let generated = await generate(scan: scan, measurements: measurements, facts: facts, vision: vision, focus: focus) {
             name = generated.suggestedName.trimmingCharacters(in: .whitespacesAndNewlines.union(.init(charactersIn: "\"“”.")))
             summary = generated.summary.trimmingCharacters(in: .whitespacesAndNewlines)
             usedModel = true
@@ -48,7 +48,8 @@ enum ScanIntelligence {
 
         guard usedModel || !facts.isEmpty || !vision.tags.isEmpty || !vision.text.isEmpty else { return nil }
         let insights = ScanInsights(suggestedName: name, summary: summary, tags: vision.tags, facts: facts,
-                                    recognizedText: vision.text, analyzedAt: .now, usedLanguageModel: usedModel)
+                                    recognizedText: vision.text, analyzedAt: .now, usedLanguageModel: usedModel,
+                                    focus: focus.rawValue)
         insights.write(to: folder)
         return insights
     }
@@ -56,13 +57,14 @@ enum ScanIntelligence {
     // MARK: Foundation Models
 
     private static func generate(scan: Scan, measurements: ScanMeasurements, facts: [ScanInsights.Fact],
-                                 vision: VisionPass.Result) async -> GeneratedScanSummary? {
-        let instructions = """
+                                 vision: VisionPass.Result, focus: ScanFocus) async -> GeneratedScanSummary? {
+        var instructions = """
         You name and describe 3D scans made with an iPhone LiDAR scanner. \
         Use only the facts, tags, room labels and text given in the prompt. \
         Never invent, estimate or convert measurements; if you mention a number, copy it exactly from the facts. \
         If something is not listed, do not claim it. Keep the tone plain and factual.
         """
+        if !focus.guidance.isEmpty { instructions += "\n" + focus.guidance + " Still copy every number exactly from the facts, and leave out anything that is not listed." }
         var lines = ["Scan type: \(scan.kind.title)"]
         if let rooms = measurements.roomFacts?.rooms.map(\.label), !rooms.isEmpty {
             lines.append("Room labels: " + rooms.joined(separator: ", "))

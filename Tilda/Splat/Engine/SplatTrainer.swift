@@ -37,7 +37,19 @@ struct SplatCheckpointInfo: Codable, Sendable {
 /// Runs one training: prepares the photos, opens the msplat session, steps it, checkpoints, exports `splat.ply`.
 /// Everything here runs off the main thread (the msplat session itself lives on its own runtime actor).
 enum SplatTrainer {
-    enum Outcome: Sendable { case finished, paused(progress: Double), cancelled }
+    enum Outcome: Sendable { case finished, paused(progress: Double), tooHot(progress: Double), cancelled }
+
+    /// What the step loop does at each iOS thermal state. Training runs the GPU flat out, so it backs off before iOS
+    /// throttles the whole phone (serious) and stops outright at critical, when iOS may end the app.
+    enum ThermalAction: Equatable { case run, cool, stop }
+    static func thermalAction(_ state: ProcessInfo.ThermalState) -> ThermalAction {
+        switch state {
+        case .nominal, .fair: .run
+        case .serious: .cool
+        case .critical: .stop
+        @unknown default: .run
+        }
+    }
 
     // MARK: Files
 
@@ -228,6 +240,23 @@ enum SplatTrainer {
                     continue
                 }
                 triedInactiveSave = false
+                // Heat: hold (no GPU work) until the phone cools, or stop at critical. A checkpoint first either way.
+                switch thermalAction(ProcessInfo.processInfo.thermalState) {
+                case .run: break
+                case .stop:
+                    if lastCheckpoint != iteration { try await checkpoint() }
+                    try? await live.close()
+                    return .tooHot(progress: Double(iteration) / Double(total))
+                case .cool:
+                    if lastCheckpoint != iteration { try await checkpoint() }
+                    publish(.cooling(progress: Double(iteration) / Double(total)))
+                    while thermalAction(ProcessInfo.processInfo.thermalState) == .cool, control.stop == .none {
+                        try await Task.sleep(nanoseconds: 2_000_000_000)
+                    }
+                    windowStart = Date(); windowIteration = iteration; smoothedRate = nil
+                    lastPublish = .distantPast
+                    continue          // re-check: cooled (run), hotter (stop) or asked to stop
+                }
                 let stats = try await live.step()
                 iteration += 1
                 splatCount = stats.splatCount

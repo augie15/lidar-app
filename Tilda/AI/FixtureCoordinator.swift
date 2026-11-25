@@ -8,7 +8,20 @@ import simd
 @MainActor
 @Observable
 final class FixtureCoordinator {
-    struct Progress: Equatable { var done: Int; var total: Int }
+    struct Progress: Equatable {
+        var done: Int
+        var total: Int
+        /// How many of `total` are views drawn from the 3D photo (they come after the photos).
+        var views = 0
+
+        var photos: Int { total - views }
+        /// "Checking photo 3 of 20" or "Checking 3D view 2 of 8".
+        var label: String {
+            done >= photos && views > 0
+                ? "Checking 3D view \(min(done - photos + 1, views)) of \(views)"
+                : "Checking photo \(min(done + 1, photos)) of \(photos)"
+        }
+    }
 
     private(set) var libraries: [UUID: FixtureLibrary] = [:]
     /// Scans being checked right now. `total` is 0 while queued or preparing.
@@ -20,6 +33,9 @@ final class FixtureCoordinator {
     @ObservationIgnored private var tasks: [UUID: Task<Void, Never>] = [:]
     @ObservationIgnored private var worker: Task<Void, Never>?
     @ObservationIgnored private var attempted: Set<UUID> = []
+    /// Scans queued to be checked with the 3D photo as well, and how to tell whether splat training has started since.
+    @ObservationIgnored private var withSplat: Set<UUID> = []
+    @ObservationIgnored private var splatBusy: (@MainActor () -> Bool)?
     @ObservationIgnored private weak var store: ScanStore?
 
     /// A scan saved this recently counts as "just scanned" and is checked automatically.
@@ -57,9 +73,17 @@ final class FixtureCoordinator {
 
     /// "Find fixtures" / "Scan photos again". Fixtures the user has touched are kept (hand-tagged, confirmed or edited);
     /// earlier detections nobody has checked are replaced.
-    func detect(_ scan: Scan, store: ScanStore) {
+    /// With `useSplat`, the scan's 3D photo is also drawn from chosen angles and checked, in the same pass. That needs a
+    /// finished splat and no splat training running (`splatIsBusy`, asked again before every view).
+    func detect(_ scan: Scan, store: ScanStore, useSplat: Bool = false, splatIsBusy: @escaping @MainActor () -> Bool = { false }) {
         self.store = store
         guard running[scan.id] == nil, !queue.contains(scan.id) else { return }
+        if useSplat, store.splatURL(for: scan) != nil, !splatIsBusy() {
+            withSplat.insert(scan.id)
+            splatBusy = splatIsBusy
+        } else {
+            withSplat.remove(scan.id)
+        }
         attempted.insert(scan.id)
         lastRunFailed.remove(scan.id)
         queue.append(scan.id)
@@ -69,6 +93,7 @@ final class FixtureCoordinator {
 
     func cancel(_ id: UUID) {
         queue.removeAll { $0 == id }
+        withSplat.remove(id)
         if let task = tasks[id] { task.cancel() } else { running[id] = nil }
     }
 
@@ -96,13 +121,17 @@ final class FixtureCoordinator {
         let factsURL = store.roomFactsURL(for: scan)
         let id = scan.id
         running[id] = Progress(done: 0, total: 0)
+        let splatURL = withSplat.remove(id) != nil ? store.splatURL(for: scan) : nil
+        let busy = splatBusy
 
         let work = Task.detached(priority: .utility) {
             let plan = planURL.flatMap { FloorPlan.load(from: $0) }
             let facts = factsURL.flatMap { RoomFacts.load(from: $0) }
-            return await FixtureDetector.run(framesDir: framesDir, plan: plan, facts: facts) { done, total in
+            return await FixtureDetector.run(
+                framesDir: framesDir, plan: plan, facts: facts, splatURL: splatURL,
+                splatAllowed: { await MainActor.run { !(busy?() ?? false) } }) { done, total, views in
                 await MainActor.run { [weak self] in
-                    if self?.running[id] != nil { self?.running[id] = Progress(done: done, total: total) }
+                    if self?.running[id] != nil { self?.running[id] = Progress(done: done, total: total, views: views) }
                 }
             }
         }
@@ -111,6 +140,13 @@ final class FixtureCoordinator {
         // A cancelled run leaves the saved results untouched.
         guard !output.cancelled else { return }
         var library = libraries[id] ?? FixtureLibrary()
+        if output.replacedViews {
+            // The old views are gone, and new ones reuse their names, so fixtures the user kept can't point at them.
+            for i in library.fixtures.indices where FixtureDetectorStorage.isRenderedView(library.fixtures[i].photoFrame) {
+                library.fixtures[i].photoFrame = nil
+                library.fixtures[i].photoBox = nil
+            }
+        }
         library.fixtures = library.merging(detections: output.fixtures, radius: FixturePlacement.mergeRadius)
         library.detectedAt = .now
         library.photosChecked = output.photosChecked

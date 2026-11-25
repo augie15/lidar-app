@@ -154,6 +154,21 @@ extension SplatMath {
         var failures: [String] = []
         func expect(_ ok: Bool, _ what: String) { if !ok { failures.append(what) } }
 
+        // Motion blur: 30 degrees per second, 1/60 s exposure, fx 1500 -> 0.5236 * (1/60) * 1500 = 13.1 px.
+        var turned = matrix_identity_float4x4
+        let a30: Float = 30 * .pi / 180 * 0.1          // 0.1 s at 30 degrees per second
+        turned.columns.0 = SIMD4(cos(a30), 0, -sin(a30), 0)
+        turned.columns.2 = SIMD4(sin(a30), 0, cos(a30), 0)
+        let blur = FrameRecorder.motionBlurPixels(from: matrix_identity_float4x4, to: turned, dt: 0.1, exposure: 1.0 / 60, fx: 1500)
+        expect(abs(blur - 13.09) < 0.2, "blur from turning is about 13 px (got \(blur))")
+        expect(FrameRecorder.motionBlurPixels(from: turned, to: turned, dt: 0.1, exposure: 1.0 / 60, fx: 1500) < 0.01, "no turn, no blur")
+        failures += SplatReadiness.selfCheck()
+
+        // Heat: run when normal or fair, hold at serious, stop at critical.
+        expect(SplatTrainer.thermalAction(.nominal) == .run && SplatTrainer.thermalAction(.fair) == .run, "runs when cool")
+        expect(SplatTrainer.thermalAction(.serious) == .cool, "holds to cool at serious")
+        expect(SplatTrainer.thermalAction(.critical) == .stop, "stops at critical")
+
         // A camera at (1, 1.4, 2), turned 90 degrees left about world Y: its -Z axis now looks along world -X.
         let yaw: Float = .pi / 2
         let cameraToWorld = simd_float4x4(columns: (

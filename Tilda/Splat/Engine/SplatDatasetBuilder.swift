@@ -29,7 +29,7 @@ enum SplatDatasetBuilder {
     /// Share of the blurriest photos to leave out.
     static let blurDropFraction: Float = 0.15
     /// More photos than this only cost time and memory; the sharpest are spread evenly across the walk.
-    static let maxPhotos = 300
+    static let maxPhotos = 500
 
     /// `report` gets the step names shown to the user; `shouldStop` is polled between photos.
     static func build(scanFolder: URL, modelURL: URL, maskDirectory: URL,

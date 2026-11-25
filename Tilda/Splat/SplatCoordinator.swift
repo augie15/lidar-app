@@ -61,6 +61,11 @@ enum SplatPhase: Equatable, Sendable {
     case finished
     /// The app left the foreground or another scan was started; training can resume from the checkpoint.
     case paused(progress: Double)
+    /// The phone got hot (iOS thermal state "serious"): training is holding with no GPU work and carries on by itself
+    /// once it cools. Still counts as running.
+    case cooling(progress: Double)
+    /// The phone got critically hot: training stopped with a checkpoint. The user resumes later.
+    case tooHot(progress: Double)
     case failed(message: String)
 }
 
@@ -75,7 +80,7 @@ final class SplatCoordinator {
     func phase(for id: UUID) -> SplatPhase { phases[id] ?? .idle }
     var isBusy: Bool {
         phases.values.contains { if case .preparing = $0 { return true }; if case .training = $0 { return true }
-            if case .saving = $0 { return true }; return false }
+            if case .saving = $0 { return true }; if case .cooling = $0 { return true }; return false }
     }
 
     private struct ActiveRun {
@@ -214,6 +219,8 @@ final class SplatCoordinator {
             phases[run.scanID] = .finished
         case .success(.paused(let progress)):
             phases[run.scanID] = .paused(progress: progress)
+        case .success(.tooHot(let progress)):
+            phases[run.scanID] = .tooHot(progress: progress)
         case .success(.cancelled):
             SplatTrainer.deleteCheckpoint(run.folder)
             phases[run.scanID] = nil

@@ -166,7 +166,10 @@ private struct MeshScanSession: View {
             }
         }
         .overlay(alignment: .bottom) {
-            ScanBottomBar(hint: hint, isProcessing: isProcessing) { finish() }
+            VStack(spacing: 12) {
+                if let coach = controller.coach, !isProcessing { ScanCoachPill(model: coach) }
+                ScanBottomBar(hint: hint, isProcessing: isProcessing) { finish() }
+            }
         }
         .background(Color.black.ignoresSafeArea())
         .onAppear { UIApplication.shared.isIdleTimerDisabled = true }

@@ -5,6 +5,7 @@ enum AppSettings {
     enum Key {
         static let capturePhotos = "capturePhotos"
         static let photoDensity = "photoDensity"
+        static let scanningTips = "scanningTips"
         static let roomDetail = "roomDetail"
         static let colorMesh = "colorMesh"
         static let flashOnStart = "flashOnStart"
@@ -25,6 +26,9 @@ enum AppSettings {
         static let removePeople = "removePeople"
         static let highResVideo = "highResVideo"
         static let smoothDepth = "smoothDepth"
+        // Insights
+        static let scanFocus = "scanFocus"
+        static let focusPromptAnswered = "focusPromptAnswered"
     }
 
     // MARK: Units
@@ -138,7 +142,7 @@ enum AppSettings {
             switch self {
             case .light: "Fewer photos, smaller scans"
             case .standard: "Good for tours and color"
-            case .dense: "Best for photoreal 3D, uses more storage"
+            case .dense: "Best for 3D photos and photoreal 3D, uses more storage"
             }
         }
         /// (metres moved, degrees turned, max photos) before a new keyframe is kept.
@@ -146,7 +150,7 @@ enum AppSettings {
             switch self {
             case .light: (0.6, 25, 120)
             case .standard: (0.3, 15, 250)
-            case .dense: (0.15, 8, 500)
+            case .dense: (0.15, 8, 900)   // big rooms for 3D photos need the headroom
             }
         }
     }
@@ -161,8 +165,15 @@ enum AppSettings {
 
     private static var defaults: UserDefaults { .standard }
 
+    /// What the owner scans for. Shapes Insights summaries. Defaults to General.
+    static var focus: ScanFocus { ScanFocus(rawValue: defaults.string(forKey: Key.scanFocus) ?? "") ?? .general }
+    /// True once the "What do you scan for?" sheet has been answered or skipped.
+    static var focusPromptAnswered: Bool { defaults.bool(forKey: Key.focusPromptAnswered) }
+
     /// Save camera photos with each Room and Mesh scan (needed for photo tours, color and photoreal export).
     static var capturePhotos: Bool { defaults.object(forKey: Key.capturePhotos) as? Bool ?? true }
+    /// Live reminders to change height and angle while scanning (default on).
+    static var scanningTips: Bool { defaults.object(forKey: Key.scanningTips) as? Bool ?? true }
     static var photoDensity: PhotoDensity { PhotoDensity(rawValue: defaults.string(forKey: Key.photoDensity) ?? "") ?? .standard }
     static var roomDetail: RoomDetail { RoomDetail(rawValue: defaults.string(forKey: Key.roomDetail) ?? "") ?? .simple }
     /// Paint the mesh with colors from the camera.

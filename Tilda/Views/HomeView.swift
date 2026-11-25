@@ -11,6 +11,7 @@ struct HomeView: View {
     @State private var unsupportedKind: ScanKind?
     @State private var path: [Scan] = []
     @State private var showSettings = false
+    @State private var showFocusPrompt = false
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -35,6 +36,17 @@ struct HomeView: View {
         .onChange(of: router.pendingScanID, initial: true) { handleRoute() }
         .onChange(of: router.pendingLatest, initial: true) { handleRoute() }
         .sheet(isPresented: $showSettings) { SettingsView() }
+        .sheet(isPresented: $showFocusPrompt, onDismiss: {
+            // Any way out (Continue, Skip, swipe down) counts as answered; the default stays General.
+            UserDefaults.standard.set(true, forKey: AppSettings.Key.focusPromptAnswered)
+        }) { FocusPromptView() }
+        .task {
+            try? await Task.sleep(for: .milliseconds(700))
+            maybeAskFocus()
+        }
+        .onChange(of: activeKind) { maybeAskFocus() }
+        .onChange(of: path) { maybeAskFocus() }
+        .onChange(of: showSettings) { maybeAskFocus() }
         .fullScreenCover(item: $activeKind, onDismiss: { store.reload() }) { kind in
             switch kind {
             case .room: RoomScanView()
@@ -50,6 +62,13 @@ struct HomeView: View {
         } message: { kind in
             Text(DeviceSupport.unsupportedMessage(for: kind))
         }
+    }
+
+    /// Shows "What do you scan for?" once, from the home screen only: never over a scan, a detail screen or Settings.
+    private func maybeAskFocus() {
+        guard !AppSettings.focusPromptAnswered, !showFocusPrompt, activeKind == nil, path.isEmpty, !showSettings,
+              router.pendingKind == nil, router.pendingScanID == nil, !router.pendingLatest else { return }
+        showFocusPrompt = true
     }
 
     private func sync() {

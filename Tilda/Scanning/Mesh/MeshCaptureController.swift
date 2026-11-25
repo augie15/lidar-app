@@ -14,6 +14,8 @@ final class MeshCaptureController: NSObject, ObservableObject, ARSessionDelegate
     nonisolated let mode: AppSettings.MeshMode
     /// Keyframe recorder, present when photos (or mesh vertex colors) are wanted. Thread-safe, fed from the delegate.
     nonisolated let recorder: FrameRecorder?
+    /// Live scanning tips (nil when turned off in Settings). Only fed when photos are being recorded.
+    nonisolated let coach: ScanCoachModel? = AppSettings.scanningTips ? ScanCoachModel() : nil
     /// Live point cloud builder (point cloud mode only).
     nonisolated(unsafe) private(set) var cloud: PointCloudCapture?
     /// Root of the live point nodes, added to the scene by the SceneKit view.
@@ -152,6 +154,9 @@ final class MeshCaptureController: NSObject, ObservableObject, ARSessionDelegate
 
     nonisolated func session(_ session: ARSession, didUpdate frame: ARFrame) {
         recorder?.consider(frame)
+        if let coach, let recorder, case .normal = frame.camera.trackingState {
+            coach.ingest(transform: frame.camera.transform, time: frame.timestamp, recorder: recorder)
+        }
         cloud?.consider(frame)
     }
 

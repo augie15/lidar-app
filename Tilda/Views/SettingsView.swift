@@ -5,12 +5,14 @@ struct SettingsView: View {
     @Environment(ScanStore.self) private var store
 
     @AppStorage(AppSettings.Key.capturePhotos) private var capturePhotos = true
+    @AppStorage(AppSettings.Key.scanningTips) private var scanningTips = true
     @AppStorage(AppSettings.Key.photoDensity) private var density = AppSettings.PhotoDensity.standard.rawValue
     @AppStorage(AppSettings.Key.roomDetail) private var roomDetail = AppSettings.RoomDetail.simple.rawValue
     @AppStorage(AppSettings.Key.flashOnStart) private var flashOnStart = false
     @AppStorage(AppSettings.Key.units) private var units = AppSettings.Units.imperial.rawValue
     @AppStorage(AppSettings.Key.wallThickness) private var wallThickness = 0.15
     @AppStorage("aiAutoAnalyze") private var aiAutoAnalyze = true
+    @AppStorage(AppSettings.Key.scanFocus) private var scanFocus = ScanFocus.general.rawValue
 
     @State private var storageText = "Calculating…"
 
@@ -45,6 +47,14 @@ struct SettingsView: View {
                 .listRowBackground(Theme.card)
 
                 Section {
+                    Toggle("Scanning tips", isOn: $scanningTips)
+                        .disabled(!capturePhotos)
+                } header: { header("Guidance") } footer: {
+                    Text("Reminds you to change height and angle as you scan, which helps 3D photos and fixture detection.")
+                }
+                .listRowBackground(Theme.card)
+
+                Section {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Room model detail").foregroundStyle(Theme.textPrimary)
                         Picker("Room model detail", selection: $roomDetail) {
@@ -73,8 +83,11 @@ struct SettingsView: View {
 
                 Section {
                     Toggle("Name, summarize and check new scans", isOn: $aiAutoAnalyze)
+                    Picker("What do you scan for?", selection: $scanFocus) {
+                        ForEach(ScanFocus.allCases) { Text($0.title).tag($0.rawValue) }
+                    }
                 } header: { header("Apple Intelligence") } footer: {
-                    Text("Names and summaries, plus a look through room scan photos for vents, bathroom fans and baseboard heaters. Runs on your iPhone with Apple Intelligence. Nothing leaves your device.")
+                    Text((ScanFocus(rawValue: scanFocus) ?? .general).detail + ". Applies to new analyses; re-analyze a scan to rewrite it.\n\nNames and summaries, plus a look through room scan photos for vents, bathroom fans and baseboard heaters. Runs on your iPhone with Apple Intelligence. Nothing leaves your device.")
                 }
                 .listRowBackground(Theme.card)
 

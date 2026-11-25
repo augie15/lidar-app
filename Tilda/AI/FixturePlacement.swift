@@ -257,6 +257,24 @@ enum FixturePlacement {
         isHeater && !plainTrim && !freestanding && (fins || endCaps || standsOut)
     }
 
+    /// Vents and fans are small, roughly square covers. Seen in perspective they can look wide and flat, never tall and
+    /// thin, and never fill much of a photo. The on-device model sometimes returns made-up "form-filling" boxes (tall
+    /// strips at round fractions over a wall or door frame); this throws those out before the close-up check.
+    /// `imageAspect` is the upright photo's width / height.
+    static func ventBoxPlausible(_ box: NormalizedBox, imageAspect: Float) -> Bool {
+        let w = box.width * imageAspect, h = box.height           // in units of photo height, so square means square
+        guard w > 0, h > 0 else { return false }
+        return h / w <= 2.0 && box.width * box.height <= 0.12 && max(box.width, box.height) <= 0.5
+    }
+
+    /// The close-up verdict for a vent or fan: it must show a grille, and must not be a light, a detector, a range
+    /// hood, a door or window frame, or bare surface.
+    static func ventVerdictAccepted(isVentOrFan: Bool, grille: Bool, light: Bool, detector: Bool, rangeHood: Bool,
+                                    frame: Bool, bare: Bool) -> Bool {
+        // A light alone is not a fan, but many bathroom fans have a light built in: a grille wins over the light.
+        isVentOrFan && grille && !detector && !rangeHood && !frame && !bare
+    }
+
     /// True when two boxes (fractions, same photo) mostly cover the same spot: the overlap is a large share of the
     /// smaller one. Used to avoid counting a heater twice when two model calls both found it.
     static func boxesOverlap(_ a: NormalizedBox, _ b: NormalizedBox, threshold: Float = 0.3) -> Bool {
@@ -297,6 +315,11 @@ enum FixturePlacement {
     /// The camera is tilted down enough to see the base of a wall (forward y below `limit`).
     static func looksDown(_ transform: simd_float4x4, limit: Float = -0.25) -> Bool {
         -transform.columns.2.y < limit
+    }
+
+    /// Tilted up by about 14 degrees or more (sin 14° ≈ 0.25): the ceiling fills a useful share of the photo.
+    static func looksUp(_ transform: simd_float4x4, limit: Float = 0.25) -> Bool {
+        -transform.columns.2.y > limit
     }
 
     /// Up to `limit` indexes into `candidates`, greedily the ones farthest (by position, then heading) from everything
@@ -363,7 +386,8 @@ enum FixturePlacement {
         func isExact(_ s: Sighting) -> Bool { s.placed.length != nil && !s.placed.lengthIsLowerBound }
 
         for s in sightings.sorted(by: { $0.confidence > $1.confidence }) {
-            if s.kind == .baseboardHeater && !s.verified { continue }
+            // Only sightings that passed the close-up check count (every kind has one).
+            if !s.verified { continue }
             var joined = false
             for i in groups.indices where groups[i].lead.kind == s.kind {
                 if s.kind == .baseboardHeater, let a = groups[i].lead.placed.axis, let b = s.placed.axis {
@@ -559,10 +583,12 @@ extension FixturePlacement {
         expect(floorHit.map { near($0.position, SIMD3(0, 0, -2.425), 0.02) } ?? false, "30 degrees down hits the floor at z = -2.425")
 
         // Merging: two sightings 0.3 m apart become one; a lone faint sighting is dropped; a lone strong one stays.
-        func sighting(_ p: SIMD3<Float>, _ c: Float, kind: Fixture.Kind = .hvacVent) -> Sighting {
+        func sighting(_ p: SIMD3<Float>, _ c: Float, kind: Fixture.Kind = .hvacVent, verified: Bool = true) -> Sighting {
             Sighting(kind: kind, placed: .init(surface: .ceiling, position: p, axis: nil, length: nil, distance: 2),
-                     confidence: c, photoFrame: "images/a.jpg", photoBox: .init(x: 0, y: 0, width: 0.1, height: 0.1))
+                     confidence: c, photoFrame: "images/a.jpg", photoBox: .init(x: 0, y: 0, width: 0.1, height: 0.1),
+                     verified: verified)
         }
+        expect(merge([sighting([1, 2.4, 1], 0.9, verified: false)]).isEmpty, "an unverified vent is dropped")
         let merged = merge([sighting([1, 2.4, 1], 0.5), sighting([1.3, 2.4, 1], 0.8), sighting([4, 2.4, 4], 0.5),
                             sighting([6, 2.4, 6], 0.9, kind: .bathroomFan)])
         expect(merged.count == 2, "merge keeps two fixtures (got \(merged.count))")
@@ -639,6 +665,25 @@ extension FixturePlacement {
         expect(crop.minX >= 0 && crop.maxX <= 1440 && crop.minY >= 0 && crop.maxY <= 1920, "crop stays inside the image")
         expect(min(crop.width, crop.height) >= 256 && crop.width > 0.3 * 1440, "crop is padded and at least 256 px on its short side")
         expect(heaterVerdictAccepted(isHeater: true, plainTrim: false, freestanding: false, fins: false, endCaps: false, standsOut: true), "verdict keeps a real heater")
+        // Vent boxes: the made-up strips from a real scan (upright 3:4 photos) are rejected, real vent shapes are kept.
+        let aspect: Float = 0.75
+        expect(!ventBoxPlausible(.init(x: 0.1, y: 0.2, width: 0.2, height: 0.6), imageAspect: aspect), "tall strip box rejected")
+        expect(!ventBoxPlausible(.init(x: 0.1, y: 0.1, width: 0.1, height: 0.8), imageAspect: aspect), "thin full-height box rejected")
+        expect(!ventBoxPlausible(.init(x: 0.2, y: 0.3, width: 0.6, height: 0.4), imageAspect: aspect), "box over a quarter of the photo rejected")
+        expect(ventBoxPlausible(.init(x: 0.4, y: 0.1, width: 0.12, height: 0.06), imageAspect: aspect), "flat ceiling vent kept")
+        expect(ventBoxPlausible(.init(x: 0.5, y: 0.7, width: 0.2, height: 0.08), imageAspect: aspect), "floor register kept")
+        expect(ventBoxPlausible(.init(x: 0.3, y: 0.3, width: 0.1, height: 0.12), imageAspect: aspect), "square wall grille kept")
+        expect(ventVerdictAccepted(isVentOrFan: true, grille: true, light: false, detector: false, rangeHood: false, frame: false, bare: false), "vent verdict keeps a grille")
+        expect(!ventVerdictAccepted(isVentOrFan: true, grille: true, light: false, detector: false, rangeHood: true, frame: false, bare: false), "vent verdict drops a range hood")
+        expect(!ventVerdictAccepted(isVentOrFan: true, grille: false, light: false, detector: false, rangeHood: false, frame: false, bare: false), "vent verdict needs a grille")
+        expect(!ventVerdictAccepted(isVentOrFan: true, grille: true, light: false, detector: false, rangeHood: false, frame: false, bare: true), "vent verdict drops bare wall")
+        expect(ventVerdictAccepted(isVentOrFan: true, grille: true, light: true, detector: false, rangeHood: false, frame: false, bare: false), "a fan with a built-in light is kept")
+        expect(!ventVerdictAccepted(isVentOrFan: false, grille: false, light: true, detector: false, rangeHood: false, frame: false, bare: false), "a plain light is dropped")
+        var tiltedUp = matrix_identity_float4x4
+        let up20: Float = 20 * .pi / 180
+        tiltedUp.columns.1 = SIMD4(0, cos(up20), sin(up20), 0)
+        tiltedUp.columns.2 = SIMD4(0, -sin(up20), cos(up20), 0)
+        expect(looksUp(tiltedUp) && !looksUp(matrix_identity_float4x4), "looksUp tells an upward camera from a level one")
         expect(!heaterVerdictAccepted(isHeater: true, plainTrim: true, freestanding: false, fins: true, endCaps: true, standsOut: true), "verdict drops trim")
         expect(!heaterVerdictAccepted(isHeater: true, plainTrim: false, freestanding: false, fins: false, endCaps: false, standsOut: false), "verdict needs a hardware clue")
         expect(!heaterVerdictAccepted(isHeater: true, plainTrim: false, freestanding: true, fins: true, endCaps: true, standsOut: true), "verdict drops a freestanding radiator")

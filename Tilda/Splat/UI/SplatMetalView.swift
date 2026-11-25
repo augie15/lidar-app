@@ -173,6 +173,9 @@ struct SplatMetalView: UIViewRepresentable {
             loadTask?.cancel()
             link?.invalidate()
             renderer?.onSortComplete = nil
+            // MetalSplatter's sort loop holds the chunk buffers until they are removed; without this every closed
+            // viewer would keep its splat (hundreds of MB) alive.
+            if let renderer { Task { await renderer.removeAllChunks() } }
             renderer = nil
         }
 

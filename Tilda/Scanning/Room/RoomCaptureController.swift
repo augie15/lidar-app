@@ -12,6 +12,8 @@ final class RoomCaptureController: NSObject, ObservableObject, RoomCaptureViewDe
     @Published var phase: Phase = .ready
     @Published private(set) var rooms: [CapturedRoom] = []
     var isMulti = false
+    /// Live scanning tips (nil when turned off in Settings). Only fed when photos are being recorded.
+    let coach: ScanCoachModel? = AppSettings.scanningTips ? ScanCoachModel() : nil
 
     private(set) weak var captureView: RoomCaptureView?
     var onInstruction: ((String) -> Void)?
@@ -38,6 +40,7 @@ final class RoomCaptureController: NSObject, ObservableObject, RoomCaptureViewDe
             let recorder = FrameRecorder()
             let poller = FramePoller(session: view.captureSession.arSession, recorder: recorder)
             poller.onCount = { [weak self] in self?.onPhotoCount?($0) }
+            if let coach { poller.onPose = { coach.ingest(transform: $0, time: $1, recorder: recorder) } }
             poller.start()
             self.recorder = recorder
             self.poller = poller

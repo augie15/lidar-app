@@ -62,11 +62,36 @@ final class FrameRecorder: @unchecked Sendable {
     private var lastTime: TimeInterval = 0
     private var inFlight = false
     private var isFinished = false
+    /// Read-only tallies for the scanning coach. Counting never changes what is kept.
+    private var keptDecisions = 0
+    private var blurSkips = 0
+    /// The previous frame seen (kept or not), for how fast the phone is turning.
+    private var lastSeen: (transform: simd_float4x4, time: TimeInterval)?
 
     private let minTranslation: Float
     private let minRotation: Float
     private let maxFrames: Int
     private let minInterval: TimeInterval = 0.35
+    /// Skip a frame whose turning would smear it by more than this many pixels during its exposure.
+    static let maxBlurPixels: Float = 2.5
+    /// Never go longer than this without a photo, blur or not (the photo tour needs its spots).
+    private let maxBlurWait: TimeInterval = 1.5
+
+    /// Motion blur, in pixels, from the camera turning between two poses `dt` seconds apart during an exposure of
+    /// `exposure` seconds, for focal length `fx` pixels. Turning dominates handheld blur; walking adds little at room
+    /// distances.
+    static func motionBlurPixels(from a: simd_float4x4, to b: simd_float4x4, dt: TimeInterval,
+                                 exposure: TimeInterval, fx: Float) -> Float {
+        guard dt > 0 else { return 0 }
+        let ra = simd_float3x3(SIMD3(a.columns.0.x, a.columns.0.y, a.columns.0.z), SIMD3(a.columns.1.x, a.columns.1.y, a.columns.1.z),
+                               SIMD3(a.columns.2.x, a.columns.2.y, a.columns.2.z))
+        let rb = simd_float3x3(SIMD3(b.columns.0.x, b.columns.0.y, b.columns.0.z), SIMD3(b.columns.1.x, b.columns.1.y, b.columns.1.z),
+                               SIMD3(b.columns.2.x, b.columns.2.y, b.columns.2.z))
+        let rel = ra.transpose * rb
+        let trace = rel[0][0] + rel[1][1] + rel[2][2]
+        let angle = acos(min(max((trace - 1) / 2, -1), 1))
+        return angle / Float(dt) * Float(exposure) * fx
+    }
 
     init(density: AppSettings.PhotoDensity = AppSettings.photoDensity) {
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
@@ -81,13 +106,20 @@ final class FrameRecorder: @unchecked Sendable {
 
     var frameCount: Int { lock.withLock { frames.count } }
 
+    /// Photos chosen so far (counted when picked, before the JPEG is written) and frames skipped for blur.
+    var coachCounts: (kept: Int, blurSkipped: Int) { lock.withLock { (keptDecisions, blurSkips) } }
+
     /// Keeps the frame if tracking is good and the camera has moved or turned enough since the last keyframe.
     func consider(_ frame: ARFrame) {
         guard case .normal = frame.camera.trackingState else { return }
         let transform = frame.camera.transform
         let time = frame.timestamp
+        let exposure = frame.camera.exposureDuration
+        let fx = frame.camera.intrinsics[0][0]
 
         let shouldKeep: Bool = lock.withLock {
+            let previous = lastSeen
+            lastSeen = (transform, time)
             guard !isFinished, !inFlight, frames.count < maxFrames, time - lastTime >= minInterval else { return false }
             if let last = lastKept {
                 let moved = simd_distance(last.columns.3, transform.columns.3)
@@ -96,7 +128,16 @@ final class FrameRecorder: @unchecked Sendable {
                 let turned = acos(min(max(simd_dot(simd_normalize(fwdA), simd_normalize(fwdB)), -1), 1))
                 guard moved >= minTranslation || turned >= minRotation else { return false }
             }
+            // A photo is due here; skip it if it is smeared by fast turning (counted only for photos actually lost),
+            // unless it has been too long without any photo. Skip frames smeared by fast turning, unless it has been too long without any photo.
+            if let previous, lastKept != nil, time - lastTime < maxBlurWait,
+               Self.motionBlurPixels(from: previous.transform, to: transform, dt: time - previous.time,
+                                     exposure: exposure, fx: fx) > Self.maxBlurPixels {
+                blurSkips += 1
+                return false
+            }
             inFlight = true
+            keptDecisions += 1
             lastKept = transform
             lastTime = time
             return true

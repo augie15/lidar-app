@@ -16,6 +16,8 @@ struct ScanInsights: Codable, Sendable, Equatable {
     var analyzedAt: Date = .now
     /// False when Apple Intelligence was unavailable and only facts, tags and text were produced.
     var usedLanguageModel: Bool = true
+    /// `ScanFocus` raw value the summary was written for. Nil in files saved before focus existed (General).
+    var focus: String? = nil
 
     static let fileName = "insights.json"
 

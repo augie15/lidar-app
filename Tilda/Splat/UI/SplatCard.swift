@@ -11,6 +11,8 @@ struct SplatCard: View {
     @AppStorage("splatQuality") private var qualityRaw = SplatQuality.quick.rawValue
     @State private var remaking = false
     @State private var lastAnnounced = -1
+    /// The quick photo check (nil until it has run).
+    @State private var readiness: SplatReadiness.Report?
 
     private var quality: SplatQuality { SplatQuality(rawValue: qualityRaw) ?? .quick }
 
@@ -24,8 +26,8 @@ struct SplatCard: View {
 
     private var isWorkingHere: Bool {
         switch phase {
-        case .preparing, .training, .saving: true
-        case .idle, .paused, .failed, .finished: false
+        case .preparing, .training, .saving, .cooling: true
+        case .idle, .paused, .tooHot, .failed, .finished: false
         }
     }
 
@@ -51,6 +53,10 @@ struct SplatCard: View {
         .animation(.easeOut(duration: 0.2), value: phase)
         .animation(.easeOut(duration: 0.2), value: remaking)
         .onChange(of: phase) { _, new in announce(new) }
+        .task(id: scan.id) {
+            let folder = store.folderURL(for: scan)
+            readiness = await Task.detached(priority: .utility) { SplatReadiness.assess(scanFolder: folder) }.value
+        }
     }
 
     @ViewBuilder private var content: some View {
@@ -71,6 +77,26 @@ struct SplatCard: View {
                 .foregroundStyle(Theme.textPrimary)
             // Pauses come from leaving Tilda, starting another scan's 3D photo, or the phone running low on memory.
             Text("It stopped before it finished. Resume to carry on from there.")
+                .font(.footnote).foregroundStyle(Theme.textSecondary)
+            if busyElsewhere { busy }
+            HStack(spacing: 10) {
+                if !busyElsewhere {
+                    Button { start() } label: { Text("Resume") }
+                        .buttonStyle(FixtureButtonStyle(prominent: true))
+                }
+                Button { coordinator.cancel(scan.id) } label: { Text("Cancel") }
+                    .buttonStyle(FixtureButtonStyle(prominent: false))
+            }
+        case .cooling(let progress):
+            working(title: "Cooling down · \(percent(progress))", progress: progress,
+                    detail: "Your iPhone got hot, so training is taking a break. It carries on by itself once it cools.")
+            keepOpenNote
+            cancelButton
+        case .tooHot(let progress):
+            Text("Stopped at \(percent(progress)) to protect your iPhone")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Theme.textPrimary)
+            Text("It got too hot. Let it cool, take it off the charger or out of its case, then resume from here.")
                 .font(.footnote).foregroundStyle(Theme.textSecondary)
             if busyElsewhere { busy }
             HStack(spacing: 10) {
@@ -110,6 +136,7 @@ struct SplatCard: View {
                 .pickerStyle(.segmented)
                 Text(quality.detail).font(.footnote).foregroundStyle(Theme.textSecondary)
             }
+            if let readiness { readinessView(readiness) }
             Button { start() } label: { Text("Make 3D photo") }
                 .buttonStyle(FixtureButtonStyle(prominent: true))
             Text("Runs on your iPhone and can take a while. Keep Tilda open; the screen stays on.")
@@ -121,6 +148,33 @@ struct SplatCard: View {
                     .frame(minHeight: 44)
             }
         }
+    }
+
+    /// What the photo check expects, with the reasons and what to do next time.
+    private func readinessView(_ report: SplatReadiness.Report) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
+                Image(systemName: report.grade == .good ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
+                    .foregroundStyle(report.grade == .good ? Theme.accent : Theme.textSecondary)
+                    .accessibilityHidden(true)
+                Text("Expected result: \(report.grade.title)")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Theme.textPrimary)
+            }
+            if report.grade == .good {
+                Text("\(report.photoCount) photos from enough angles for a sharp 3D photo.")
+                    .font(.footnote).foregroundStyle(Theme.textSecondary)
+            } else {
+                ForEach(Array(report.issues.prefix(3).enumerated()), id: \.offset) { _, issue in
+                    Text("\(issue.problem) \(issue.fix)")
+                        .font(.footnote).foregroundStyle(Theme.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Text("You can still make it; it will be less sharp.")
+                    .font(.footnote).foregroundStyle(Theme.textMuted)
+            }
+        }
+        .accessibilityElement(children: .combine)
     }
 
     private var busy: some View {
@@ -202,6 +256,8 @@ struct SplatCard: View {
         case .finished: text = "3D photo ready"; lastAnnounced = -1
         case .failed: text = "3D photo failed"; lastAnnounced = -1
         case .paused: text = "3D photo paused"
+        case .cooling: text = "3D photo paused to let your iPhone cool down"
+        case .tooHot: text = "3D photo stopped because your iPhone is too hot"
         case .idle: lastAnnounced = -1
         default: break
         }
@@ -222,7 +278,7 @@ struct SplatFileWatcher: View {
     }
 }
 
-/// DEBUG only: `-TildaSplatCardState idle|busy|preparing|training|saving|paused|failed|finished` fakes a state so the
+/// DEBUG only: `-TildaSplatCardState idle|busy|preparing|training|saving|paused|cooling|toohot|failed|finished` fakes a state so the
 /// card can be seen in the Simulator, which can't train. Always inactive in Release.
 enum SplatCardPreview {
     static var raw: String? {
@@ -241,6 +297,8 @@ enum SplatCardPreview {
         case "training": .training(progress: 0.42, splatCount: 184_000, secondsLeft: 150)
         case "saving": .saving
         case "paused": .paused(progress: 0.42)
+        case "cooling": .cooling(progress: 0.58)
+        case "toohot": .tooHot(progress: 0.58)
         case "failed": .failed(message: "Ran out of memory. Close other apps and try again.")
         case "finished": .finished
         case nil: nil

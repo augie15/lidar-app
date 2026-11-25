@@ -9,6 +9,7 @@ struct FixturesRow: View {
 
     @Environment(ScanStore.self) private var store
     @Environment(FixtureCoordinator.self) private var coordinator
+    @Environment(SplatCoordinator.self) private var splats
     @AppStorage(AppSettings.Key.units) private var unitsRaw = AppSettings.Units.imperial.rawValue
 
     private var units: AppSettings.Units { AppSettings.Units(rawValue: unitsRaw) ?? .imperial }
@@ -16,6 +17,8 @@ struct FixturesRow: View {
     private var progress: FixtureCoordinator.Progress? { coordinator.running[scan.id] }
     private var hasPhotos: Bool { store.framesURL(for: scan) != nil }
     private var canDetect: Bool { hasPhotos && FixtureDetectionSupport.status == .available }
+    /// The scan has a 3D photo and none is being made right now.
+    private var canUseSplat: Bool { canDetect && store.splatURL(for: scan) != nil && !splats.isBusy }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -72,7 +75,7 @@ struct FixturesRow: View {
         VStack(alignment: .leading, spacing: 8) {
             if progress.total > 0 {
                 ProgressView(value: Double(progress.done), total: Double(progress.total)).tint(Theme.accent)
-                Text("Checking photo \(min(progress.done + 1, progress.total)) of \(progress.total)")
+                Text(progress.label)
                     .font(.footnote.monospacedDigit())
                     .foregroundStyle(Theme.textSecondary)
             } else {
@@ -99,6 +102,12 @@ struct FixturesRow: View {
             }
             Button(action: onReview) { Label("Add by hand", systemImage: "plus") }
                 .buttonStyle(FixtureButtonStyle(prominent: false))
+        }
+        if canUseSplat {
+            Button { coordinator.detect(scan, store: store, useSplat: true, splatIsBusy: { splats.isBusy }) } label: {
+                Label("Check with 3D photo", systemImage: "cube.transparent")
+            }
+            .buttonStyle(FixtureButtonStyle(prominent: false))
         }
     }
 }

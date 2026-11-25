@@ -37,7 +37,12 @@ struct RoomScanView: View {
                 }
             }
         }
-        .overlay(alignment: .bottom) { bottomBar }
+        .overlay(alignment: .bottom) {
+            VStack(spacing: 12) {
+                if phase == .scanning, let coach = controller.coach { ScanCoachPill(model: coach) }
+                bottomBar
+            }
+        }
         .background(Color.black.ignoresSafeArea())
         .preferredColorScheme(.dark)
         .onAppear {

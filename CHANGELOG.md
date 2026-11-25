@@ -5,8 +5,16 @@ All notable changes to Tilda are listed here. The format follows [Keep a Changel
 ## [Unreleased]
 
 ### Added
-- 3D photos: train a Gaussian splat from a scan's photos on the iPhone (Pro models with 8 GB or more), with blurry photos skipped and people masked out by on-device Vision, then view or share it. Uses msplat-ios (Apache-2.0, built from source) and MetalSplatter (MIT); licences are in Settings.
+- Scan focus: on first open Tilda asks what you scan for (General, Renovation, Real estate, Interior design or Home inventory). Insights summaries and the order of facts follow it, and a card can be rewritten for a new focus. Change it in Settings.
+- Scanning tips: during room and mesh scans, a small hint suggests tilting up or down, changing height, slowing down or looking back from the other side, until coverage is good. One tip at a time, with cooldowns. Turn it off in Settings, Guidance.
+- Check with 3D photo: for scans with a 3D photo, fixture detection also looks at views rendered from the splat, square-on to each wall and up at the ceiling, with exact camera positions.
+- 3D photos: train a Gaussian splat from a scan's photos on the iPhone (Pro models with 8 GB or more), with blurry photos skipped and people masked out by on-device Vision, then view or share it. Before training, a photo check rates the expected result (Good, Fair or Likely soft) from photo count for the room size, repeat views, height variety and ceiling coverage, with what to do differently. While scanning, frames blurred by fast turning are skipped, and Dense photo density now keeps up to 900 photos. Training takes a cooling break when the phone gets hot (iOS thermal state serious) and stops with a checkpoint at critical. Uses msplat-ios (Apache-2.0, built from source) and MetalSplatter (MIT); licences are in Settings.
 - Fixture review: HVAC vents, bathroom fans and baseboard heaters are highlighted on the floor plan, the 3D model and the walkthrough, with counts on the scan page. Found fixtures can be confirmed, moved, retyped, resized (heater length), deleted with undo, or added by tapping the plan.
+
+### Fixed
+- Fixture checks now include photos tilted up at the ceiling (the tour's photo picker ignored tilt, so a fan above a door could be skipped), and a bathroom fan with a built-in light is no longer rejected as a light.
+- Closing the 3D photo viewer now releases the splat's memory.
+- Vents and bathroom fans: each find now gets a close-up second look (grille required; lights, range hoods, detectors, door frames and bare surfaces rejected), and impossible box shapes are dropped. A room with no vents no longer shows made-up ones.
 
 ## [1.0.0] - 2026-11-23
 

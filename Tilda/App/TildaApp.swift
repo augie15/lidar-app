@@ -12,18 +12,45 @@ struct TildaApp: App {
 
     init() {
         #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("-TildaResetFocusPrompt") {
+            UserDefaults.standard.removeObject(forKey: AppSettings.Key.focusPromptAnswered)
+        }
+        if let dir = UserDefaults.standard.string(forKey: "TildaSplatViews") {
+            Task { await SplatViewRenderer.writeSampleViews(to: URL(fileURLWithPath: dir, isDirectory: true)) }
+        }
         if ProcessInfo.processInfo.arguments.contains("-TildaSelfCheck") {
+            let coachFailures = ScanCoach.selfCheck()
+            NSLog("%@", coachFailures.isEmpty ? "Scan coach self-check: all passed" : "Scan coach self-check FAILED: \(coachFailures)")
             let failures = FixturePlacement.selfCheck()
             NSLog("%@", failures.isEmpty ? "FixturePlacement self-check: all passed" : "FixturePlacement self-check FAILED: \(failures)")
             let splatFailures = SplatMath.selfCheck()
             NSLog("%@", splatFailures.isEmpty ? "Splat self-check: all passed" : "Splat self-check FAILED: \(splatFailures)")
+            let viewFailures = SplatViewPlanner.selfCheck() + FixtureDetectorStorage.selfCheck()
+            NSLog("%@", viewFailures.isEmpty ? "Splat view self-check: all passed" : "Splat view self-check FAILED: \(viewFailures)")
+            Task {
+                let renderFailures = await SplatViewRenderer.renderSelfCheck()
+                NSLog("%@", renderFailures.isEmpty ? "Splat view render self-check: all passed" : "Splat view render self-check FAILED: \(renderFailures)")
+            }
         }
+        #endif
+    }
+
+    @ViewBuilder
+    private var rootView: some View {
+        #if DEBUG
+        if let name = UserDefaults.standard.string(forKey: "TildaCoachPreview") {
+            ScanCoachPreviewScreen(tip: CoachTip(rawValue: name))
+        } else {
+            HomeView()
+        }
+        #else
+        HomeView()
         #endif
     }
 
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            rootView
                 .environment(store)
                 .environment(router)
                 .environment(analysis)

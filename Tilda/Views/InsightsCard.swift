@@ -6,6 +6,7 @@ import UIKit
 struct InsightsCard: View {
     let insights: ScanInsights?
     let busy: Bool
+    var currentFocus: ScanFocus = AppSettings.focus
     let onAnalyze: () -> Void
 
     @State private var showAllFacts = false
@@ -27,7 +28,8 @@ struct InsightsCard: View {
                         .font(.footnote)
                         .foregroundStyle(Theme.textMuted)
                 }
-                if !insights.facts.isEmpty { facts(insights.facts) }
+                focusLine(insights)
+                if !insights.facts.isEmpty { facts(recordedFocus(insights).ordered(insights.facts)) }
                 if !insights.tags.isEmpty { tags(insights.tags) }
                 if !insights.recognizedText.isEmpty { recognized(insights.recognizedText) }
             } else if busy {
@@ -76,6 +78,41 @@ struct InsightsCard: View {
             }
             .disabled(busy)
             .accessibilityLabel(busy ? "Analyzing" : (insights == nil ? "Analyze scan" : "Re-analyze scan"))
+        }
+    }
+
+    private func recordedFocus(_ insights: ScanInsights) -> ScanFocus {
+        insights.focus.flatMap(ScanFocus.init(rawValue:)) ?? .general
+    }
+
+    /// "For renovation" when the summary was written for a non-General focus, plus a one-tap rewrite when the
+    /// current setting differs. Never re-runs on its own.
+    @ViewBuilder
+    private func focusLine(_ insights: ScanInsights) -> some View {
+        let recorded = recordedFocus(insights)
+        let differs = recorded != currentFocus && !insights.summary.isEmpty && ScanIntelligence.isModelAvailable
+        if recorded != .general || differs {
+            HStack(spacing: 8) {
+                if recorded != .general {
+                    Label("For \(recorded.phrase)", systemImage: recorded.symbol)
+                        .font(.footnote)
+                        .foregroundStyle(Theme.textMuted)
+                }
+                Spacer(minLength: 8)
+                if differs {
+                    Button(action: onAnalyze) {
+                        Text("Rewrite for \(currentFocus.phrase)")
+                            .font(.footnote.weight(.medium))
+                            .foregroundStyle(Theme.accentText)
+                            .padding(.horizontal, 12)
+                            .frame(minHeight: 44)
+                            .background(Theme.tile, in: Capsule())
+                    }
+                    .buttonStyle(PressableStyle())
+                    .disabled(busy)
+                }
+            }
+            .padding(.top, -6)
         }
     }
 

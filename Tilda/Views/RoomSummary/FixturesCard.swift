@@ -8,6 +8,7 @@ struct FixturesCard: View {
 
     @Environment(ScanStore.self) private var store
     @Environment(FixtureCoordinator.self) private var coordinator
+    @Environment(SplatCoordinator.self) private var splats: SplatCoordinator?
     @Environment(\.summaryPalette) private var p
 
     private var library: FixtureLibrary? { coordinator.library(for: scan.id) }
@@ -49,7 +50,7 @@ struct FixturesCard: View {
             if progress.total > 0 {
                 ProgressView(value: Double(progress.done), total: Double(progress.total))
                     .tint(p.accent)
-                Text("Checking photo \(min(progress.done + 1, progress.total)) of \(progress.total)")
+                Text(progress.label)
                     .font(.subheadline)
                     .monospacedDigit()
                     .foregroundStyle(p.secondary)
@@ -116,6 +117,14 @@ struct FixturesCard: View {
                 }
                 .buttonStyle(FixtureButtonStyle(prominent: !again && support == .available))
                 .disabled(support != .available)
+                if let splats, support == .available, store.splatURL(for: scan) != nil, !splats.isBusy {
+                    Button {
+                        coordinator.detect(scan, store: store, useSplat: true, splatIsBusy: { splats.isBusy })
+                    } label: {
+                        Label("Check with 3D photo", systemImage: "cube.transparent")
+                    }
+                    .buttonStyle(FixtureButtonStyle(prominent: false))
+                }
                 if case let .unavailable(reason) = support, found || library?.detectedAt != nil {
                     Text(reason).font(.caption).foregroundStyle(p.muted)
                 }
