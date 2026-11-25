@@ -865,7 +865,7 @@
 				CODE_SIGN_ENTITLEMENTS = Tilda/Tilda.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Tilda/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -888,7 +888,7 @@
 				CODE_SIGN_ENTITLEMENTS = Tilda/Tilda.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Tilda/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
