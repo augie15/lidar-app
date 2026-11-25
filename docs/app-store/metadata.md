@@ -21,13 +21,13 @@ Written for the name in use, "Tilda: Room & Object Scanner". It avoids repeating
 ## Promotional text (170 characters max)
 
 ```
-Scan any room or object with your iPhone's LiDAR. Get floor plans, square footage and 3D models, then export to USDZ, OBJ, STL or PLY. Free and private.
+New: turn a room scan into a photo-real 3D photo, made right on your iPhone. Plus scanning tips, smarter fixture finding and support for iOS 18.
 ```
-(152 characters). This field can be changed at any time without a new review.
+(144 characters, for 1.1). This field can be changed at any time without a new review.
 
 ## Description (4000 characters max)
 
-(2341 characters)
+(3150 characters, for 1.1)
 
 ```
 Tilda turns the LiDAR scanner in your iPhone Pro into a fast, private 3D scanner. Scan a room, a whole floor or an object, then export in a few taps. Free, with no accounts, no ads and no tracking.
@@ -38,6 +38,13 @@ ROOM SCANS
 - Room summary with square footage, ceiling height, and door and window counts. Share it as a PDF.
 - Photo tour: swipe through photos pinned to spots on the floor plan.
 - Walk-through: move through your scanned space in 3D.
+- Scanning tips remind you to tilt up and down and change height, so nothing is missed.
+
+3D PHOTOS
+- Turn a scan into a photo-real 3D scene you can look around: a Gaussian splat, trained right on your iPhone in minutes.
+- A quick photo check tells you how sharp it will be before you start.
+- Blurry photos are skipped and people walking through are masked out, using Apple's on-device Vision.
+- Look around with orbit, pan and zoom, or share the file to other splat viewers.
 
 OBJECT SCANS
 - Photoreal: a textured 3D model built on your iPhone with Apple's Object Capture.
@@ -55,8 +62,9 @@ EXPORT ANYWHERE
 - Share by AirDrop, Files, Mail or any app. Scans also show up in the Files app.
 
 APPLE INTELLIGENCE (OPTIONAL)
-- On supported iPhones, Tilda names and summarizes your scans, and suggests tags.
+- Tilda names and summarizes your scans and suggests tags. Tell it what you scan for (renovation, real estate, interior design or home inventory) and the summary follows.
 - Ask a scan questions such as "How much paint for the walls?" or "Will a 2 m sofa fit?"
+- Finds HVAC vents, bathroom fans and baseboard heaters in room scans and marks them on the floor plan, ready for you to check.
 - It all runs on your iPhone with Apple's on-device model. Nothing is sent to a cloud.
 
 SIRI, SHORTCUTS AND SPOTLIGHT
@@ -69,8 +77,9 @@ FREE AND PRIVATE
 - Data leaves your phone only when you choose to export or share a file.
 
 REQUIREMENTS
-- An iPhone with a LiDAR scanner (Pro models, iPhone 12 Pro and later) running iOS 18 or later (Apple Intelligence features need iOS 26). Without LiDAR, Tilda explains that scanning is not available.
-- Apple Intelligence features need a supported iPhone with Apple Intelligence turned on.
+- An iPhone with a LiDAR scanner (Pro models, iPhone 12 Pro and later) running iOS 18 or later. Without LiDAR, Tilda explains that scanning is not available.
+- 3D photos need an iPhone 15 Pro or later Pro model.
+- Apple Intelligence features need iOS 26 or later on a supported iPhone with Apple Intelligence turned on. Finding fixtures from photos needs iOS 27.
 
 Tips: walk slowly, keep walls, floor and corners in view, and use the flash in dark rooms.
 
@@ -80,9 +89,9 @@ Questions or ideas? Visit the support page or send feedback from Settings.
 ## Keywords (100 characters max)
 
 ```
-measure,square footage,sqft,usdz,obj,stl,ply,point cloud,mesh,photogrammetry,roomplan,home,free
+measure,square footage,sqft,usdz,obj,stl,ply,point cloud,mesh,photogrammetry,roomplan,splat,free
 ```
-(95 characters.)
+(96 characters. 1.1 swaps "home" for "splat".)
 
 Rules followed: comma-separated, no spaces after commas, none of the words from the name in use (tilda, room, object, scanner) or the subtitle (lidar, floor, plans, 3d, models).
 
@@ -113,7 +122,17 @@ brett@augiesrentals.ca. This email is also published on the support and privacy 
 
 ## Other fields
 
-- Version: 1.0 (build number is bumped by `scripts/archive.sh --bump`).
+- Version: 1.1 (build number is bumped by `scripts/archive.sh --bump`). 1.0 (build 2) was approved on 2026-11-25.
 - Price: Free. No in-app purchases.
 - What's New (v1.0): `First release.`
+- What's New (v1.1, 578 characters):
+
+```
+- 3D photos: turn a scan into a photo-real Gaussian splat, trained on your iPhone (iPhone 15 Pro or later). A quick check tells you how sharp it will be before you start.
+- Scanning tips: gentle reminders to tilt up and down, change height and slow down, so your scans capture more.
+- Fixtures: more reliable vent, bathroom fan and baseboard heater finding, and a new check using the 3D photo.
+- Insights: tell Tilda what you scan for (renovation, real estate, interior design or home inventory) and summaries follow it.
+- Now runs on iOS 18 and later.
+- Fixes and improvements.
+```
 - Age rating: see `age-rating.md`. Privacy: see `app-privacy.md`.
